@@ -1,4 +1,4 @@
-#include <stan/services/io/write_stan.hpp>
+#include <stan/io/write_stan.hpp>
 #include <stan/interface_callbacks/writer/stream_writer.hpp>
 #include <gtest/gtest.h>
 #include <sstream>
@@ -13,6 +13,6 @@ TEST(StanUi, write_stan) {
     + "stan_version_minor = " + stan::MINOR_VERSION + "\n"
     + "stan_version_patch = " + stan::PATCH_VERSION + "\n";
 
-  EXPECT_NO_THROW(stan::services::io::write_stan(writer));
+  EXPECT_NO_THROW(stan::io::write_stan(writer));
   EXPECT_EQ(expected_output, ss.str());
 }

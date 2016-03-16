@@ -2,10 +2,10 @@
 #define STAN_SERVICES_OPTIMIZE_LBFGS_HPP
 
 #include <stan/interface_callbacks/writer/base_writer.hpp>
+#include <stan/io/do_print.hpp>
+#include <stan/io/write_iteration.hpp>
 #include <stan/optimization/bfgs.hpp>
 #include <stan/services/error_codes.hpp>
-#include <stan/services/io/do_print.hpp>
-#include <stan/services/io/write_iteration.hpp>
 #include <fstream>
 #include <iostream>
 #include <iomanip>
@@ -89,16 +89,16 @@ namespace stan {
         parameter_writer(names);
 
         if (save_iterations) {
-          io::write_iteration(model, base_rng,
-                              lp, cont_vector, disc_vector,
-                              message_writer, parameter_writer);
+          stan::io::write_iteration(model, base_rng,
+                                    lp, cont_vector, disc_vector,
+                                    message_writer, parameter_writer);
         }
 
         int ret = 0;
 
         while (ret == 0) {
           interrupt();
-          if (io::do_print(lbfgs.iter_num(), 50*refresh)) {
+          if (stan::io::do_print(lbfgs.iter_num(), 50*refresh)) {
             message_writer("    Iter "
                            "     log prob "
                            "       ||dx|| "
@@ -139,16 +139,16 @@ namespace stan {
           }
 
           if (save_iterations) {
-            io::write_iteration(model, base_rng,
-                                lp, cont_vector, disc_vector,
-                                message_writer, parameter_writer);
+            stan::io::write_iteration(model, base_rng,
+                                      lp, cont_vector, disc_vector,
+                                      message_writer, parameter_writer);
           }
         }
 
         if (!save_iterations)
-          io::write_iteration(model, base_rng,
-                              lp, cont_vector, disc_vector,
-                              message_writer, parameter_writer);
+          stan::io::write_iteration(model, base_rng,
+                                    lp, cont_vector, disc_vector,
+                                    message_writer, parameter_writer);
 
         for (int i = 0; i < cont_params.size(); ++i)
           cont_params[i] = cont_vector[i];

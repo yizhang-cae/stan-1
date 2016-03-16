@@ -6,12 +6,12 @@
 #include <boost/random/uniform_real_distribution.hpp>
 #include <boost/random/variate_generator.hpp>
 #include <stan/model/util.hpp>
-#include <stan/services/error_codes.hpp>
-#include <stan/io/array_var_context.hpp>
-#include <stan/io/chained_var_context.hpp>
 #include <stan/interface_callbacks/var_context_factory/var_context_factory.hpp>
 #include <stan/interface_callbacks/writer/base_writer.hpp>
-#include <stan/services/io/write_error_msg.hpp>
+#include <stan/io/array_var_context.hpp>
+#include <stan/io/chained_var_context.hpp>
+#include <stan/io/write_error_msg.hpp>
+#include <stan/services/error_codes.hpp>
 #include <stan/math/prim/scal/fun/is_inf.hpp>
 #include <stan/math/prim/scal/fun/is_nan.hpp>
 #include <stan/math/prim/mat/fun/Eigen.hpp>
@@ -132,7 +132,7 @@ namespace stan {
           stan::model::gradient(model, cont_params, init_log_prob,
                                 init_grad);
         } catch (const std::exception& e) {
-          io::write_error_msg(writer, e);
+          stan::io::write_error_msg(writer, e);
           writer();
           writer("Rejecting initial value:");
           writer("  Error evaluating the log probability "

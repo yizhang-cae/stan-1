@@ -1,4 +1,4 @@
-#include <stan/services/io/write_iteration.hpp>
+#include <stan/io/write_iteration.hpp>
 #include <gtest/gtest.h>
 #include <test/test-models/good/services/test_lp.hpp>
 #include <sstream>
@@ -43,9 +43,9 @@ TEST_F(StanUi, write_iteration) {
   std::stringstream msg_ss, param_ss;
   stan::interface_callbacks::writer::stream_writer msg_writer(msg_ss);
   stan::interface_callbacks::writer::stream_writer param_writer(param_ss);
-  stan::services::io::write_iteration(model, base_rng,
-                                      lp, cont_vector, disc_vector,
-                                      msg_writer, param_writer);
+  stan::io::write_iteration(model, base_rng,
+                            lp, cont_vector, disc_vector,
+                            msg_writer, param_writer);
   EXPECT_EQ("", msg_ss.str());
   EXPECT_EQ("1,0,0,1,1,2713\n", param_ss.str())
     << "the output should be (1,  0,       0,    exp(0),    exp(0), 2713) \n"

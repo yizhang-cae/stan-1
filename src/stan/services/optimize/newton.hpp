@@ -2,11 +2,11 @@
 #define STAN_SERVICES_OPTIMIZE_NEWTON_HPP
 
 #include <stan/interface_callbacks/writer/base_writer.hpp>
+#include <stan/io/write_iteration.hpp>
+#include <stan/io/write_error_msg.hpp>
 #include <stan/math.hpp>
 #include <stan/optimization/newton.hpp>
 #include <stan/services/error_codes.hpp>
-#include <stan/services/io/write_iteration.hpp>
-#include <stan/services/io/write_error_msg.hpp>
 #include <cmath>
 #include <limits>
 #include <string>
@@ -56,7 +56,7 @@ namespace stan {
                                                      &message);
           message_writer(message.str());
         } catch (const std::exception& e) {
-          services::io::write_error_msg(message_writer, e);
+          stan::io::write_error_msg(message_writer, e);
           lp = -std::numeric_limits<double>::infinity();
         }
 
@@ -73,9 +73,9 @@ namespace stan {
         double lastlp = lp;
         for (int m = 0; m < num_iterations; m++) {
           if (save_iterations)
-            io::write_iteration(model, base_rng,
-                                lp, cont_vector, disc_vector,
-                                message_writer, parameter_writer);
+            stan::io::write_iteration(model, base_rng,
+                                      lp, cont_vector, disc_vector,
+                                      message_writer, parameter_writer);
           interrupt();
           lastlp = lp;
           lp = stan::optimization::newton_step(model, cont_vector, disc_vector);
@@ -91,9 +91,9 @@ namespace stan {
             break;
         }
 
-        io::write_iteration(model, base_rng,
-                            lp, cont_vector, disc_vector,
-                            message_writer, parameter_writer);
+        stan::io::write_iteration(model, base_rng,
+                                  lp, cont_vector, disc_vector,
+                                  message_writer, parameter_writer);
         for (int i = 0; i < cont_params.size(); ++i)
           cont_params[i] = cont_vector[i];
         return stan::services::error_codes::OK;

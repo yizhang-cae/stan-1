@@ -3,8 +3,8 @@
 
 #include <stan/interface_callbacks/writer/base_writer.hpp>
 #include <stan/interface_callbacks/interrupt/base_interrupt.hpp>
+#include <stan/io/do_print.hpp>
 #include <stan/mcmc/base_mcmc.hpp>
-#include <stan/services/io/do_print.hpp>
 #include <stan/services/sample/mcmc_writer.hpp>
 #include <stan/services/sample/progress.hpp>
 #include <string>
@@ -31,7 +31,7 @@ namespace stan {
         for (int m = 0; m < num_iterations; ++m) {
           interrupt();
 
-          if (io::do_print(m, (start + m + 1 == finish), refresh))
+          if (stan::io::do_print(m, (start + m + 1 == finish), refresh))
             message_writer(progress(m, start, finish, refresh, warmup));
 
           sample = sampler.transition(sample, message_writer);

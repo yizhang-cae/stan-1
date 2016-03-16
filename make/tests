@@ -145,7 +145,7 @@ src/test/unit/optimization/bfgs_update_test.cpp: src/test/test-models/good/optim
 src/test/unit/optimization/lbfgs_update_test.cpp: src/test/test-models/good/optimization/rosenbrock.hpp
 src/test/unit/services/diagnose/diagnose_test.cpp: src/test/test-models/good/services/test_lp.hpp
 src/test/unit/services/init/command_init_test.cpp: src/test/test-models/good/services/test_lp.hpp
-src/test/unit/services/io/write_iteration_test.cpp: src/test/test-models/good/services/test_lp.hpp
+src/test/unit/io/write_iteration_test.cpp: src/test/test-models/good/services/test_lp.hpp
 src/test/unit/services/mcmc/sample_test.cpp: src/test/test-models/good/services/test_lp.hpp
 src/test/unit/services/mcmc/warmup_test.cpp: src/test/test-models/good/services/test_lp.hpp
 src/test/unit/services/optimize/bfgs_test.cpp: src/test/test-models/good/optimization/rosenbrock.hpp

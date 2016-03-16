@@ -5,10 +5,10 @@
 #include <stan/interface_callbacks/writer/base_writer.hpp>
 #include <stan/interface_callbacks/writer/stream_writer.hpp>
 #include <stan/io/dump.hpp>
+#include <stan/io/write_iteration.hpp>
 #include <stan/model/util.hpp>
-#include <stan/services/io/write_iteration.hpp>
 #include <stan/services/error_codes.hpp>
-#include <stan/services/variational/print_progress.hpp>
+#include <stan/variational/print_progress.hpp>
 #include <stan/variational/families/normal_fullrank.hpp>
 #include <stan/variational/families/normal_meanfield.hpp>
 #include <boost/circular_buffer.hpp>
@@ -224,10 +224,9 @@ namespace stan {
           for (int iter_tune = 1; iter_tune <= adapt_iterations; ++iter_tune) {
             print_progress_m = eta_sequence_index
               * adapt_iterations + iter_tune;
-            services::variational
-              ::print_progress(print_progress_m, 0,
-                               adapt_iterations * eta_sequence_size,
-                               adapt_iterations, true, "", "", message_writer);
+            print_progress(print_progress_m, 0,
+                           adapt_iterations * eta_sequence_size,
+                           adapt_iterations, true, "", "", message_writer);
 
             // (ROBUST) Compute gradient of ELBO. It's OK if it diverges.
             // We'll try a smaller eta.
@@ -506,10 +505,10 @@ namespace stan {
           cont_vector.at(i) = cont_params_(i);
         std::vector<int> disc_vector;
 
-        services::io::write_iteration(model_, rng_,
-                                      0, cont_vector, disc_vector,
-                                      message_writer,
-                                      parameter_writer);
+        stan::io::write_iteration(model_, rng_,
+                                  0, cont_vector, disc_vector,
+                                  message_writer,
+                                  parameter_writer);
         // Draw more samples from posterior and write on subsequent lines
         message_writer();
         std::stringstream ss;
@@ -522,10 +521,10 @@ namespace stan {
           for (int i = 0; i < cont_params_.size(); ++i) {
             cont_vector.at(i) = cont_params_(i);
           }
-          services::io::write_iteration(model_, rng_,
-                                        0, cont_vector, disc_vector,
-                                        message_writer,
-                                        parameter_writer);
+          stan::io::write_iteration(model_, rng_,
+                                    0, cont_vector, disc_vector,
+                                    message_writer,
+                                    parameter_writer);
         }
         ss << "COMPLETED.";
         message_writer(ss.str());

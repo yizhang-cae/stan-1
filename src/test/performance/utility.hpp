@@ -17,6 +17,8 @@
 #include <stan/io/json/json_error.hpp>
 #include <stan/io/json/json_handler.hpp>
 #include <stan/io/json/json_parser.hpp>
+#include <stan/io/write_model.hpp>
+#include <stan/io/write_stan.hpp>
 #include <stan/services/sample/mcmc_writer.hpp>
 
 #include <stan/mcmc/hmc/static/adapt_unit_e_static_hmc.hpp>
@@ -32,11 +34,6 @@
 #include <stan/optimization/bfgs.hpp>
 
 #include <stan/services/init/initialize_state.hpp>
-#include <stan/services/io/do_print.hpp>
-#include <stan/services/io/write_error_msg.hpp>
-#include <stan/services/io/write_iteration.hpp>
-#include <stan/services/io/write_model.hpp>
-#include <stan/services/io/write_stan.hpp>
 #include <stan/services/sample/generate_transitions.hpp>
 #include <stan/services/sample/progress.hpp>
 #include <stan/services/sample/hmc_nuts_diag_e_adapt.hpp>
@@ -299,8 +296,8 @@ namespace stan {
         interface_callbacks::interrupt::noop interrupt;
         
         if (output_stream) {
-          services::io::write_stan(sample_writer);
-          services::io::write_model(sample_writer, model.model_name());
+          stan::io::write_stan(sample_writer);
+          stan::io::write_model(sample_writer, model.model_name());
           //parser.print(output_stream, "#");
         }
 

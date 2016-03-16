@@ -1,14 +1,14 @@
 #ifndef TEST_UNIT_LANG_REJECT_REJECT_HELPER_HPP
 #define TEST_UNIT_LANG_REJECT_REJECT_HELPER_HPP
 
+#include <stan/io/dump.hpp>
+#include <stan/io/write_iteration.hpp>
+#include <stan/interface_callbacks/writer/stream_writer.hpp>
 #include <gtest/gtest.h>
 #include <stdexcept>
 #include <sstream>
 #include <fstream>
 #include <boost/random/additive_combine.hpp>
-#include <stan/io/dump.hpp>
-#include <stan/services/io/write_iteration.hpp>
-#include <stan/interface_callbacks/writer/stream_writer.hpp>
 
 void expect_substring(const std::string& msg,
                       const std::string& expected_substring) {
@@ -34,7 +34,7 @@ void reject_test(const std::string& expected_msg1 = "",
 
   std::stringstream out;
   try {
-    using stan::services::io::write_iteration;
+    using stan::io::write_iteration;
     M model(empty_data_context, &model_output);
     std::vector<double> cont_vector(model.num_params_r(), 0.0);
     std::vector<int> disc_vector;
