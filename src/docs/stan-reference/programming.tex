@@ -8352,6 +8352,23 @@ must be expressions that only involve data or transformed data
 variables.  The initial state \code{y} or the parameters \code{theta}
 are the only arguments which may involve parameters.
 
+\subsection{Discontinuous ODE System Function}
+
+The ODE integrator is able to integrate over discontinuities in the
+state function, although the accuracy of points near the discontinuity
+may be problematic (requiring many small steps).  An example of such a
+discontinuity is a lag in a pharmacokinetic model, where a
+concentration is going to be zero for times $0 < t < t'$ for some
+lag-time $t'$, whereas it will be nonzero for times $t \geq t'$.  As
+an example, would involve code in the system such as
+%
+\begin{stancode}
+if (t < t_lag)
+  return 0;
+else
+  ... return non-zero value...;
+\end{stancode}
+
 
 \section{Measurement Error Models}
 
