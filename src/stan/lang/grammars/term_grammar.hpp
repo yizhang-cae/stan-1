@@ -1,12 +1,12 @@
 #ifndef STAN_LANG_GRAMMARS_TERM_GRAMMAR_HPP
 #define STAN_LANG_GRAMMARS_TERM_GRAMMAR_HPP
 
-#include <boost/spirit/include/qi.hpp>
-
 #include <stan/lang/ast.hpp>
 #include <stan/lang/grammars/expression_grammar.hpp>
+#include <stan/lang/grammars/indexes_grammar.hpp>
+#include <stan/lang/grammars/semantic_actions.hpp>
 #include <stan/lang/grammars/whitespace_grammar.hpp>
-
+#include <boost/spirit/include/qi.hpp>
 #include <string>
 #include <sstream>
 #include <vector>
@@ -16,24 +16,23 @@ namespace stan {
   namespace lang {
 
     template <typename Iterator>
-    struct term_grammar;
+    struct expression_grammar;
 
     template <typename Iterator>
-    struct expression_grammar;
+    struct indexes_grammar;
 
     template <typename Iterator>
     struct term_grammar
       : public boost::spirit::qi::grammar<Iterator,
                                           expression(var_origin),
                                           whitespace_grammar<Iterator> > {
-      term_grammar(variable_map& var_map,
-                   std::stringstream& error_msgs,
+      term_grammar(variable_map& var_map, std::stringstream& error_msgs,
                    expression_grammar<Iterator>& eg);
 
       variable_map& var_map_;
       std::stringstream& error_msgs_;
-
-      stan::lang::expression_grammar<Iterator>& expression_g;
+      expression_grammar<Iterator>& expression_g;
+      indexes_grammar<Iterator> indexes_g;
 
       boost::spirit::qi::rule<Iterator,
                               std::vector<expression>(var_origin),
@@ -75,19 +74,23 @@ namespace stan {
                               whitespace_grammar<Iterator> >
       integrate_ode_r;
 
+      boost::spirit::qi::rule<Iterator,
+                              integrate_ode_cvode(var_origin),
+                              whitespace_grammar<Iterator> >
+      integrate_ode_cvode_r;
+
 
       boost::spirit::qi::rule<Iterator,
                               std::string(),
                               whitespace_grammar<Iterator> >
       identifier_r;
 
-
       boost::spirit::qi::rule<Iterator,
-                              expression(var_origin),
- boost::spirit::qi::locals<std::vector<std::vector<stan::lang::expression> > >,
-                              whitespace_grammar<Iterator> >
-      indexed_factor_r;
-
+          expression(var_origin),
+          boost::spirit::qi::locals<std::vector<std::vector<expression> >,
+                                    std::vector<idx> >,
+          whitespace_grammar<Iterator> >
+      idx_factor_r;
 
       boost::spirit::qi::rule<Iterator,
                               int_literal(),

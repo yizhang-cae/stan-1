@@ -1,22 +1,21 @@
 #ifndef STAN_MCMC_HMC_HAMILTONIANS_UNIT_E_METRIC_HPP
 #define STAN_MCMC_HMC_HAMILTONIANS_UNIT_E_METRIC_HPP
 
+#include <stan/mcmc/hmc/hamiltonians/base_hamiltonian.hpp>
+#include <stan/mcmc/hmc/hamiltonians/unit_e_point.hpp>
 #include <boost/random/variate_generator.hpp>
 #include <boost/random/normal_distribution.hpp>
 
-#include <stan/mcmc/hmc/hamiltonians/base_hamiltonian.hpp>
-#include <stan/mcmc/hmc/hamiltonians/unit_e_point.hpp>
-
 namespace stan {
-
   namespace mcmc {
 
     // Euclidean manifold with unit metric
-    template <typename M, typename BaseRNG>
-    class unit_e_metric : public base_hamiltonian<M, unit_e_point, BaseRNG> {
+    template <class Model, class BaseRNG>
+    class unit_e_metric
+      : public base_hamiltonian<Model, unit_e_point, BaseRNG> {
     public:
-      unit_e_metric(M& m, std::ostream* e)
-        : base_hamiltonian<M, unit_e_point, BaseRNG>(m, e) {}
+      explicit unit_e_metric(const Model& model)
+        : base_hamiltonian<Model, unit_e_point, BaseRNG>(model) {}
 
       ~unit_e_metric() {}
 
@@ -30,6 +29,10 @@ namespace stan {
 
       double phi(unit_e_point& z) {
         return this->V(z);
+      }
+
+      double dG_dt(unit_e_point& z) {
+        return 2 * T(z) - z.q.dot(z.g);
       }
 
       const Eigen::VectorXd dtau_dq(unit_e_point& z) {
@@ -54,7 +57,5 @@ namespace stan {
     };
 
   }  // mcmc
-
 }  // stan
-
 #endif

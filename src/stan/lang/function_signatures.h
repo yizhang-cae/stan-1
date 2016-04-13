@@ -175,6 +175,13 @@ add("columns_dot_self", ROW_VECTOR_T, MATRIX_T);
 add_unary("cos");
 add_unary("cosh");
 add("crossprod", MATRIX_T, MATRIX_T);
+add("csr_matrix_times_vector",VECTOR_T, INT_T, INT_T,
+          VECTOR_T, expr_type(INT_T, 1U), expr_type(INT_T, 1U), VECTOR_T);
+add("csr_to_dense_matrix", MATRIX_T,INT_T, INT_T,
+          VECTOR_T, expr_type(INT_T, 1U), expr_type(INT_T, 1U));
+add("csr_extract_w", VECTOR_T, MATRIX_T);
+add("csr_extract_v", expr_type(INT_T, 1U), MATRIX_T);
+add("csr_extract_u", expr_type(INT_T, 1U), MATRIX_T);
 add("cumulative_sum", expr_type(DOUBLE_T, 1U),
     expr_type(DOUBLE_T, 1U));
 add("cumulative_sum", VECTOR_T, VECTOR_T);
@@ -327,7 +334,7 @@ add("gaussian_dlm_obs_log", DOUBLE_T, MATRIX_T, MATRIX_T, MATRIX_T,
     MATRIX_T, MATRIX_T, VECTOR_T, MATRIX_T);
 add("gaussian_dlm_obs_log", DOUBLE_T, MATRIX_T, MATRIX_T, MATRIX_T,
     VECTOR_T, MATRIX_T, VECTOR_T, MATRIX_T);
-add_nullary("get_lp");  // special handling in term_grammar_def
+add_nullary("get_lp");  // because of get
 for (size_t i = 0; i < vector_types.size(); ++i) {
   for (size_t j = 0; j < vector_types.size(); ++j) {
     for (size_t k = 0; k < vector_types.size(); ++k) {
@@ -357,6 +364,7 @@ add("hypergeometric_log", DOUBLE_T, INT_T, INT_T, INT_T, INT_T);
 add("hypergeometric_rng", INT_T, INT_T, INT_T, INT_T);
 add_binary("hypot");
 add("if_else", DOUBLE_T, INT_T, DOUBLE_T, DOUBLE_T);
+add("inc_beta", DOUBLE_T, DOUBLE_T, DOUBLE_T, DOUBLE_T);
 add("int_step", INT_T, DOUBLE_T);
 add("int_step", INT_T, INT_T);
 add_unary("inv");
@@ -390,6 +398,7 @@ for (size_t i = 0; i < vector_types.size(); ++i) {
 }
 add_binary("inv_gamma_rng");
 add_unary("inv_logit");
+add_unary("inv_Phi");
 add_unary("inv_sqrt");
 add_unary("inv_square");
 add("inv_wishart_log", DOUBLE_T, MATRIX_T, DOUBLE_T, MATRIX_T);
@@ -865,6 +874,7 @@ for (size_t i = 0; i < base_types.size(); ++i) {
 }
 add_unary("tan");
 add_unary("tanh");
+add_nullary("target");  // converted to "get_lp" in term_grammar semantics
 add("tcrossprod", MATRIX_T, MATRIX_T);
 add_unary("tgamma");
 add("to_array_1d", expr_type(DOUBLE_T, 1), MATRIX_T);

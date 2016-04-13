@@ -125,14 +125,14 @@ parameters {
 }
 transformed parameters {
   real<lower=0> squared_error;
-  squared_error <- dot_self(y - x * beta);
+  squared_error = dot_self(y - x * beta);
 }
 model {
-  increment_log_prob(-squared_error);
+  target += -squared_error;
 }
 generated quantities {
   real<lower=0> sigma_squared;
-  sigma_squared <- squared_error / N;
+  sigma_squared = squared_error / N;
 }
 \end{stancode}
 %
@@ -230,7 +230,7 @@ data {
 // ...
 model {
   // ...
-  increment_log_prob(- lambda * dot_self(beta));
+  target += - lambda * dot_self(beta);
 }
 \end{stancode}
 %
@@ -275,7 +275,7 @@ data {
 model {
   // ...
   for (k in 1:K)
-    increment_log_prob(- lambda * abs(beta[k]));
+    target += - lambda * fabs(beta[k]);
 }
 \end{stancode}
 
@@ -304,8 +304,8 @@ data {
 model {
   // ...
   for (k in 1:K)
-    increment_log_prob(-lambda1 * fabs(beta[k]));
-  increment_log_prob(-lambda2 * dot_self(beta));
+    target += -lambda1 * fabs(beta[k]);
+  target += -lambda2 * dot_self(beta);
 }
 \end{stancode}
 %
@@ -328,7 +328,7 @@ elastic net estimate is calculated in the generated quantities block.
 generated quantities {
   vector[K] beta_elastic_net;
   // ...
-  beta_elastic_net <- (1 + lambda2) * beta;
+  beta_elastic_net = (1 + lambda2) * beta;
 }
 \end{stancode}
 %
@@ -1840,43 +1840,65 @@ z_k
 .
 \]
 
-\section{Unit Vector}
-Unit vectors show up in directional statistics.
+\section{Unit Vector}\label{unit-vector.section}
 
-The $n$-sphere is the set of points $x \in \reals^n$ such that
+An $n$-dimensional vector $x \in \reals^n$ is said to be a unit vector
+if it has unit Euclidean length, so that
+%
 \[
-\Vert x \Vert^2 = \sum_{i=1}^n x_i^2 = 1\ .
+\Vert x \Vert 
+\ = \ \sqrt{x^{\top}\,x}
+\ = \ \sqrt{x_1^2 + x_2^2 + \cdots + x_n^2}
+\ = \ 1\ .
 \]
+%
+
 
 \subsection{Unit Vector Inverse Transform}
 
-To parameterize unit length vectors, we use hyperspherical coordinates.
-The unconstrained vector $y \in \reals^{n-1}$ is a set of angles which
-relates to the unit vector as follows:
-\begin{eqnarray*}
-x_1 & = & \cos(y_1) \\
-x_2 & = & \cos(y_2) \sin(y_1) \\
-x_3 & = & \cos(y_3) \sin(y_1) \sin(y_2) \\
-& \vdots & \\
-x_i & = & \cos(y_i) \prod_{j=1}^{i-1} \sin(y_j) \\
-& \vdots & \\
-x_n & = & \prod_{j=1}^{n-1} \sin(y_j).
-\end{eqnarray*}
-Note that, in practice, we use $y_i = \hat{y}_i + \frac{\pi}{2}$ and use $\hat{y}_i$ as the unconstrained parameters to avoid a singularity at
-$y_i = 0$.
-
-
-\subsection{Absolute Jacobian Determinant of the Unit Vector
-  Inverse Transform}
-To derive the determinant of the Jacobian we first add a radius coordinate
-$r=1$ which multiplies the vector $x$.
-The Jacobian, $J$, can be shown to be lower triangular, so its
-determinant is just the product of diagonal entries and the
-absolute value of the determinant is
+Stan divides an unconstrained vector $y \in \reals^{n}$ by its norm,
+$\Vert y \Vert = \sqrt{y^\top y}$, to obtain a unit vector $x$,
+%
 \[
-\left| \, \det J \, \right| = \left|r^{n-1} \sin^{n-2}(y_1) \sin^{n-3}(y_2) ... \sin(y_{n-2})\right| .
+x = \frac{y}{\Vert y \Vert}.
 \]
+%
 
+To generate a unit vector, Stan generates points at random in
+$\reals^n$ with independent unit normal distributions, which are then
+standardized by dividing by their Euclidean length.
+\cite{Marsaglia:1972} showed this generates points uniformly at random
+on $S^{n-1}$.  That is, if we draw $y_n \sim \distro{Normal}(0, 1)$
+for $n \in 1{:}n$, then $x = \frac{y}{\Vert y \Vert}$ has a uniform
+distribution over $S^{n-1}$.  This allows us to use an $n$-dimensional
+basis for $S^{n-1}$ that preserves local neighborhoods in that points
+that are close to each other in $\reals^n$ map to points near each
+other in $S^{n-1}$.  The mapping is not perfectly distance preserving,
+because there are points arbitrarily far away from each other in
+$\reals^n$ that map to identical points in $S^{n-1}$.
+
+
+\subsubsection{Warning: undefined at zero!}
+
+The above mapping from $\reals^n$ to $S^n$ is not defined at zero.
+While this point outcome has measure zero during sampling, and may
+thus be ignored, it is the default initialization point and thus unit
+vector parameters cannot be initialized at zero.  A simple workaround
+is to initialize from a very small interval around zero, which is an
+option built into all of the Stan interfaces.
+
+\subsection{Absolute Jacobian Determinant of the Unit Vector Inverse
+  Transform}
+
+The Jacobian matrix relating the input vector $y$ to the output vector
+$x$ is singular because $x^\top x = 1$ for any non-zero input vector
+$y$. Thus, there technically is no unique transformation from $x$ to
+$y$. To circumvent this issue, let $r = \sqrt{y^\top y}$ so that $y = r
+x$. The transformation from $\left(r, x_{-n}\right)$ to $y$ is
+well-defined but $r$ is arbitrary, so we set $r = 1$. In this case,
+the determinant of the Jacobian is proportional to $-\frac{1}{2} y^\top y$,
+which is the kernel of a standard multivariate normal distribution
+with $n$ independent dimensions.
 
 \section{Correlation Matrices}\label{correlation-matrix-transform.section}
 
@@ -2477,13 +2499,13 @@ Differentiation Variational Inference (ADVI). For more details, see
 \section{Classical Variational Inference}
 
 Variational inference approximates the
-posterior $p(\theta \mid y)$ with a simple, parameterized distribution
-$q(\theta \,;\, \phi)$. It matches the approximation to the
+posterior $p(\theta \, | \, y)$ with a simple, parameterized distribution
+$q(\theta \, | \, \phi)$. It matches the approximation to the
 true posterior by minimizing the Kullback-Leibler (KL) divergence,
 %
 \[
   \phi^* = \argmin_\phi
-  \KL{ q(\theta \,;\, \phi) }{ p(\theta \mid y) }.
+  \KL{q(\theta \, | \, \phi) }{ p(\theta \mid y)}.
 \]
 %
 Typically the KL divergence lacks an analytic, closed-form solution.
@@ -2495,7 +2517,7 @@ Instead we maximize a proxy to the KL divergence, the evidence lower bound
   =
   \E_{q (\theta)} \big[ \log p (y,\theta) \big]
   -
-  \E_{q (\theta)} \big[ \log q (\theta\,;\,\phi) \big].
+  \E_{q (\theta)} \big[ \log q (\theta\, | \,\phi) \big].
 \]
 %
 The first term is an expectation of the log
@@ -2515,14 +2537,14 @@ The variational objective (ELBO) becomes
 \[
   \mathcal{L}(\phi)
   =
-  \E_{q(\zeta\,;\,\phi)}
+  \E_{q(\zeta\,|\,\phi)}
   \bigg[
   \log p (y, T^{-1}(\zeta))
   +
   \log \big| \det J_{T^{-1}}(\zeta) \big|
   \bigg]
   -
-  \E_{q (\zeta\,;\,\phi)} \big[ \log q (\zeta\,;\,\phi) \big].
+  \E_{q (\zeta\, | \,\phi)} \big[ \log q (\zeta\, | \,\phi) \big].
 \]
 %
 Since the $\zeta$ variables live in the real-coordinate space, we can choose a
@@ -2530,13 +2552,13 @@ fixed family for the variational distribution. We choose a fully-factorized
 Gaussian,
 %
 \[
-  q(\zeta \,;\, \phi)
+  q(\zeta \, | \, \phi)
   =
-  \mathcal{N}\left(\zeta \,;\, \mu, \sigma\right)
+  \distro{Normal}\left(\zeta \, | \, \mu, \sigma\right)
   =
   \prod_{k=1}^K
-  \mathcal{N}
-  \left(\zeta_k \,;\, \mu_k, \sigma_k\right),
+  \distro{Normal}
+  \left(\zeta_k \, | \, \mu_k, \sigma_k\right),
 \]
 %
 where the vector
@@ -2552,11 +2574,10 @@ latent variables. This implicitly defines the variational approximation in the
 original latent variable space as
 %
 \[
-\mathcal{N} \left(T^{-1}(\zeta)\,;\, \mu, \sigma\right)
-\big| \det J_{T^{-1}}(\zeta) \big|.
+\distro{Normal} \left(T(\theta) \, | \, \mu, \sigma\right)
+\big| \det J_{T}(\theta) \big|.
 \]
-Note that this is, in general, not a Gaussian distribution. We choose a
-fully factorized Gaussian for its efficiency and analytic entropy term.
+This is, in general, not a Gaussian distribution.
 This choice may call to mind the Laplace approximation
 technique, where a second-order Taylor expansion around the
 maximum-a-posteriori estimate gives a Gaussian approximation to the
@@ -2566,7 +2587,7 @@ The variational objective (ELBO) that we maximize is,
 \[
   \mathcal{L}(\phi)
   =
-  \E_{q(\zeta\,;\,\phi)}
+  \E_{q(\zeta\, | \,\phi)}
   \bigg[
   \log p (y, T^{-1}(\zeta))
   +

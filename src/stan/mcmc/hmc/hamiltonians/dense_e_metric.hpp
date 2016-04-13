@@ -1,26 +1,24 @@
 #ifndef STAN_MCMC_HMC_HAMILTONIANS_DENSE_E_METRIC_HPP
 #define STAN_MCMC_HMC_HAMILTONIANS_DENSE_E_METRIC_HPP
 
-#include <boost/random/variate_generator.hpp>
-#include <boost/random/normal_distribution.hpp>
-
 #include <stan/math/prim/mat/fun/Eigen.hpp>
-#include <Eigen/Cholesky>
-
 #include <stan/math/prim/mat/meta/index_type.hpp>
 #include <stan/mcmc/hmc/hamiltonians/base_hamiltonian.hpp>
 #include <stan/mcmc/hmc/hamiltonians/dense_e_point.hpp>
+#include <boost/random/variate_generator.hpp>
+#include <boost/random/normal_distribution.hpp>
+#include <Eigen/Cholesky>
 
 namespace stan {
-
   namespace mcmc {
 
     // Euclidean manifold with dense metric
-    template <typename M, typename BaseRNG>
-    class dense_e_metric : public base_hamiltonian<M, dense_e_point, BaseRNG> {
+    template <class Model, class BaseRNG>
+    class dense_e_metric
+      : public base_hamiltonian<Model, dense_e_point, BaseRNG> {
     public:
-      dense_e_metric(M& m, std::ostream* e)
-        : base_hamiltonian<M, dense_e_point, BaseRNG>(m, e) {}
+      explicit dense_e_metric(const Model& model)
+        : base_hamiltonian<Model, dense_e_point, BaseRNG>(model) {}
 
       ~dense_e_metric() {}
 
@@ -34,6 +32,10 @@ namespace stan {
 
       double phi(dense_e_point& z) {
         return this->V(z);
+      }
+
+      double dG_dt(dense_e_point& z) {
+        return 2 * T(z) - z.q.dot(z.g);
       }
 
       const Eigen::VectorXd dtau_dq(dense_e_point& z) {
@@ -63,7 +65,5 @@ namespace stan {
     };
 
   }  // mcmc
-
 }  // stan
-
 #endif
