@@ -19,10 +19,10 @@ namespace stan {
      */
     template <typename T, class V = noop>
     struct value {
-      T val_;
       bool is_set_;
       const T default_;
       const bool has_default_;
+      T val_;
       V v_;
 
       /**
@@ -35,6 +35,7 @@ namespace stan {
         : is_set_(false),
           default_(),
           has_default_(false),
+          val_(default_),
           v_() { }
 
       /**
@@ -49,6 +50,7 @@ namespace stan {
         : is_set_(false),
           default_(),
           has_default_(false),
+          val_(default_),
           v_(v) { }
 
       /**
@@ -63,6 +65,7 @@ namespace stan {
         : is_set_(false),
           default_(d),
           has_default_(true),
+          val_(default_),
           v_() { }
 
       /**
@@ -80,6 +83,7 @@ namespace stan {
         : is_set_(false),
           default_(d),
           has_default_(true),
+          val_(default_),
           v_(v) {
         if (!v_.validate(default_))
           throw std::invalid_argument("default value is not valid");

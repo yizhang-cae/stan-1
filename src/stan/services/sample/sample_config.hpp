@@ -8,10 +8,15 @@
 
 namespace stan {
   namespace services {
-    
-    // template <class Model>
+
+    /**
+     * Configuation for the sample function.
+     *
+     * @tparam Model model class that follows the Stan program concept
+     */
+    template <class Model>
     struct sample_config {
-      // const Model& model_;
+      const Model& model_;
 
       // var_context& data_;
 
@@ -21,6 +26,9 @@ namespace stan {
       typedef double random_init_bounds_t;
       value<random_init_bounds_t, is_positive> random_init_bounds_;
 
+      typedef std::string algorithm_t;
+      value<algorithm_t, one_of<std::string> > algorithm_;
+      
       typedef std::string metric_t;
       value<metric_t, one_of<std::string> > metric_;
       
@@ -35,62 +43,81 @@ namespace stan {
       typedef int iter_t;
       value<iter_t, is_positive> iter_;
       typedef int warmup_t;
-      value<warmup_t, is_positive> warmup_; // iter/2
+      value<warmup_t, is_positive> warmup_;
       typedef int num_samples_t;
       value<num_samples_t, is_positive> num_samples_;
       typedef int thin_t;
       value<thin_t, is_positive> thin_;
 
-      
-      // explicit sample_config(Model& m)
-      // : model_(m)
-      sample_config()
-        : do_random_inits_(true),
-          random_init_bounds_(2),
-          metric_("diag_e", one_of<std::string>("dense_e", "diag_e", "unit_e")),
-          max_treedepth_(10),
-          int_time_(1),
-          iter_(2000),
-          warmup_(iter_.default_ / 2),
-          num_samples_(1000),
-          thin_(1)
+      /**
+       * Constructor.
+       *
+       * Creates the sample configuration with the defaults.
+       *
+       * @param model The Stan program
+       */
+       explicit sample_config(Model& model)
+         : model_(model),
+           do_random_inits_(true),
+           random_init_bounds_(2),
+           algorithm_("nuts", one_of<std::string>("hmc", "nuts", "fixed_param")),
+           metric_("diag_e", one_of<std::string>("dense_e", "diag_e", "unit_e")),
+           max_treedepth_(10),
+           int_time_(1),
+           iter_(2000),
+           warmup_(iter_.default_ / 2),
+           num_samples_(1000),
+           thin_(1)
       { }
-      
-      void validate() {
+
+      /**
+       * Validates the input.
+       *
+       * @return true if the sample object is ok;
+       *   false otherwise. May write to the writer.
+       */
+      bool validate() {
         // individual validation
-        do_random_inits_.validate();
-        random_init_bounds_.validate();
-        metric_.validate();
-        max_treedepth_.validate();
-        int_time_.validate();
-        iter_.validate();
-        warmup_.validate();
-        num_samples_.validate();
-        thin_.validate();
-        max_treedepth_.validate();
-        int_time_.validate();
+        if (!do_random_inits_.validate()) return false;
+        if (!random_init_bounds_.validate()) return false;
+        if (!metric_.validate()) return false;
+        if (!max_treedepth_.validate()) return false;
+        if (!int_time_.validate()) return false;
+        if (!iter_.validate()) return false;
+        if (!warmup_.validate()) return false;
+        if (!num_samples_.validate()) return false;
+        if (!thin_.validate()) return false;
+        if (!max_treedepth_.validate()) return false;
+        if (!int_time_.validate()) return false;
 
-        //   if (algorithm_.value_ == "hmc") {
-        //     if (max_treedepth_.is_set_) barf;
-        //     ...
-        //       }
-        
-        //   if (algorithm_.value_ == "nuts") {
-        //     if (int_time_.is_set_) barf;
-        //     ...
-        //       }
-        
-        //   if (adapt_.value_ == true) {
-        //     if (adapt_engaged_.is_set_) barf;
-        //     ...
-        
-        //       }
+        if (algorithm_.val_ == "hmc") {
+          if (max_treedepth_.is_set_) {
+            // barf;
+            return false;
+          }
+        }
 
+        
+        if (algorithm_.val_ == "nuts") {
+          if (int_time_.is_set_) {
+            // barf;
+            return false;
+          }
+        }
+
+        /*
+         if (adapt_.val_ == true) {
+          if (adapt_engaged_.is_set_) {
+            // barf;
+            return false;
+          }
+        }
+        */
+        return true;
       }
 
     };
     
   }
 }
-
 #endif

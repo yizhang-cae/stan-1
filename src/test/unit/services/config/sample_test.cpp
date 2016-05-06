@@ -1,12 +1,14 @@
-#include <stan/services/sample/sample_config.hpp>
+#include <stan/services/sample/sample.hpp>
 #include <gtest/gtest.h>
 
 class Model {
 };
 
-TEST(sample_config, test) {
+TEST(sample, test) {
   Model model;
   
   stan::services::sample_config<Model> config(model);
-  EXPECT_TRUE(config.validate());
+
+  stan::services::sample(config);
+  
 }
