@@ -10,6 +10,7 @@
 #include <stan/services/sample/run_adaptive_sampler.hpp>
 #include <stan/mcmc/hmc/nuts/adapt_diag_e_nuts.hpp>
 #include <ctime>
+#include <boost/random/additive_combine.hpp>  // L'Ecuyer RNG
 
 namespace stan {
   namespace services {
@@ -47,8 +48,9 @@ namespace stan {
        */
       template <class Model, class rng_t>
       int hmc_nuts_diag_e_adapt(Model& model,
-                                rng_t& base_rng,
-                                Eigen::VectorXd& cont_params,
+                                long rng_seed,
+                                unsigned int chain_id,
+                                //Eigen::VectorXd& cont_params, init_var_context
                                 int num_warmup,
                                 int num_samples,
                                 int num_thin,
@@ -68,6 +70,9 @@ namespace stan {
                   interface_callbacks::writer::base_writer& sample_writer,
                   interface_callbacks::writer::base_writer& diagnostic_writer,
                   interface_callbacks::writer::base_writer& message_writer) {
+        boost::ecuyer1988 rng(rng_seed);
+        Eigen::VectorXd cont_params = Eigen::VectorXd::Zero(model.num_params_r());
+        
         stan::services::check_timing(model, cont_params, message_writer);
 
         stan::mcmc::adapt_diag_e_nuts<Model, rng_t> sampler(model, base_rng);
