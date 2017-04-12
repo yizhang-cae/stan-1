@@ -1267,50 +1267,6 @@ add("linOdeModel", MATRIX_T, arg_types_212);
 add("linOdeModel", MATRIX_T, arg_types_211);
 add("linOdeModel", MATRIX_T, arg_types_221);
 
-/*
-std::vector<expr_type> arg_types_PKcpt_1;
-std::vector<expr_type> arg_types_PKcpt_2;
-arg_types_PKcpt_1.push_back(expr_type(DOUBLE_T, 2U));
-arg_types_PKcpt_2.push_back(expr_type(DOUBLE_T, 1U));
-for(int i = 0; i < 4; i++) {
-  arg_types_PKcpt_1.push_back(vector_types[1]);
-  arg_types_PKcpt_2.push_back(vector_types[1]);
-}
-for(int i = 0; i < 4; i++) {
-  arg_types_PKcpt_1.push_back(int_vector_types[1]);
-  arg_types_PKcpt_2.push_back(int_vector_types[1]);
-}
-add("PKModelTwoCpt", MATRIX_T, arg_types_PKcpt_1);
-add("PKModelTwoCpt", MATRIX_T, arg_types_PKcpt_2);
-add("PKModelOneCpt", MATRIX_T, arg_types_PKcpt_1);
-add("PKModelOneCpt", MATRIX_T, arg_types_PKcpt_2);
+// Expose analytical solutions
+add("fOneCpt", VECTOR_T, DOUBLE_T, VECTOR_T, VECTOR_T, expr_type(DOUBLE_T, 1U));
 
-// linCptModel
-std::vector<expr_type> arg_types_linCpt_1;
-std::vector<expr_type> arg_types_linCpt_2;
-std::vector<expr_type> arg_types_linCpt_3;
-std::vector<expr_type> arg_types_linCpt_4;
-arg_types_linCpt_1.push_back(expr_type(MATRIX_T, 1U));
-arg_types_linCpt_2.push_back(expr_type(MATRIX_T, 1U));
-arg_types_linCpt_3.push_back(MATRIX_T);
-arg_types_linCpt_4.push_back(MATRIX_T);
-arg_types_linCpt_1.push_back(expr_type(DOUBLE_T, 2U));
-arg_types_linCpt_2.push_back(expr_type(DOUBLE_T, 1U));
-arg_types_linCpt_3.push_back(expr_type(DOUBLE_T, 2U));
-arg_types_linCpt_4.push_back(expr_type(DOUBLE_T, 1U));
-for(int i = 0; i < 4; i++) {
-  arg_types_linCpt_1.push_back(vector_types[1]);
-  arg_types_linCpt_2.push_back(vector_types[1]);
-  arg_types_linCpt_3.push_back(vector_types[1]);
-  arg_types_linCpt_4.push_back(vector_types[1]);
-}
-for(int i = 0; i < 4; i++) {
-  arg_types_linCpt_1.push_back(int_vector_types[1]);
-  arg_types_linCpt_2.push_back(int_vector_types[1]);
-  arg_types_linCpt_3.push_back(int_vector_types[1]);
-  arg_types_linCpt_4.push_back(int_vector_types[1]);
-}
-add("linCptModel", MATRIX_T, arg_types_linCpt_1);
-add("linCptModel", MATRIX_T, arg_types_linCpt_2);
-add("linCptModel", MATRIX_T, arg_types_linCpt_3);
-add("linCptModel", MATRIX_T, arg_types_linCpt_4); */
