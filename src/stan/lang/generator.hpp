@@ -451,7 +451,7 @@ namespace stan {
         o_ << ", ";
 
         generate_expression(fx.tlag_, o_);
-        o_ << ", ";
+        o_ << ", pstream__, ";
 
         generate_expression(fx.rel_tol_, o_);
         o_ << ", ";
