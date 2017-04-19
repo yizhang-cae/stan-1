@@ -1269,4 +1269,5 @@ add("linOdeModel", MATRIX_T, arg_types_221);
 
 // Expose analytical solutions
 add("fOneCpt", VECTOR_T, DOUBLE_T, VECTOR_T, VECTOR_T, expr_type(DOUBLE_T, 1U));
+add("fTwoCpt", VECTOR_T, DOUBLE_T, VECTOR_T, VECTOR_T, expr_type(DOUBLE_T, 1U));
 

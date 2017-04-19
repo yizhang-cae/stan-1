@@ -9,7 +9,7 @@ data {
 
 transformed data {
   vector[nCmt] pred;
-  pred = fOneCpt(dt, parameter, init, rate);
+  pred = fTwoCpt(dt, parameter, init, rate);
 
 }
 
@@ -24,8 +24,8 @@ transformed parameters {
   // currently rate is expected to be data
   vector[nCmt] pred_p;
 
-  pred_p = fOneCpt(dt, parameter, init, rate);
-  pred_p = fOneCpt(dt, parameter_p, init_p, rate);
+  pred_p = fTwoCpt(dt, parameter, init, rate);
+  pred_p = fTwoCpt(dt, parameter_p, init_p, rate);
 
   // For now, only tests interesting scenarios, rather than
   // all possible combinations.

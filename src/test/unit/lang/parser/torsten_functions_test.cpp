@@ -17,3 +17,7 @@ TEST(lang_parser, generalCptModel_function_signatures) {
 TEST(lang_parse, fOneCptModel_function_signatures) {
     test_parsable("function-signatures/math/torsten/fOneCpt");
 }
+
+TEST(lang_parse, fTwoCptModel_function_signatures) {
+     test_parsable("function-signatures/math/torsten/fTwoCpt");
+}
