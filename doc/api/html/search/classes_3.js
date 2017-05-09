@@ -22,8 +22,8 @@ var searchData=
   ['division_5fexpr',['division_expr',['../structstan_1_1lang_1_1division__expr.html',1,'stan::lang']]],
   ['double_5fliteral',['double_literal',['../structstan_1_1lang_1_1double__literal.html',1,'stan::lang']]],
   ['double_5fvar_5fdecl',['double_var_decl',['../structstan_1_1lang_1_1double__var__decl.html',1,'stan::lang']]],
+  ['dummy_5fstruct',['DUMMY_STRUCT',['../struct_d_u_m_m_y___s_t_r_u_c_t.html',1,'']]],
   ['dump',['dump',['../classstan_1_1io_1_1dump.html',1,'stan::io']]],
-  ['dump_5ffactory',['dump_factory',['../classstan_1_1interface__callbacks_1_1var__context__factory_1_1dump__factory.html',1,'stan::interface_callbacks::var_context_factory']]],
   ['dump_5fmember_5fvar_5fvisgen',['dump_member_var_visgen',['../structstan_1_1lang_1_1dump__member__var__visgen.html',1,'stan::lang']]],
   ['dump_5freader',['dump_reader',['../classstan_1_1io_1_1dump__reader.html',1,'stan::io']]]
 ];

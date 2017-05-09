@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['categorical_5fargument',['categorical_argument',['../classstan_1_1services_1_1categorical__argument.html',1,'stan::services']]],
   ['chained_5fvar_5fcontext',['chained_var_context',['../classstan_1_1io_1_1chained__var__context.html',1,'stan::io']]],
   ['chains',['chains',['../classstan_1_1mcmc_1_1chains.html',1,'stan::mcmc']]],
   ['cholesky_5fcorr_5fvar_5fdecl',['cholesky_corr_var_decl',['../structstan_1_1lang_1_1cholesky__corr__var__decl.html',1,'stan::lang']]],

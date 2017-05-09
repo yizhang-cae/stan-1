@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['statement_5ft',['statement_t',['../structstan_1_1lang_1_1statement.html#a062e93732d528621b787a13e4dd252c4',1,'stan::lang::statement']]],
-  ['statements_5ft',['statements_t',['../structstan_1_1lang_1_1program.html#aec89898d753e241ac35910528a70812f',1,'stan::lang::program']]],
-  ['string_5fargument',['string_argument',['../namespacestan_1_1services.html#a626d2f28004f94b43f69592034613b45',1,'stan::services']]]
+  ['range_5ft',['range_t',['../structstan_1_1lang_1_1variable__map.html#a4869f785bf14e81f1a8c2b51845ecac0',1,'stan::lang::variable_map']]],
+  ['result_5ftype',['result_type',['../structstan_1_1lang_1_1visgen.html#a01f5d5c505913f32e29545ee85dbd6d7',1,'stan::lang::visgen']]],
+  ['row_5fvector_5ft',['row_vector_t',['../classstan_1_1io_1_1reader.html#ae7e8bfb1b6dcbe339afc4018061c6e20',1,'stan::io::reader::row_vector_t()'],['../classstan_1_1io_1_1writer.html#a2d93217d9659da7a9b047720c6a4450f',1,'stan::io::writer::row_vector_t()']]]
 ];
