@@ -328,6 +328,8 @@ namespace stan {
       factor_r =
         integrate_ode_control_r(_r1)[assign_lhs_f(_val, _1)]
         | integrate_ode_r(_r1)[assign_lhs_f(_val, _1)]
+        | algebra_solver_control_r(_r1)[assign_lhs_f(_val, _1)]
+        | algebra_solver_r(_r1)[assign_lhs_f(_val, _1)]
         | generalOdeModel_control_r(_r1)[assign_lhs_f(_val, _1)]
         | (fun_r(_r1)[assign_lhs_f(_b, _1)]
            > eps[set_fun_type_named_f(_val, _b, _r1, _pass,

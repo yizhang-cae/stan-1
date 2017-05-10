@@ -35,9 +35,9 @@ parameters {
 }
 
 transformed parameters {
-//  vector[2] theta_p;
-//  theta_p = algebra_solver(algebra_system, x, y, dat, dat_int);
-//  theta_p = algebra_solver(algebra_system, x, y_p, dat, dat_int);
+  vector[2] theta_p;
+  theta_p = algebra_solver(algebra_system, x, y, dat, dat_int);
+  theta_p = algebra_solver(algebra_system, x, y_p, dat, dat_int);
 }
 
 model {
