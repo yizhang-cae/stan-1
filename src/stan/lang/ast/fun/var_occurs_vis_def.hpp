@@ -62,6 +62,14 @@ namespace stan {
       return false;  // no refs persist out of integrate_ode_control() call
     }
 
+    bool var_occurs_vis::operator()(const algebra_solver& e) const {
+      return false;  // no refs persist out of algebra_solver() call
+    }
+
+    bool var_occurs_vis::operator()(const algebra_solver_control& e) const {
+      return false;  // no refs persist out of algebra_solver_control() call
+    }
+
     bool var_occurs_vis::operator()(const generalOdeModel_control& e) const {
       return false;  // no refs persist out of generalOdeModel_control() call
     }

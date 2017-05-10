@@ -44,6 +44,16 @@ namespace stan {
     }
 
     expr_type
+    expression_type_vis::operator()(const algebra_solver& e) const {
+      return expr_type(VECTOR_T, 0);
+    }
+
+    expr_type
+    expression_type_vis::operator()(const algebra_solver_control& e) const {
+      return expr_type(VECTOR_T, 0);
+    }
+
+    expr_type
     expression_type_vis::operator()(const generalOdeModel_control& e) const {
       return MATRIX_T;
       // return expr_type(MATRIX_T, 0);

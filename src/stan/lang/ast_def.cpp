@@ -79,6 +79,8 @@
 #include <stan/lang/ast/node/int_var_decl_def.hpp>
 #include <stan/lang/ast/node/integrate_ode_def.hpp>
 #include <stan/lang/ast/node/integrate_ode_control_def.hpp>
+#include <stan/lang/ast/node/algebra_solver_def.hpp>
+#include <stan/lang/ast/node/algebra_solver_control_def.hpp>
 #include <stan/lang/ast/node/lb_idx_def.hpp>
 #include <stan/lang/ast/node/lub_idx_def.hpp>
 #include <stan/lang/ast/node/matrix_var_decl_def.hpp>

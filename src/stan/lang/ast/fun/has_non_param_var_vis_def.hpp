@@ -93,6 +93,17 @@ namespace stan {
         || boost::apply_visitor(*this, e.theta_.expr_);
     }
 
+    bool has_non_param_var_vis::operator()(const algebra_solver& e) const {
+      // if any vars, return true  -- CHECK: nonlinearity?
+      return boost::apply_visitor(*this, e.y_.expr_);
+    }
+    
+    bool has_non_param_var_vis::operator()(const algebra_solver_control& e)
+      const {
+      // if any vars, return true
+      return boost::apply_visitor(*this, e.y_.expr_);
+    }
+
     bool has_non_param_var_vis::operator()(const generalOdeModel_control& e)
       const {
       // CHECK - anything to do with nonlinearity ?

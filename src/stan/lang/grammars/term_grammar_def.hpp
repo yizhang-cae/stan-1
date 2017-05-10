@@ -45,6 +45,25 @@ BOOST_FUSION_ADAPT_STRUCT(stan::lang::integrate_ode_control,
                           (stan::lang::expression, abs_tol_)
                           (stan::lang::expression, max_num_steps_) )
 
+BOOST_FUSION_ADAPT_STRUCT(stan::lang::algebra_solver,
+                           (std::string, solver_name_)
+                           (std::string, system_function_name_)
+                           (stan::lang::expression, x_)
+                           (stan::lang::expression, y_)
+                           (stan::lang::expression, dat_)
+                           (stan::lang::expression, dat_int_) )
+
+BOOST_FUSION_ADAPT_STRUCT(stan::lang::algebra_solver_control,
+                           (std::string, solver_name_)
+                           (std::string, system_function_name_)
+                           (stan::lang::expression, x_)
+                           (stan::lang::expression, y_)
+                           (stan::lang::expression, dat_)
+                           (stan::lang::expression, dat_int_)
+                           (stan::lang::expression, rel_tol_)
+                           (stan::lang::expression, fun_tol_)
+                           (stan::lang::expression, max_num_steps_) )
+
 BOOST_FUSION_ADAPT_STRUCT(stan::lang::generalOdeModel_control,
                           (std::string, integration_function_name_)
                           (std::string, system_function_name_)
@@ -221,6 +240,47 @@ namespace stan {
         > lit(')')
           [validate_integrate_ode_f(_val, boost::phoenix::ref(var_map_),
                                     _pass, boost::phoenix::ref(error_msgs_))];
+
+      algebra_solver_control_r.name("expression");
+      algebra_solver_control_r
+        %= (string("algebra_solver") >> no_skip[!char_("a-zA-Z0-9_")])
+        >> lit('(')              // >> allows backtracking to non-control
+        >> identifier_r          // 1) system function name (function only)
+        >> lit(',')
+        >> expression_g(_r1)     // 2) x (data only)
+        >> lit(',')
+        >> expression_g(_r1)     // 3) y
+        >> lit(',')
+        >> expression_g(_r1)     // 4) dat (data only)
+        >> lit(',')
+        >> expression_g(_r1)     // 5) dat_int (data only)
+        >> lit(',')
+        >> expression_g(_r1)     // 6) relative tolerance (data only)
+        >> lit(',')
+        >> expression_g(_r1)     // 7) function tolerance (data only)
+        >> lit(',')
+        >> expression_g(_r1)     // 8) maximum number of steps (data only)
+        > lit(')')
+          [validate_algebra_solver_control_f(_val, boost::phoenix::ref(var_map_),
+                                             _pass,
+                                             boost::phoenix::ref(error_msgs_))];
+
+      algebra_solver_r.name("expression");
+      algebra_solver_r
+        %= (string("algebra_solver") >> no_skip[!char_("a-zA-Z0-9_")])
+        > lit('(')
+        > identifier_r          // 1) system function name (function only)
+        > lit(',')
+        > expression_g(_r1)     // 2) x (data only)
+        > lit(',')
+        > expression_g(_r1)     // 3) y
+        > lit(',')
+        > expression_g(_r1)     // 4) dat (data only)
+        > lit(',')
+        > expression_g(_r1)     // 5) dat_int (data only)
+        > lit(')')
+          [validate_algebra_solver_f(_val, boost::phoenix::ref(var_map_),
+                                     _pass, boost::phoenix::ref(error_msgs_))];
 
         generalOdeModel_control_r.name("expression");
         generalOdeModel_control_r
