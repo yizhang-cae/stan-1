@@ -39,7 +39,7 @@ namespace stan {
       bool operator()(const variable& x) const;  // NOLINT(runtime/explicit)
       bool operator()(const integrate_ode& x) const;  // NOLINT
       bool operator()(const integrate_ode_control& x) const;  // NOLINT
-      bool operator()(const algebra_solver& x) const;  // NOLINT(runtime/explicit)
+      bool operator()(const algebra_solver& x) const;  // NOLINT
       bool operator()(const algebra_solver_control& x) const;  // NOLINT
       bool operator()(const generalOdeModel_control& x) const;  // NOLINT
       bool operator()(const fun& x) const;  // NOLINT(runtime/explicit)

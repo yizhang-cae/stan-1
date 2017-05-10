@@ -2623,7 +2623,7 @@ namespace stan {
     bool data_only_expression::operator()(const algebra_solver_control& x)
       const {
       return boost::apply_visitor(*this, x.y_.expr_);
-    }    
+    }
     bool data_only_expression::operator()(const generalOdeModel_control& x)
       const {
       return ((((((boost::apply_visitor(*this, x.time_.expr_)
@@ -2633,7 +2633,7 @@ namespace stan {
         && boost::apply_visitor(*this, x.pMatrix_.expr_))
         && boost::apply_visitor(*this, x.biovar_.expr_))
         && boost::apply_visitor(*this, x.tlag_.expr_));
-    }  // include all arguments with a template type    
+    }  // include all arguments with a template type
     bool data_only_expression::operator()(const fun& x) const {
       for (size_t i = 0; i < x.args_.size(); ++i)
         if (!boost::apply_visitor(*this, x.args_[i].expr_))
