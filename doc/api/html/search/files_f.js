@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['random_5fvar_5fcontext_2ehpp',['random_var_context.hpp',['../random__var__context_8hpp.html',1,'']]],
   ['range_2ehpp',['range.hpp',['../range_8hpp.html',1,'']]],
   ['range_5fdef_2ehpp',['range_def.hpp',['../range__def_8hpp.html',1,'']]],
   ['reader_2ehpp',['reader.hpp',['../reader_8hpp.html',1,'']]],
@@ -12,8 +13,12 @@ var searchData=
   ['returns_5ftype_5fdef_2ehpp',['returns_type_def.hpp',['../returns__type__def_8hpp.html',1,'']]],
   ['returns_5ftype_5fvis_2ehpp',['returns_type_vis.hpp',['../returns__type__vis_8hpp.html',1,'']]],
   ['returns_5ftype_5fvis_5fdef_2ehpp',['returns_type_vis_def.hpp',['../returns__type__vis__def_8hpp.html',1,'']]],
+  ['row_5fvector_5fexpr_2ehpp',['row_vector_expr.hpp',['../row__vector__expr_8hpp.html',1,'']]],
+  ['row_5fvector_5fexpr_5fdef_2ehpp',['row_vector_expr_def.hpp',['../row__vector__expr__def_8hpp.html',1,'']]],
   ['row_5fvector_5fvar_5fdecl_2ehpp',['row_vector_var_decl.hpp',['../row__vector__var__decl_8hpp.html',1,'']]],
   ['row_5fvector_5fvar_5fdecl_5fdef_2ehpp',['row_vector_var_decl_def.hpp',['../row__vector__var__decl__def_8hpp.html',1,'']]],
+  ['run_5fadaptive_5fsampler_2ehpp',['run_adaptive_sampler.hpp',['../run__adaptive__sampler_8hpp.html',1,'']]],
+  ['run_5fsampler_2ehpp',['run_sampler.hpp',['../run__sampler_8hpp.html',1,'']]],
   ['rvalue_2ehpp',['rvalue.hpp',['../rvalue_8hpp.html',1,'']]],
   ['rvalue_5fat_2ehpp',['rvalue_at.hpp',['../rvalue__at_8hpp.html',1,'']]],
   ['rvalue_5findex_5fsize_2ehpp',['rvalue_index_size.hpp',['../rvalue__index__size_8hpp.html',1,'']]],

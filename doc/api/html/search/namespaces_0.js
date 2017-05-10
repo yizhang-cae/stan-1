@@ -1,15 +1,14 @@
 var searchData=
 [
+  ['advi',['advi',['../namespacestan_1_1services_1_1experimental_1_1advi.html',1,'stan::services::experimental']]],
+  ['callbacks',['callbacks',['../namespacestan_1_1callbacks.html',1,'stan']]],
+  ['diagnose',['diagnose',['../namespacestan_1_1services_1_1diagnose.html',1,'stan::services']]],
+  ['experimental',['experimental',['../namespacestan_1_1services_1_1experimental.html',1,'stan::services']]],
   ['gm',['gm',['../namespacestan_1_1gm.html',1,'stan']]],
-  ['init',['init',['../namespacestan_1_1services_1_1init.html',1,'stan::services']]],
-  ['interface_5fcallbacks',['interface_callbacks',['../namespacestan_1_1interface__callbacks.html',1,'stan']]],
-  ['interrupt',['interrupt',['../namespacestan_1_1interface__callbacks_1_1interrupt.html',1,'stan::interface_callbacks']]],
-  ['io',['io',['../namespacestan_1_1services_1_1io.html',1,'stan::services']]],
   ['io',['io',['../namespacestan_1_1io.html',1,'stan']]],
   ['json',['json',['../namespacestan_1_1json.html',1,'stan']]],
   ['lang',['lang',['../namespacestan_1_1lang.html',1,'stan']]],
   ['math',['math',['../namespacestan_1_1math.html',1,'stan']]],
-  ['mcmc',['mcmc',['../namespacestan_1_1services_1_1mcmc.html',1,'stan::services']]],
   ['mcmc',['mcmc',['../namespacestan_1_1mcmc.html',1,'stan']]],
   ['model',['model',['../namespacestan_1_1model.html',1,'stan']]],
   ['optimization',['optimization',['../namespacestan_1_1optimization.html',1,'stan']]],
@@ -18,8 +17,6 @@ var searchData=
   ['services',['services',['../namespacestan_1_1services.html',1,'stan']]],
   ['stan',['stan',['../namespacestan.html',1,'']]],
   ['std',['std',['../namespacestd.html',1,'']]],
-  ['var_5fcontext_5ffactory',['var_context_factory',['../namespacestan_1_1interface__callbacks_1_1var__context__factory.html',1,'stan::interface_callbacks']]],
-  ['variational',['variational',['../namespacestan_1_1services_1_1variational.html',1,'stan::services']]],
-  ['variational',['variational',['../namespacestan_1_1variational.html',1,'stan']]],
-  ['writer',['writer',['../namespacestan_1_1interface__callbacks_1_1writer.html',1,'stan::interface_callbacks']]]
+  ['util',['util',['../namespacestan_1_1services_1_1util.html',1,'stan::services']]],
+  ['variational',['variational',['../namespacestan_1_1variational.html',1,'stan']]]
 ];

@@ -2,6 +2,7 @@
 #define STAN_LANG_AST_FUN_HAS_VAR_VIS_DEF_HPP
 
 #include <stan/lang/ast.hpp>
+#include <iostream>
 
 namespace stan {
   namespace lang {
@@ -29,11 +30,24 @@ namespace stan {
       return false;
     }
 
+    bool has_var_vis::operator()(const matrix_expr& e) const {
+      for (size_t i = 0; i < e.args_.size(); ++i)
+        if (boost::apply_visitor(*this, e.args_[i].expr_))
+          return true;
+      return false;
+    }
+
+    bool has_var_vis::operator()(const row_vector_expr& e) const {
+      for (size_t i = 0; i < e.args_.size(); ++i)
+        if (boost::apply_visitor(*this, e.args_[i].expr_))
+          return true;
+      return false;
+    }
+
     bool has_var_vis::operator()(const variable& e) const {
-      var_origin vo = var_map_.get_origin(e.name_);
-      return vo == parameter_origin
-        || vo == transformed_parameter_origin
-        || (vo == local_origin && e.type_.base_type_ != INT_T);
+      scope var_scope = var_map_.get_scope(e.name_);
+      return var_scope.par_or_tpar()
+        || (var_scope.is_local() && e.type_.base_type_ != INT_T);
     }
 
     bool has_var_vis::operator()(const fun& e) const {
@@ -53,6 +67,16 @@ namespace stan {
       // only init state and params may contain vars
       return boost::apply_visitor(*this, e.y0_.expr_)
         || boost::apply_visitor(*this, e.theta_.expr_);
+    }
+
+    bool has_var_vis::operator()(const algebra_solver& e) const {
+      // only y may contain vars
+      return boost::apply_visitor(*this, e.y_.expr_);
+    }
+
+    bool has_var_vis::operator()(const algebra_solver_control& e) const {
+      // only y may contain vars
+      return boost::apply_visitor(*this, e.y_.expr_);
     }
 
     bool has_var_vis::operator()(const generalOdeModel_control& e) const {

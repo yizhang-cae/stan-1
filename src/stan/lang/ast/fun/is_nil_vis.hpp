@@ -10,10 +10,14 @@ namespace stan {
     struct int_literal;
     struct double_literal;
     struct array_expr;
+    struct matrix_expr;
+    struct row_vector_expr;
     struct variable;
     struct fun;
     struct integrate_ode;
     struct integrate_ode_control;
+    struct algebra_solver;
+    struct algebra_solver_control;
     struct generalOdeModel_control;
     struct index_op;
     struct index_op_sliced;
@@ -30,9 +34,13 @@ namespace stan {
       bool operator()(const int_literal& x) const;  // NOLINT(runtime/explicit)
       bool operator()(const double_literal& x) const;  // NOLINT
       bool operator()(const array_expr& x) const;  // NOLINT
+      bool operator()(const matrix_expr& x) const;  // NOLINT
+      bool operator()(const row_vector_expr& x) const;  // NOLINT
       bool operator()(const variable& x) const;  // NOLINT(runtime/explicit)
       bool operator()(const integrate_ode& x) const;  // NOLINT
       bool operator()(const integrate_ode_control& x) const;  // NOLINT
+      bool operator()(const algebra_solver& x) const;  // NOLINT
+      bool operator()(const algebra_solver_control& x) const;  // NOLINT
       bool operator()(const generalOdeModel_control& x) const;  // NOLINT
       bool operator()(const fun& x) const;  // NOLINT(runtime/explicit)
       bool operator()(const index_op& x) const;  // NOLINT(runtime/explicit)

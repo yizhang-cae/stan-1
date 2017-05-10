@@ -22,6 +22,14 @@ namespace stan {
       return false;
     }
 
+    bool is_nil_vis::operator()(const matrix_expr& /* x */) const {
+      return false;
+    }
+
+    bool is_nil_vis::operator()(const row_vector_expr& /* x */) const {
+      return false;
+    }
+
     bool is_nil_vis::operator()(const variable& /* x */) const {
       return false;
     }
@@ -31,6 +39,14 @@ namespace stan {
     }
 
     bool is_nil_vis::operator()(const integrate_ode_control& /* x */) const {
+      return false;
+    }
+
+    bool is_nil_vis::operator()(const algebra_solver& /* x */) const {
+      return false;
+    }
+
+    bool is_nil_vis::operator()(const algebra_solver_control& /* x */) const {
       return false;
     }
 

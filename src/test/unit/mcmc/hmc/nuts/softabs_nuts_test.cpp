@@ -1,8 +1,7 @@
-#include <stan/math/rev/mat.hpp>
-#include <stan/interface_callbacks/writer/stream_writer.hpp>
+#include <test/test-models/good/mcmc/hmc/common/gauss3D.hpp>
+#include <stan/callbacks/stream_writer.hpp>
 #include <stan/mcmc/hmc/nuts/softabs_nuts.hpp>
 #include <boost/random/additive_combine.hpp>
-#include <test/test-models/good/mcmc/hmc/common/gauss3D.hpp>
 #include <stan/io/dump.hpp>
 #include <fstream>
 
@@ -22,9 +21,9 @@ TEST(McmcSoftAbsNuts, build_tree_test) {
   z_init.p(2) = -1;
 
   std::stringstream output;
-  stan::interface_callbacks::writer::stream_writer writer(output);
+  stan::callbacks::stream_writer writer(output);
   std::stringstream error_stream;
-  stan::interface_callbacks::writer::stream_writer error_writer(error_stream);
+  stan::callbacks::stream_writer error_writer(error_stream);
 
   std::fstream empty_stream("", std::fstream::in);
   stan::io::dump data_var_context(empty_stream);
@@ -91,9 +90,9 @@ TEST(McmcSoftAbsNuts, tree_boundary_test) {
   z_init.p(2) = -1;
 
   std::stringstream output;
-  stan::interface_callbacks::writer::stream_writer writer(output);
+  stan::callbacks::stream_writer writer(output);
   std::stringstream error_stream;
-  stan::interface_callbacks::writer::stream_writer error_writer(error_stream);
+  stan::callbacks::stream_writer error_writer(error_stream);
 
   std::fstream empty_stream("", std::fstream::in);
   stan::io::dump data_var_context(empty_stream);
@@ -297,9 +296,9 @@ TEST(McmcSoftAbsNuts, transition_test) {
   z_init.p(2) = -1;
 
   std::stringstream output;
-  stan::interface_callbacks::writer::stream_writer writer(output);
+  stan::callbacks::stream_writer writer(output);
   std::stringstream error_stream;
-  stan::interface_callbacks::writer::stream_writer error_writer(error_stream);
+  stan::callbacks::stream_writer error_writer(error_stream);
 
   std::fstream empty_stream("", std::fstream::in);
   stan::io::dump data_var_context(empty_stream);
@@ -326,7 +325,7 @@ TEST(McmcSoftAbsNuts, transition_test) {
   EXPECT_FLOAT_EQ(-0.86902142, s.cont_params()(1));
   EXPECT_FLOAT_EQ(1.6008, s.cont_params()(2));
   EXPECT_FLOAT_EQ(-3.5239484, s.log_prob());
-  EXPECT_FLOAT_EQ(0.99709648, s.accept_stat());
+  EXPECT_FLOAT_EQ(0.99690288, s.accept_stat());
   EXPECT_EQ("", output.str());
   EXPECT_EQ("", error_stream.str());
 }

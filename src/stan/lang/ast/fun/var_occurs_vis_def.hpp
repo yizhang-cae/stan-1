@@ -23,7 +23,24 @@ namespace stan {
     }
 
     bool var_occurs_vis::operator()(const array_expr& e) const {
-      return false;  // TODO(carpenter): update for array_expr
+      for (size_t i = 0; i < e.args_.size(); ++i)
+        if (boost::apply_visitor(*this, e.args_[i].expr_))
+          return true;
+      return false;
+    }
+
+    bool var_occurs_vis::operator()(const matrix_expr& e) const {
+      for (size_t i = 0; i < e.args_.size(); ++i)
+        if (boost::apply_visitor(*this, e.args_[i].expr_))
+          return true;
+      return false;
+    }
+
+    bool var_occurs_vis::operator()(const row_vector_expr& e) const {
+      for (size_t i = 0; i < e.args_.size(); ++i)
+        if (boost::apply_visitor(*this, e.args_[i].expr_))
+          return true;
+      return false;
     }
 
     bool var_occurs_vis::operator()(const variable& e) const {
@@ -43,6 +60,14 @@ namespace stan {
 
     bool var_occurs_vis::operator()(const integrate_ode_control& e) const {
       return false;  // no refs persist out of integrate_ode_control() call
+    }
+
+    bool var_occurs_vis::operator()(const algebra_solver& e) const {
+      return false;  // no refs persist out of algebra_solver() call
+    }
+
+    bool var_occurs_vis::operator()(const algebra_solver_control& e) const {
+      return false;  // no refs persist out of algebra_solver_control() call
     }
 
     bool var_occurs_vis::operator()(const generalOdeModel_control& e) const {

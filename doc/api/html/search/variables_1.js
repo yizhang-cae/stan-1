@@ -17,7 +17,7 @@ var searchData=
   ['add_5fidxs_5ff',['add_idxs_f',['../namespacestan_1_1lang.html#a72baabb2672a243ac50dbf1f2030b563',1,'stan::lang']]],
   ['add_5fline_5fnumber_5ff',['add_line_number_f',['../namespacestan_1_1lang.html#a0096b22606e504822f8f0b8773b8aa3e',1,'stan::lang']]],
   ['add_5floop_5fidentifier_5ff',['add_loop_identifier_f',['../namespacestan_1_1lang.html#a8ad5ad9629a5592fae8976ee79caaf92',1,'stan::lang']]],
-  ['add_5flp_5fvar_5ff',['add_lp_var_f',['../namespacestan_1_1lang.html#a753220b6c8c999a3ee0bf78a39fb1f99',1,'stan::lang']]],
+  ['add_5fparams_5fvar_5ff',['add_params_var_f',['../namespacestan_1_1lang.html#aa1d68283cf8598be450993ff7d116a11',1,'stan::lang']]],
   ['add_5fvar_5ff',['add_var_f',['../namespacestan_1_1lang.html#a90f052a77427e0ab381643084bbab6da',1,'stan::lang']]],
   ['add_5fwhile_5fbody_5ff',['add_while_body_f',['../namespacestan_1_1lang.html#a113b28c041b2d695d365846978a38a9b',1,'stan::lang']]],
   ['add_5fwhile_5fcondition_5ff',['add_while_condition_f',['../namespacestan_1_1lang.html#adfef57b170334b47c3c3323a1efa6c8a',1,'stan::lang']]],
@@ -30,12 +30,13 @@ var searchData=
   ['arg_5fdecls_5f',['arg_decls_',['../structstan_1_1lang_1_1function__decl__def.html#a1a19b62a5b6da3067b70034f52c3e45d',1,'stan::lang::function_decl_def']]],
   ['arg_5fdecls_5fr',['arg_decls_r',['../structstan_1_1lang_1_1functions__grammar.html#a8f4f8d8153a3a3b81b16f3bd0cfb6303',1,'stan::lang::functions_grammar']]],
   ['arg_5ftype_5f',['arg_type_',['../structstan_1_1lang_1_1arg__decl.html#aec79254ac2e2bd3f2f9259a29b9fd85b',1,'stan::lang::arg_decl']]],
-  ['args_5f',['args_',['../structstan_1_1lang_1_1array__expr.html#a443ca8b3621d36707eb6544a3e7ba127',1,'stan::lang::array_expr::args_()'],['../structstan_1_1lang_1_1distribution.html#ae24ea0432e64cf579608fd73117ca7ae',1,'stan::lang::distribution::args_()'],['../structstan_1_1lang_1_1fun.html#a2c7e1bbb86016f9cc67b2af60fd9882f',1,'stan::lang::fun::args_()']]],
-  ['args_5fr',['args_r',['../structstan_1_1lang_1_1term__grammar.html#a551b89ecd8efba854c239b5f890d67d6',1,'stan::lang::term_grammar']]],
+  ['args_5f',['args_',['../structstan_1_1lang_1_1array__expr.html#a443ca8b3621d36707eb6544a3e7ba127',1,'stan::lang::array_expr::args_()'],['../structstan_1_1lang_1_1distribution.html#ae24ea0432e64cf579608fd73117ca7ae',1,'stan::lang::distribution::args_()'],['../structstan_1_1lang_1_1fun.html#a2c7e1bbb86016f9cc67b2af60fd9882f',1,'stan::lang::fun::args_()'],['../structstan_1_1lang_1_1matrix__expr.html#a3562474c6f7a644040ca653c93ae00e2',1,'stan::lang::matrix_expr::args_()'],['../structstan_1_1lang_1_1row__vector__expr.html#a0e35e37ebbf2054c470c92390a5d41ec',1,'stan::lang::row_vector_expr::args_()']]],
+  ['args_5fr',['args_r',['../structstan_1_1lang_1_1term__grammar.html#afa58a506d931cc31bf3538dae29d9a3e',1,'stan::lang::term_grammar']]],
   ['array_5fdims_5fr',['array_dims_r',['../structstan_1_1lang_1_1bare__type__grammar.html#ae71a0e8d37a12b1acf6d30a8b4ba15eb',1,'stan::lang::bare_type_grammar']]],
-  ['array_5fexpr_5fr',['array_expr_r',['../structstan_1_1lang_1_1term__grammar.html#aacce6d772f44972305cf6c335bd4b367',1,'stan::lang::term_grammar']]],
-  ['assgn_5fr',['assgn_r',['../structstan_1_1lang_1_1statement__grammar.html#a33f62e7d75ce884d965690e6ccf1d410',1,'stan::lang::statement_grammar']]],
+  ['array_5fexpr_5fr',['array_expr_r',['../structstan_1_1lang_1_1term__grammar.html#a94d14a4515fcc66dd47773705eb784bf',1,'stan::lang::term_grammar']]],
+  ['array_5fexpr_5fscope_5f',['array_expr_scope_',['../structstan_1_1lang_1_1array__expr.html#acca9af5ecbbd82432022be76e7ce3a63',1,'stan::lang::array_expr']]],
+  ['assgn_5fr',['assgn_r',['../structstan_1_1lang_1_1statement__grammar.html#a7abf58e33bd785f820adf53dc175f3d5',1,'stan::lang::statement_grammar']]],
   ['assign_5flhs_5ff',['assign_lhs_f',['../namespacestan_1_1lang.html#a092cb2640be87937380477f8bc4502be',1,'stan::lang']]],
   ['assignment_5foperator_5fr',['assignment_operator_r',['../structstan_1_1lang_1_1statement__grammar.html#adbc1442be8ac52a4717c094f7e5e69df',1,'stan::lang::statement_grammar']]],
-  ['assignment_5fr',['assignment_r',['../structstan_1_1lang_1_1statement__grammar.html#ae901b3b5daa848fdca236a5a728f15d7',1,'stan::lang::statement_grammar']]]
+  ['assignment_5fr',['assignment_r',['../structstan_1_1lang_1_1statement__grammar.html#a09730c3c32d79326d00f7f3fba9f66c8',1,'stan::lang::statement_grammar']]]
 ];
