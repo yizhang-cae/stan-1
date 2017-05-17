@@ -1687,21 +1687,45 @@ namespace stan {
                                   std::ostream& error_msgs) {
       pass = true;
 
-      // test function argument type
       expr_type sys_result_type(DOUBLE_T, 1);
       std::vector<expr_type> sys_arg_types;
-      sys_arg_types.push_back(expr_type(DOUBLE_T, 0));
-      sys_arg_types.push_back(expr_type(DOUBLE_T, 1));
-      sys_arg_types.push_back(expr_type(DOUBLE_T, 1));
-      sys_arg_types.push_back(expr_type(DOUBLE_T, 1));
-      sys_arg_types.push_back(expr_type(INT_T, 1));
+      std::string expected_signature;
+
+      // build expected function argument type for generalOdeModel
+      if (ode_fun.integration_function_name_ == "generalOdeModel_rk45"
+        || ode_fun.integration_function_name_ == "generalOdeModel_bdf") {
+        sys_arg_types.push_back(expr_type(DOUBLE_T, 0));  // t0
+        sys_arg_types.push_back(expr_type(DOUBLE_T, 1));  // y
+        sys_arg_types.push_back(expr_type(DOUBLE_T, 1));  // theta
+        sys_arg_types.push_back(expr_type(DOUBLE_T, 1));  // x_r
+        sys_arg_types.push_back(expr_type(INT_T, 1));  // x_i
+        expected_signature = "(real, real[], real[], real[], int[]) : real[]";
+      }
+
+      // build expected function argument type for mixOdeModel
+      if ((ode_fun.integration_function_name_ == "mixOde1CptModel_rk45"
+        || ode_fun.integration_function_name_ == "mixOde1CptModel_bdf")
+        || (ode_fun.integration_function_name_ == "mixOde2CptModel_rk45"
+          || ode_fun.integration_function_name_ == "mixOde2CptModel_bdf")) {
+        sys_arg_types.push_back(expr_type(DOUBLE_T, 0));  // t0
+        sys_arg_types.push_back(expr_type(DOUBLE_T, 1));  // y
+        sys_arg_types.push_back(expr_type(DOUBLE_T, 1));  // y_PK
+        sys_arg_types.push_back(expr_type(DOUBLE_T, 1));  // theta
+        sys_arg_types.push_back(expr_type(DOUBLE_T, 1));  // x_r
+        sys_arg_types.push_back(expr_type(INT_T, 1));  // x_i
+        expected_signature = "(real, real[], real[], real[], real[], int[]) : real[]";  // NOLINT
+      }
+
       function_signature_t system_signature(sys_result_type, sys_arg_types);
+
+      // test function argument type
       if (!function_signatures::instance()
             .is_defined(ode_fun.system_function_name_, system_signature)) {
-      error_msgs << "first argument to generalOdeModel"
-                 << " must be a function with signature"
-                 << " (real, real[], real[], real[], int[]) : real[] ";
-      pass = false;
+        error_msgs << "first argument to"
+                   << ode_fun.integration_function_name_
+                   << " must be a function with signature "
+                   << expected_signature << " ";
+        pass = false;
       }
 
       // test regular argument types

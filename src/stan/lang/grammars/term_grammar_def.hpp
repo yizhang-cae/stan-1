@@ -288,7 +288,15 @@ namespace stan {
         generalOdeModel_control_r
          %= ( (string("generalOdeModel_bdf") >> no_skip[!char_("a-zA-Z0-9_")])
               | (string("generalOdeModel_rk45")
-                >> no_skip[!char_("a-zA-Z0-9_")]) )
+                >> no_skip[!char_("a-zA-Z0-9_")])
+              | (string("mixOde1CptModel_rk45")
+                >> no_skip[!char_("a-zA-Z0-9_")])
+              | (string("mixOde1CptModel_bdf")
+                >> no_skip[!char_("a-zA-Z0-9_")])
+              | (string("mixOde2CptModel_rk45")
+                >> no_skip[!char_("a-zA-Z0-9_")])
+              | (string("mixOde2CptModel_bdf")
+                >> no_skip[!char_("a-zA-Z0-9_")]))
          > lit('(')            // >> allows backtracking to non-control
          > identifier_r        // 1) system function name (function only)
          > lit(',')

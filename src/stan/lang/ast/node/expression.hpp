@@ -23,6 +23,7 @@ namespace stan {
     struct algebra_solver;
     struct algebra_solver_control;
     struct generalOdeModel_control;
+    struct mixOdeModel_control;
     struct index_op;
     struct index_op_sliced;
     struct conditional_op;
