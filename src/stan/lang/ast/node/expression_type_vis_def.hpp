@@ -56,7 +56,6 @@ namespace stan {
     expr_type
     expression_type_vis::operator()(const generalOdeModel_control& e) const {
       return MATRIX_T;
-      // return expr_type(MATRIX_T, 0);
     }
 
     expr_type expression_type_vis::operator()(const fun& e) const {
