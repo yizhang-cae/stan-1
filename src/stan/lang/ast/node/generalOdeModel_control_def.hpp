@@ -24,7 +24,8 @@ namespace stan {
                            const expression& pMatrix,
                            const expression& biovar,
                            const expression& tlag,
-                           const expression& rel_tol, const expression& abs_tol,
+                           const expression& rel_tol,
+                           const expression& abs_tol,
                            const expression& max_num_steps)
       : integration_function_name_(integration_function_name),
         system_function_name_(system_function_name),

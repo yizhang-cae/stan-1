@@ -22,6 +22,14 @@ namespace stan {
       return e.type_;
     }
 
+    expr_type expression_type_vis::operator()(const matrix_expr& e) const {
+      return expr_type(MATRIX_T, 0);
+    }
+
+    expr_type expression_type_vis::operator()(const row_vector_expr& e) const {
+      return expr_type(ROW_VECTOR_T, 0);
+    }
+
     expr_type expression_type_vis::operator()(const variable& e) const {
       return e.type_;
     }
@@ -33,6 +41,16 @@ namespace stan {
     expr_type
     expression_type_vis::operator()(const integrate_ode_control& e) const {
       return expr_type(DOUBLE_T, 2);
+    }
+
+    expr_type
+    expression_type_vis::operator()(const algebra_solver& e) const {
+      return expr_type(VECTOR_T, 0);
+    }
+
+    expr_type
+    expression_type_vis::operator()(const algebra_solver_control& e) const {
+      return expr_type(VECTOR_T, 0);
     }
 
     expr_type

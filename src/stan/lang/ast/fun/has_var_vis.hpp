@@ -11,10 +11,14 @@ namespace stan {
     struct int_literal;
     struct double_literal;
     struct array_expr;
+    struct matrix_expr;
+    struct row_vector_expr;
     struct variable;
     struct fun;
     struct integrate_ode;
     struct integrate_ode_control;
+    struct algebra_solver;
+    struct algebra_solver_control;
     struct generalOdeModel_control;
     struct index_op;
     struct index_op_sliced;
@@ -76,6 +80,24 @@ namespace stan {
        * @param e expression
        * @return true if expression contains a non-data variable
        */
+      bool operator()(const matrix_expr& e) const;
+
+      /**
+       * Return true if the specified expression contains a non-data
+       * variable. 
+       *
+       * @param e expression
+       * @return true if expression contains a non-data variable
+       */
+      bool operator()(const row_vector_expr& e) const;
+
+      /**
+       * Return true if the specified expression contains a non-data
+       * variable. 
+       *
+       * @param e expression
+       * @return true if expression contains a non-data variable
+       */
       bool operator()(const variable& e) const;
 
       /**
@@ -95,6 +117,24 @@ namespace stan {
        * @return true if expression contains a non-data variable
        */
       bool operator()(const integrate_ode_control& e) const;
+
+      /**
+       * Return true if the specified expression contains a non-data
+       * variable. 
+       *
+       * @param e expression
+       * @return true if expression contains a non-data variable
+       */
+      bool operator()(const algebra_solver& e) const;
+
+      /**
+       * Return true if the specified expression contains a non-data
+       * variable. 
+       *
+       * @param e expression
+       * @return true if expression contains a non-data variable
+       */
+      bool operator()(const algebra_solver_control& e) const;
 
       /**
        * Return true if the specified expression contains a non-data

@@ -105,19 +105,19 @@ TEST_F(performance, run) {
 TEST_F(performance, values_from_tagged_version) {
   int N_values = 9;
   ASSERT_EQ(N_values, last_draws_per_run[0].size())
-    << "last tagged version, 2.9.0, had " << N_values << " elements";
+    << "last tagged version, 2.16.0, had " << N_values << " elements";
 
   std::vector<double> first_run = last_draws_per_run[0];
-  EXPECT_FLOAT_EQ(-65.201302, first_run[0])
+  EXPECT_FLOAT_EQ(-65.508499, first_run[0])
     << "lp__: index 0";
 
-  EXPECT_FLOAT_EQ(0.93779498, first_run[1])
+  EXPECT_FLOAT_EQ(0.78501701, first_run[1])
     << "accept_stat__: index 1";
 
-  EXPECT_FLOAT_EQ(1.20701, first_run[2])
+  EXPECT_FLOAT_EQ(0.76857001, first_run[2])
     << "stepsize__: index 2";
 
-  EXPECT_FLOAT_EQ(2, first_run[3])
+  EXPECT_FLOAT_EQ(1, first_run[3])
     << "treedepth__: index 3";
 
   EXPECT_FLOAT_EQ(3, first_run[4])
@@ -126,13 +126,13 @@ TEST_F(performance, values_from_tagged_version) {
   EXPECT_FLOAT_EQ(0, first_run[5])
     << "divergent__: index 5";
 
-  EXPECT_FLOAT_EQ(65.755402, first_run[6])
+  EXPECT_FLOAT_EQ(68.208702, first_run[6])
     << "energy__: index 6";
 
-  EXPECT_FLOAT_EQ(1.29672, first_run[7])
+  EXPECT_FLOAT_EQ(1.4087501, first_run[7])
     << "beta.1: index 7";
 
-  EXPECT_FLOAT_EQ(-0.47478199, first_run[8])
+  EXPECT_FLOAT_EQ(-0.69222099, first_run[8])
     << "beta.2: index 8";
 
   matches_tagged_version = !HasNonfatalFailure();
@@ -160,26 +160,6 @@ TEST_F(performance, check_output_is_same) {
   ASSERT_TRUE(file_stream.good());
 
   std::string line, expected;
-
-  getline(file_stream, line);
-  expected = "# stan_version_major = " + stan::MAJOR_VERSION;
-  ASSERT_EQ(expected, line);
-  ASSERT_TRUE(file_stream.good());
-
-
-  getline(file_stream, line);
-  expected = "# stan_version_minor = " + stan::MINOR_VERSION;
-  ASSERT_EQ(expected, line);
-  ASSERT_TRUE(file_stream.good());
-
-  getline(file_stream, line);
-  expected = "# stan_version_patch = " + stan::PATCH_VERSION;
-  ASSERT_EQ(expected, line);
-  ASSERT_TRUE(file_stream.good());
-
-  getline(file_stream, line);
-  ASSERT_EQ("# model = logistic_model", line);
-  ASSERT_TRUE(file_stream.good());
 
   getline(file_stream, line);
   ASSERT_EQ("lp__,accept_stat__,stepsize__,treedepth__,n_leapfrog__,divergent__,energy__,beta.1,beta.2", line);
