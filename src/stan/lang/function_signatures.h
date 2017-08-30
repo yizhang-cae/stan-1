@@ -505,6 +505,7 @@ add("is_nan", INT_T, DOUBLE_T);
 add_binary("lbeta");
 add_binary("lchoose");
 add_unary_vectorized("lgamma");
+add("linear_interpolation", vector_types[1], vector_types[1], vector_types[1], vector_types[1]);
 add("lkj_corr_cholesky_log", DOUBLE_T, MATRIX_T, DOUBLE_T);
 add("lkj_corr_cholesky_lpdf", DOUBLE_T, MATRIX_T, DOUBLE_T);
 add("lkj_corr_cholesky_rng", MATRIX_T, INT_T, DOUBLE_T);
