@@ -139,6 +139,10 @@ TEST(lang_parser, inverse_spd_matrix_function_signatures) {
   test_parsable("function-signatures/math/matrix/inverse_spd");
 }
 
+TEST(lang_parser, linear_interpolation_matrix_function_signatures) {
+  test_parsable("function-signatures/math/matrix/linear_interpolation");
+}
+
 TEST(lang_parser, log_matrix_function_signatures) {
   test_parsable("function-signatures/math/matrix/log");
 }

@@ -96,6 +96,8 @@
 #include <stan/lang/ast/node/index_op_sliced.hpp>
 #include <stan/lang/ast/node/integrate_ode.hpp>
 #include <stan/lang/ast/node/integrate_ode_control.hpp>
+#include <stan/lang/ast/node/algebra_solver.hpp>
+#include <stan/lang/ast/node/algebra_solver_control.hpp>
 #include <stan/lang/ast/node/int_literal.hpp>
 #include <stan/lang/ast/node/int_var_decl.hpp>
 #include <stan/lang/ast/node/lb_idx.hpp>
@@ -128,5 +130,8 @@
 #include <stan/lang/ast/node/var_decl.hpp>
 #include <stan/lang/ast/node/vector_var_decl.hpp>
 #include <stan/lang/ast/node/while_statement.hpp>
+
+// Torsten
+#include <stan/lang/ast/node/generalOdeModel_control.hpp>
 
 #endif
