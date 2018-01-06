@@ -512,6 +512,8 @@ add("is_nan", expr_type(int_type()), expr_type(double_type()));
 add_binary("lbeta");
 add_binary("lchoose");
 add_unary_vectorized("lgamma");
+add("linear_interpolation", expr_type(double_type()), expr_type(double_type()), vector_types[1], vector_types[1]);
+add("linear_interpolation", vector_types[1], vector_types[1], vector_types[1], vector_types[1]);
 add("lkj_corr_cholesky_log", expr_type(double_type()), expr_type(matrix_type()), expr_type(double_type()));
 add("lkj_corr_cholesky_lpdf", expr_type(double_type()), expr_type(matrix_type()), expr_type(double_type()));
 add("lkj_corr_cholesky_rng", expr_type(matrix_type()), expr_type(int_type()), expr_type(double_type()));
