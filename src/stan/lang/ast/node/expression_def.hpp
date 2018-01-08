@@ -39,7 +39,7 @@ namespace stan {
 
     expression::expression(const algebra_solver_control& expr) : expr_(expr) { }
 
-    expression::expression(const generalOdeModel_control& expr) : expr_(expr) { }
+    expression::expression(const generalOdeModel_control& expr) : expr_(expr) {}
 
     expression::expression(const fun& expr) : expr_(expr) { }
 

@@ -1891,26 +1891,37 @@ namespace stan {
 
       // build expected function argument type for generalOdeModel
       if (ode_fun.integration_function_name_ == "generalOdeModel_rk45"
-	  || ode_fun.integration_function_name_ == "generalOdeModel_bdf") {
-        sys_arg_types.push_back(function_arg_type(expr_type(double_type(), 0)));  // t0
-        sys_arg_types.push_back(function_arg_type(expr_type(double_type(), 1)));  // y
-        sys_arg_types.push_back(function_arg_type(expr_type(double_type(), 1)));  // theta
-        sys_arg_types.push_back(function_arg_type(expr_type(double_type(), 1)));  // x_r
-        sys_arg_types.push_back(function_arg_type(expr_type(int_type(), 1)));  // x_i
+          || ode_fun.integration_function_name_ == "generalOdeModel_bdf") {
+        sys_arg_types.push_back(function_arg_type(expr_type(double_type(),
+                                                            0)));  // t0
+        sys_arg_types.push_back(function_arg_type(expr_type(double_type(),
+                                                            1)));  // y
+        sys_arg_types.push_back(function_arg_type(expr_type(double_type(),
+                                                            1)));  // theta
+        sys_arg_types.push_back(function_arg_type(expr_type(double_type(),
+                                                            1)));  // x_r
+        sys_arg_types.push_back(function_arg_type(expr_type(int_type(),
+                                                            1)));  // x_i
         expected_signature = "(real, real[], real[], real[], int[]) : real[]";
       }
 
       // build expected function argument type for mixOdeModel
       if ((ode_fun.integration_function_name_ == "mixOde1CptModel_rk45"
-	   || ode_fun.integration_function_name_ == "mixOde1CptModel_bdf")
-	  || (ode_fun.integration_function_name_ == "mixOde2CptModel_rk45"
-	      || ode_fun.integration_function_name_ == "mixOde2CptModel_bdf")) {
-        sys_arg_types.push_back(function_arg_type(expr_type(double_type(), 0)));  // t0
-        sys_arg_types.push_back(function_arg_type(expr_type(double_type(), 1)));  // y
-        sys_arg_types.push_back(function_arg_type(expr_type(double_type(), 1)));  // y_PK
-        sys_arg_types.push_back(function_arg_type(expr_type(double_type(), 1)));  // theta
-        sys_arg_types.push_back(function_arg_type(expr_type(double_type(), 1)));  // x_r
-        sys_arg_types.push_back(function_arg_type(expr_type(int_type(), 1)));  // x_i
+           || ode_fun.integration_function_name_ == "mixOde1CptModel_bdf")
+          || (ode_fun.integration_function_name_ == "mixOde2CptModel_rk45"
+              || ode_fun.integration_function_name_ == "mixOde2CptModel_bdf")) {
+        sys_arg_types.push_back(function_arg_type(expr_type(double_type(),
+                                                            0)));  // t0
+        sys_arg_types.push_back(function_arg_type(expr_type(double_type(),
+                                                            1)));  // y
+        sys_arg_types.push_back(function_arg_type(expr_type(double_type(),
+                                                            1)));  // y_PK
+        sys_arg_types.push_back(function_arg_type(expr_type(double_type(),
+                                                            1)));  // theta
+        sys_arg_types.push_back(function_arg_type(expr_type(double_type(),
+                                                            1)));  // x_r
+        sys_arg_types.push_back(function_arg_type(expr_type(int_type(),
+                                                            1)));  // x_i
         expected_signature = "(real, real[], real[], real[], real[], int[]) : real[]";  // NOLINT
       }
 
@@ -1918,7 +1929,7 @@ namespace stan {
 
       // test function argument type
       if (!function_signatures::instance()
-	  .is_defined(ode_fun.system_function_name_, system_signature)) {
+          .is_defined(ode_fun.system_function_name_, system_signature)) {
         error_msgs << "first argument to"
                    << ode_fun.integration_function_name_
                    << " must be a function with signature "
@@ -2018,7 +2029,8 @@ namespace stan {
         pass = false;
       }
       if ((ode_fun.pMatrix_.expression_type() != expr_type(double_type(), 2))
-	  && (ode_fun.pMatrix_.expression_type() != expr_type(double_type(), 1))) {
+          && (ode_fun.pMatrix_.expression_type() !=
+              expr_type(double_type(), 1))) {
         error_msgs << "eleventh argument to "
                    << ode_fun.integration_function_name_
                    << " must be type real[ ] or real[ , ]"
@@ -2029,7 +2041,8 @@ namespace stan {
         pass = false;
       }
       if ((ode_fun.biovar_.expression_type() != expr_type(double_type(), 2))
-	  && (ode_fun.biovar_.expression_type() != expr_type(double_type(), 1))) {
+          && (ode_fun.biovar_.expression_type() !=
+              expr_type(double_type(), 1))) {
         error_msgs << "twelth argument to "
                    << ode_fun.integration_function_name_
                    << " must be type real[ ] or real[ , ]"
@@ -2040,7 +2053,7 @@ namespace stan {
         pass = false;
       }
       if ((ode_fun.tlag_.expression_type() != expr_type(double_type(), 2))
-	  && (ode_fun.tlag_.expression_type() != expr_type(double_type(), 1))) {
+          && (ode_fun.tlag_.expression_type() != expr_type(double_type(), 1))) {
         error_msgs << "thirteenth argument to "
                    << ode_fun.integration_function_name_
                    << " must be type real[ ] or real[ , ]"
@@ -2141,10 +2154,10 @@ namespace stan {
     }
 
     void validate_generalOdeModel_control::operator()(
-						      const generalOdeModel_control& ode_fun,
-						      const variable_map& var_map,
-						      bool& pass,
-						      std::ostream& error_msgs) const {
+                          const generalOdeModel_control& ode_fun,
+                          const variable_map& var_map,
+                          bool& pass,
+                          std::ostream& error_msgs) const {
       validate_generalOdeModel(ode_fun, var_map, pass, error_msgs);
     }
     boost::phoenix::function<validate_generalOdeModel_control>
