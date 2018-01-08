@@ -123,6 +123,8 @@
 #include <stan/lang/ast/node/unary_op.hpp>
 #include <stan/lang/ast/node/uni_idx.hpp>
 #include <stan/lang/ast/node/unit_vector_var_decl.hpp>
+#include <stan/lang/ast/node/univariate_integral.hpp>
+#include <stan/lang/ast/node/univariate_integral_control.hpp>
 #include <stan/lang/ast/node/variable.hpp>
 #include <stan/lang/ast/node/variable_dims.hpp>
 #include <stan/lang/ast/node/var_decl.hpp>

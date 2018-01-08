@@ -104,6 +104,13 @@ namespace stan {
       return boost::apply_visitor(*this, e.y_.expr_);
     }
 
+    bool has_non_param_var_vis::operator()(const
+                                           univariate_integral_control& e)
+      const {
+      return boost::apply_visitor(*this, e.t0_.expr_)
+        || boost::apply_visitor(*this, e.t1_.expr_);
+    }
+
     bool has_non_param_var_vis::operator()(const generalOdeModel_control& e)
       const {
       // CHECK - anything to do with nonlinearity ?

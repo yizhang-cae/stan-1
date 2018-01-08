@@ -592,6 +592,16 @@ namespace stan {
     validate_algebra_solver_control_f;
 
     // called from: term_grammar
+    struct validate_univariate_integral_control
+      : public phoenix_functor_quaternary {
+      void operator()(const univariate_integral_control& univar_fun,
+                      const variable_map& var_map, bool& pass,
+                      std::ostream& error_msgs) const;
+    };
+    extern boost::phoenix::function<validate_univariate_integral_control>
+    validate_univariate_integral_control_f;
+
+    // called from: term_grammar
     struct validate_generalOdeModel_control
       : public phoenix_functor_quaternary {
       void operator()(const generalOdeModel_control& ode_fun,
@@ -769,6 +779,7 @@ namespace stan {
       bool operator()(const integrate_ode_control& x) const;
       bool operator()(const algebra_solver& x) const;
       bool operator()(const algebra_solver_control& x) const;
+      bool operator()(const univariate_integral_control& x) const;
       bool operator()(const generalOdeModel_control& x) const;
       bool operator()(const fun& x) const;
       bool operator()(const index_op& x) const;

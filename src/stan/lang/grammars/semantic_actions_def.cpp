@@ -252,6 +252,9 @@ namespace stan {
                                          const algebra_solver_control&)
       const;
     template void assign_lhs::operator()(expression&,
+                                         const univariate_integral_control&)
+      const;
+    template void assign_lhs::operator()(expression&,
                                          const generalOdeModel_control&)
       const;
     template void assign_lhs::operator()(array_expr&,
@@ -1877,6 +1880,55 @@ namespace stan {
     }
     boost::phoenix::function<validate_algebra_solver_control>
     validate_algebra_solver_control_f;
+
+    template <class T>
+    void validate_univariate_integral(const T& univar_fun,
+                                                       const variable_map& var_map,
+                                                       bool& pass,
+                                                       std::ostream& error_msgs) {
+      pass = true;
+      expr_type sys_result_type(double_type(), 0);
+      std::vector<function_arg_type> sys_arg_types;
+      sys_arg_types.push_back(function_arg_type(expr_type(double_type(), 0)));
+      function_signature_t system_signature(sys_result_type, sys_arg_types);
+      if (!function_signatures::instance()
+          .is_defined(univar_fun.system_function_name_, system_signature)) {
+        error_msgs << "first argument to "
+                   << "univariate_integral"
+                   << " must be the name of a function with signature"
+                   << " (real) : real ";
+        pass = false;
+      }
+      // test regular argument types
+      if (univar_fun.t0_.expression_type() != expr_type(double_type(), 0)) {
+        error_msgs << "second argument to "
+                   << "univariate_integral"
+                   << " must have type real for integral interval boundary;"
+                   << " found type="
+                   << univar_fun.t0_.expression_type()
+                   << ". ";
+        pass = false;
+      }
+      if (univar_fun.t1_.expression_type() != expr_type(double_type(), 0)) {
+        error_msgs << "thrid argument to "
+                   << "univariate_integral"
+                   << " must have type real for integral interval boundary;"
+                   << " found type="
+                   << univar_fun.t1_.expression_type()
+                   << ". ";
+        pass = false;
+      }
+    }
+
+    void validate_univariate_integral_control::operator()(
+                          const univariate_integral_control& univar_fun,
+                          const variable_map& var_map,
+                          bool& pass,
+                          std::ostream& error_msgs) const {
+      validate_univariate_integral(univar_fun, var_map, pass, error_msgs);
+    }
+    boost::phoenix::function<validate_univariate_integral_control>
+    validate_univariate_integral_control_f;
 
     template <class T>
     void validate_generalOdeModel(const T& ode_fun,

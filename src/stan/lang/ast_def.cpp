@@ -109,6 +109,8 @@
 #include <stan/lang/ast/node/unary_op_def.hpp>
 #include <stan/lang/ast/node/uni_idx_def.hpp>
 #include <stan/lang/ast/node/unit_vector_var_decl_def.hpp>
+#include <stan/lang/ast/node/univariate_integral_control.hpp>
+#include <stan/lang/ast/node/univariate_integral_control_def.hpp>
 #include <stan/lang/ast/node/vector_var_decl_def.hpp>
 #include <stan/lang/ast/node/var_decl_def.hpp>
 #include <stan/lang/ast/node/variable_def.hpp>

@@ -54,6 +54,12 @@ namespace stan {
     }
 
     expr_type
+    expression_type_vis::operator()(const
+                                    univariate_integral_control& e) const {
+      return expr_type(double_type(), 0);
+    }
+
+    expr_type
     expression_type_vis::operator()(const generalOdeModel_control& e) const {
       return expr_type(matrix_type(), 0);
     }

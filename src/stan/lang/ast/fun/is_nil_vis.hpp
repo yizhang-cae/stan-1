@@ -18,6 +18,7 @@ namespace stan {
     struct integrate_ode_control;
     struct algebra_solver;
     struct algebra_solver_control;
+    struct univariate_integral_control;
     struct generalOdeModel_control;
     struct index_op;
     struct index_op_sliced;
@@ -40,6 +41,7 @@ namespace stan {
       bool operator()(const integrate_ode& x) const;  // NOLINT
       bool operator()(const integrate_ode_control& x) const;  // NOLINT
       bool operator()(const algebra_solver& x) const;  // NOLINT
+      bool operator()(const univariate_integral_control& x) const;  // NOLINT
       bool operator()(const algebra_solver_control& x) const;  // NOLINT
       bool operator()(const generalOdeModel_control& x) const;  // NOLINT
       bool operator()(const fun& x) const;  // NOLINT(runtime/explicit)
