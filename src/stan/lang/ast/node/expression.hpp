@@ -43,7 +43,8 @@ namespace stan {
                              boost::recursive_wrapper<integrate_ode_control>,
                              boost::recursive_wrapper<algebra_solver>,
                              boost::recursive_wrapper<algebra_solver_control>,
-                             boost::recursive_wrapper<univariate_integral_control>,
+                             boost::recursive_wrapper<
+                               univariate_integral_control>,
                              boost::recursive_wrapper<generalOdeModel_control>,
                              boost::recursive_wrapper<fun>,
                              boost::recursive_wrapper<index_op>,

@@ -1883,9 +1883,9 @@ namespace stan {
 
     template <class T>
     void validate_univariate_integral(const T& univar_fun,
-                                                       const variable_map& var_map,
-                                                       bool& pass,
-                                                       std::ostream& error_msgs) {
+                                      const variable_map& var_map,
+                                      bool& pass,
+                                      std::ostream& error_msgs) {
       pass = true;
       expr_type sys_result_type(double_type(), 0);
       std::vector<function_arg_type> sys_arg_types;
@@ -2926,6 +2926,11 @@ namespace stan {
       const {
       return boost::apply_visitor(*this, x.theta_.expr_);
     }
+    bool data_only_expression::operator()(const univariate_integral_control& x)
+      const {
+      return boost::apply_visitor(*this, x.t0_.expr_)
+        && boost::apply_visitor(*this, x.t1_.expr_);
+    }  // include all arguments with a template type
     bool data_only_expression::operator()(const generalOdeModel_control& x)
       const {
       return ((((((boost::apply_visitor(*this, x.time_.expr_)

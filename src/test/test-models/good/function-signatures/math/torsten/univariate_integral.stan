@@ -1,14 +1,14 @@
 functions {
-  real[] fun_ord0(real t) {
+  real fun_ord0(real t) {
     real res = 2.0;
     return res;
   }
-  real[] fun_ord1(real t) {
+  real fun_ord1(real t) {
     real k = 1.2;
     real res = k * t;
     return res;
   }
-  real[] fun_ord2(real t) {
+  real fun_ord2(real t) {
     real a = 2.3;
     real b = 2.0;
     real c = 1.5;
@@ -25,13 +25,8 @@ data {
 transformed data {
   real univar_integral;
 
-  t0 = 0.0;
-  t1 = 2.5;
   univar_integral = univariate_integral(fun_ord0, t0, t1);
   univar_integral = univariate_integral(fun_ord1, t0, t1);
-
-  t0 = 0.0;
-  t1 = 0.4;
   univar_integral = univariate_integral(fun_ord2, t0, t1);
 }
 
