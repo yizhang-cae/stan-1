@@ -1887,7 +1887,7 @@ namespace stan {
                                       bool& pass,
                                       std::ostream& error_msgs) {
       pass = true;
-      expr_type sys_result_type(double_type(), 0);
+      expr_type sys_result_type(double_type(), 1);
       std::vector<function_arg_type> sys_arg_types;
       sys_arg_types.push_back(function_arg_type(expr_type(double_type(), 0)));
       function_signature_t system_signature(sys_result_type, sys_arg_types);
@@ -1896,7 +1896,7 @@ namespace stan {
         error_msgs << "first argument to "
                    << "univariate_integral"
                    << " must be the name of a function with signature"
-                   << " (real) : real ";
+                   << " (real) : vector ";
         pass = false;
       }
       // test regular argument types
