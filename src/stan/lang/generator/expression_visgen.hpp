@@ -225,9 +225,9 @@ namespace stan {
            << '('
            << fx.system_function_name_
            << "_functor__(), ";
-        generate_expression(fx.t0_, NOT_USER_FACING, o_);
+        generate_expression(fx.y0_, NOT_USER_FACING, o_);
         o_ << ", ";
-        generate_expression(fx.t1_, NOT_USER_FACING, o_);
+        generate_expression(fx.theta_, NOT_USER_FACING, o_);
         o_ << ")";
       }
 

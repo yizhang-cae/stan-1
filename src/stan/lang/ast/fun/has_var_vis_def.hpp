@@ -82,9 +82,9 @@ namespace stan {
     bool has_var_vis::operator()(const
                                  univariate_integral_control& e)
       const {
-      // only theta may contain vars
-      return boost::apply_visitor(*this, e.t0_.expr_)
-        || boost::apply_visitor(*this, e.t1_.expr_);
+      // only y0 & theta may contain vars
+      return boost::apply_visitor(*this, e.y0_.expr_)
+        || boost::apply_visitor(*this, e.theta_.expr_);
     }
 
     bool has_var_vis::operator()(const generalOdeModel_control& e) const {

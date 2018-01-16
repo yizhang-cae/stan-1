@@ -1900,21 +1900,21 @@ namespace stan {
         pass = false;
       }
       // test regular argument types
-      if (univar_fun.t0_.expression_type() != expr_type(double_type(), 0)) {
+      if (univar_fun.y0_.expression_type() != expr_type(double_type(), 1)) {
         error_msgs << "second argument to "
                    << "univariate_integral"
-                   << " must have type real for integral interval boundary;"
+                   << " must have type vector for initial condition;"
                    << " found type="
-                   << univar_fun.t0_.expression_type()
+                   << univar_fun.y0_.expression_type()
                    << ". ";
         pass = false;
       }
-      if (univar_fun.t1_.expression_type() != expr_type(double_type(), 0)) {
+      if (univar_fun.theta_.expression_type() != expr_type(double_type(), 1)) {
         error_msgs << "thrid argument to "
                    << "univariate_integral"
-                   << " must have type real for integral interval boundary;"
+                   << " must have type vector for integral interval limit;"
                    << " found type="
-                   << univar_fun.t1_.expression_type()
+                   << univar_fun.theta_.expression_type()
                    << ". ";
         pass = false;
       }
@@ -2928,8 +2928,8 @@ namespace stan {
     }
     bool data_only_expression::operator()(const univariate_integral_control& x)
       const {
-      return boost::apply_visitor(*this, x.t0_.expr_)
-        && boost::apply_visitor(*this, x.t1_.expr_);
+      return boost::apply_visitor(*this, x.y0_.expr_)
+        && boost::apply_visitor(*this, x.theta_.expr_);
     }  // include all arguments with a template type
     bool data_only_expression::operator()(const generalOdeModel_control& x)
       const {

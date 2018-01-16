@@ -21,26 +21,31 @@ functions {
 }
 
 data {
-  real t0;
-  real t1;
+  real dy0[1];
+  real dtheta[1];
 }
 
 transformed data {
-  real univar_integral[1];
+  real d_univar_integral[1];
 
-  univar_integral = univariate_integral(fun_ord0, t0, t1);
-  univar_integral = univariate_integral(fun_ord1, t0, t1);
-  univar_integral = univariate_integral(fun_ord2, t0, t1);
+  d_univar_integral = univariate_integral(fun_ord0, dy0, dtheta);
+  d_univar_integral = univariate_integral(fun_ord1, dy0, dtheta);
+  d_univar_integral = univariate_integral(fun_ord2, dy0, dtheta);
 }
 
 parameters {
   real y_p;
 
-  real y0_p[2];
-  real theta_p[1];
+  real py0[1];
+  real ptheta[1];
 }
 
 transformed parameters {
+  real p_univar_integral[1];
+
+  p_univar_integral = univariate_integral(fun_ord0, py0, ptheta);
+  p_univar_integral = univariate_integral(fun_ord1, py0, ptheta);
+  p_univar_integral = univariate_integral(fun_ord2, py0, ptheta);
 }
 
 model {

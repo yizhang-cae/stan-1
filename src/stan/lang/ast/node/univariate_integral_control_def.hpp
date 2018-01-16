@@ -11,11 +11,11 @@ namespace stan {
 
     univariate_integral_control::
     univariate_integral_control(const std::string& system_function_name,
-                                const expression& t0,
-                                const expression& t1)
+                                const expression& y0,
+                                const expression& theta)
       : system_function_name_(system_function_name),
-        t0_(t0),
-        t1_(t1)
+        y0_(y0),
+        theta_(theta)
     { }
   }
 }

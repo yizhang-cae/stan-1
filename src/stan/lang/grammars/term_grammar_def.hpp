@@ -64,8 +64,8 @@ BOOST_FUSION_ADAPT_STRUCT(stan::lang::algebra_solver_control,
 
 BOOST_FUSION_ADAPT_STRUCT(stan::lang::univariate_integral_control,
                           (std::string, system_function_name_)
-                          (stan::lang::expression, t0_)
-                          (stan::lang::expression, t1_) )
+                          (stan::lang::expression, y0_)
+                          (stan::lang::expression, theta_) )
 
 BOOST_FUSION_ADAPT_STRUCT(stan::lang::generalOdeModel_control,
                           (std::string, integration_function_name_)
@@ -296,10 +296,10 @@ namespace stan {
         >> lit(',')
         >> expression_g(_r1)     // 3) t1
         > lit(')')
-          [validate_univariate_integral_control_f(_val,
-                                             boost::phoenix::ref(var_map_),
-                                             _pass,
-                                             boost::phoenix::ref(error_msgs_))];
+        [validate_univariate_integral_control_f(_val,
+                                                boost::phoenix::ref(var_map_),
+                                                _pass,
+                                                boost::phoenix::ref(error_msgs_))];
 
       generalOdeModel_control_r.name("expression");
       generalOdeModel_control_r
