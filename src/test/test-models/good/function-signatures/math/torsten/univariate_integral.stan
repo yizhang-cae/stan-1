@@ -28,9 +28,13 @@ data {
 transformed data {
   real d_univar_integral[1];
 
-  d_univar_integral = univariate_integral(fun_ord0, dy0, dtheta);
-  d_univar_integral = univariate_integral(fun_ord1, dy0, dtheta);
-  d_univar_integral = univariate_integral(fun_ord2, dy0, dtheta);
+  d_univar_integral = univariate_integral_rk45(fun_ord0, dy0, dtheta);
+  d_univar_integral = univariate_integral_rk45(fun_ord1, dy0, dtheta);
+  d_univar_integral = univariate_integral_rk45(fun_ord2, dy0, dtheta);
+
+  d_univar_integral = univariate_integral_bdf(fun_ord0, dy0, dtheta);
+  d_univar_integral = univariate_integral_bdf(fun_ord1, dy0, dtheta);
+  d_univar_integral = univariate_integral_bdf(fun_ord2, dy0, dtheta);
 }
 
 parameters {
@@ -43,9 +47,13 @@ parameters {
 transformed parameters {
   real p_univar_integral[1];
 
-  p_univar_integral = univariate_integral(fun_ord0, py0, ptheta);
-  p_univar_integral = univariate_integral(fun_ord1, py0, ptheta);
-  p_univar_integral = univariate_integral(fun_ord2, py0, ptheta);
+  p_univar_integral = univariate_integral_rk45(fun_ord0, py0, ptheta);
+  p_univar_integral = univariate_integral_rk45(fun_ord1, py0, ptheta);
+  p_univar_integral = univariate_integral_rk45(fun_ord2, py0, ptheta);
+
+  p_univar_integral = univariate_integral_bdf(fun_ord0, py0, ptheta);
+  p_univar_integral = univariate_integral_bdf(fun_ord1, py0, ptheta);
+  p_univar_integral = univariate_integral_bdf(fun_ord2, py0, ptheta);
 }
 
 model {

@@ -1889,7 +1889,13 @@ namespace stan {
       pass = true;
       expr_type sys_result_type(double_type(), 1);
       std::vector<function_arg_type> sys_arg_types;
-      sys_arg_types.push_back(function_arg_type(expr_type(double_type(), 0)));
+
+
+      if (univar_fun.integration_function_name_ == "univariate_integral_rk45"
+          || univar_fun.integration_function_name_ == "univariate_integral_bdf") {
+        sys_arg_types.push_back(function_arg_type(expr_type(double_type(), 0)));
+      }
+
       function_signature_t system_signature(sys_result_type, sys_arg_types);
       if (!function_signatures::instance()
           .is_defined(univar_fun.system_function_name_, system_signature)) {

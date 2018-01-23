@@ -221,7 +221,7 @@ namespace stan {
       }
 
       void operator()(const univariate_integral_control& fx) const {
-        o_ << "univariate_integral"
+        o_ << fx.integration_function_name_
            << '('
            << fx.system_function_name_
            << "_functor__(), ";

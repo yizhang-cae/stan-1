@@ -14,6 +14,10 @@ namespace stan {
      * parameters for the integrator.
      */
     struct univariate_integral_control {
+      /* The name of the function (* tells us which integrator is being
+       * called).
+       */
+      std::string integration_function_name_;
       /**
        * Name of the functor that's be integrated
        */
@@ -41,8 +45,9 @@ namespace stan {
        * @param t0 left end of interval
        * @param t1 right end of interval
        */
-      univariate_integral_control(const
-                                  std::string& system_function_name,
+      univariate_integral_control(
+                                  const std::string& integration_function_name,
+                                  const std::string& system_function_name,
                                   const expression& y0,
                                   const expression& theta);
     };
