@@ -289,8 +289,10 @@ namespace stan {
 
       univariate_integral_control_r.name("expression");
       univariate_integral_control_r
-        %= ( (string("univariate_integral_rk45") >> no_skip[!char_("a-zA-Z0-9_")])
-              | (string("univariate_integral_bdf") >> no_skip[!char_("a-zA-Z0-9_")]) )
+        %= ( (string("univariate_integral_rk45") >>
+              no_skip[!char_("a-zA-Z0-9_")])
+             | (string("univariate_integral_bdf") >>
+                no_skip[!char_("a-zA-Z0-9_")]) )
         >> lit('(')
         >> identifier_r          // 1) system function name (function only)
         >> lit(',')
@@ -299,9 +301,9 @@ namespace stan {
         >> expression_g(_r1)     // 3) t1
         > lit(')')
         [validate_univariate_integral_control_f(_val,
-                                                boost::phoenix::ref(var_map_),
-                                                _pass,
-                                                boost::phoenix::ref(error_msgs_))];
+                                       boost::phoenix::ref(var_map_),
+                                       _pass,
+                                       boost::phoenix::ref(error_msgs_))];
 
       generalOdeModel_control_r.name("expression");
       generalOdeModel_control_r
