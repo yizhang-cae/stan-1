@@ -65,8 +65,11 @@ BOOST_FUSION_ADAPT_STRUCT(stan::lang::algebra_solver_control,
 BOOST_FUSION_ADAPT_STRUCT(stan::lang::univariate_integral_control,
                           (std::string, integration_function_name_)
                           (std::string, system_function_name_)
-                          (stan::lang::expression, y0_)
-                          (stan::lang::expression, theta_) )
+                          (stan::lang::expression, t0_)
+                          (stan::lang::expression, t1_)
+                          (stan::lang::expression, theta_)
+                          (stan::lang::expression, x_r_)
+                          (stan::lang::expression, x_i_) )
 
 BOOST_FUSION_ADAPT_STRUCT(stan::lang::generalOdeModel_control,
                           (std::string, integration_function_name_)
@@ -293,12 +296,18 @@ namespace stan {
               no_skip[!char_("a-zA-Z0-9_")])
              | (string("univariate_integral_bdf") >>
                 no_skip[!char_("a-zA-Z0-9_")]) )
-        >> lit('(')
-        >> identifier_r          // 1) system function name (function only)
-        >> lit(',')
-        >> expression_g(_r1)     // 2) t0
-        >> lit(',')
-        >> expression_g(_r1)     // 3) t1
+        > lit('(')
+        > identifier_r          // 1) system function name (function only)
+        > lit(',')
+        > expression_g(_r1)     // 2) t0 (data only)
+        > lit(',')
+        > expression_g(_r1)     // 2) t1 (data only)
+        > lit(',')
+        > expression_g(_r1)     // 3) theta
+        > lit(',')
+        > expression_g(_r1)     // 4) x_r (data only)
+        > lit(',')
+        > expression_g(_r1)     // 5) x_i (data only)
         > lit(')')
         [validate_univariate_integral_control_f(_val,
                                        boost::phoenix::ref(var_map_),

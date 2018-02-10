@@ -24,14 +24,29 @@ namespace stan {
       std::string system_function_name_;
 
       /**
-       * init condition
+       * left limit
        */
-      expression y0_;
+      expression t0_;
+
+      /**
+       * right limit
+       */
+      expression t1_;
 
       /**
        * parameters
        */
       expression theta_;
+
+      /**
+       * Real-valued data (array of real).
+       */
+      expression x_r_;
+
+      /**
+       * Integer-valued data (array of int).
+       */
+      expression x_i_;
 
       /**
        * default constructor.
@@ -48,8 +63,11 @@ namespace stan {
       univariate_integral_control(
                                   const std::string& integration_function_name,
                                   const std::string& system_function_name,
-                                  const expression& y0,
-                                  const expression& theta);
+                                  const expression& t0,
+                                  const expression& t1,
+                                  const expression& theta,
+                                  const expression& x_r,
+                                  const expression& x_i);
     };
 
   }
