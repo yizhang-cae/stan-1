@@ -46,20 +46,18 @@ BOOST_FUSION_ADAPT_STRUCT(stan::lang::integrate_ode_control,
                           (stan::lang::expression, max_num_steps_) )
 
 BOOST_FUSION_ADAPT_STRUCT(stan::lang::algebra_solver,
-                           (std::string, solver_name_)
                            (std::string, system_function_name_)
-                           (stan::lang::expression, x_)
                            (stan::lang::expression, y_)
-                           (stan::lang::expression, dat_)
-                           (stan::lang::expression, dat_int_) )
+                           (stan::lang::expression, theta_)
+                           (stan::lang::expression, x_r_)
+                           (stan::lang::expression, x_i_) )
 
 BOOST_FUSION_ADAPT_STRUCT(stan::lang::algebra_solver_control,
-                           (std::string, solver_name_)
                            (std::string, system_function_name_)
-                           (stan::lang::expression, x_)
                            (stan::lang::expression, y_)
-                           (stan::lang::expression, dat_)
-                           (stan::lang::expression, dat_int_)
+                           (stan::lang::expression, theta_)
+                           (stan::lang::expression, x_r_)
+                           (stan::lang::expression, x_i_)
                            (stan::lang::expression, rel_tol_)
                            (stan::lang::expression, fun_tol_)
                            (stan::lang::expression, max_num_steps_) )
@@ -243,17 +241,17 @@ namespace stan {
 
       algebra_solver_control_r.name("expression");
       algebra_solver_control_r
-        %= (string("algebra_solver") >> no_skip[!char_("a-zA-Z0-9_")])
-        >> lit('(')              // >> allows backtracking to non-control
+        %= lit("algebra_solver")
+        >> lit('(')
         >> identifier_r          // 1) system function name (function only)
         >> lit(',')
-        >> expression_g(_r1)     // 2) x (data only)
+        >> expression_g(_r1)     // 2) y (data only)
         >> lit(',')
-        >> expression_g(_r1)     // 3) y
+        >> expression_g(_r1)     // 3) theta
         >> lit(',')
-        >> expression_g(_r1)     // 4) dat (data only)
+        >> expression_g(_r1)     // 4) x_r (data only)
         >> lit(',')
-        >> expression_g(_r1)     // 5) dat_int (data only)
+        >> expression_g(_r1)     // 5) x_i (data only)
         >> lit(',')
         >> expression_g(_r1)     // 6) relative tolerance (data only)
         >> lit(',')
@@ -264,75 +262,74 @@ namespace stan {
           [validate_algebra_solver_control_f(_val,
                                              boost::phoenix::ref(var_map_),
                                              _pass,
-                                             boost::phoenix::ref(error_msgs_))
-                                             ];
+                                             boost::phoenix::ref(error_msgs_))];
 
       algebra_solver_r.name("expression");
       algebra_solver_r
-        %= (string("algebra_solver") >> no_skip[!char_("a-zA-Z0-9_")])
+        %= lit("algebra_solver")
         > lit('(')
         > identifier_r          // 1) system function name (function only)
         > lit(',')
-        > expression_g(_r1)     // 2) x (data only)
+        > expression_g(_r1)     // 2) y (data only)
         > lit(',')
-        > expression_g(_r1)     // 3) y
+        > expression_g(_r1)     // 3) theta
         > lit(',')
-        > expression_g(_r1)     // 4) dat (data only)
+        > expression_g(_r1)     // 4) x_r (data only)
         > lit(',')
-        > expression_g(_r1)     // 5) dat_int (data only)
+        > expression_g(_r1)     // 5) x_i (data only)
         > lit(')')
-          [validate_algebra_solver_f(_val, boost::phoenix::ref(var_map_),
-                                     _pass, boost::phoenix::ref(error_msgs_))];
+        [validate_algebra_solver_f(_val, boost::phoenix::ref(var_map_),
+                                   _pass, boost::phoenix::ref(error_msgs_))];
 
-        generalOdeModel_control_r.name("expression");
-        generalOdeModel_control_r
-         %= ( (string("generalOdeModel_bdf") >> no_skip[!char_("a-zA-Z0-9_")])
-              | (string("generalOdeModel_rk45")
+      generalOdeModel_control_r.name("expression");
+      generalOdeModel_control_r
+        %= ( (string("generalOdeModel_bdf") >> no_skip[!char_("a-zA-Z0-9_")])
+             | (string("generalOdeModel_rk45")
                 >> no_skip[!char_("a-zA-Z0-9_")])
-              | (string("mixOde1CptModel_rk45")
+             | (string("mixOde1CptModel_rk45")
                 >> no_skip[!char_("a-zA-Z0-9_")])
-              | (string("mixOde1CptModel_bdf")
+             | (string("mixOde1CptModel_bdf")
                 >> no_skip[!char_("a-zA-Z0-9_")])
-              | (string("mixOde2CptModel_rk45")
+             | (string("mixOde2CptModel_rk45")
                 >> no_skip[!char_("a-zA-Z0-9_")])
-              | (string("mixOde2CptModel_bdf")
+             | (string("mixOde2CptModel_bdf")
                 >> no_skip[!char_("a-zA-Z0-9_")]))
-         > lit('(')            // >> allows backtracking to non-control
-         > identifier_r        // 1) system function name (function only)
-         > lit(',')
-         > expression_g(_r1)   // 2) nCmt
-         > lit(',')
-         > expression_g(_r1)   // 3) time
-         > lit(',')
-         > expression_g(_r1)   // 4) amt
-         > lit(',')
-         > expression_g(_r1)   // 5) rate
-         > lit(',')
-         > expression_g(_r1)   // 6) ii
-         > lit(',')
-         > expression_g(_r1)   // 7) evid (data only)
-         > lit(',')
-         > expression_g(_r1)   // 8) cmt (data only)
-         > lit(',')
-         > expression_g(_r1)   // 9) addl (data only)
-         > lit(',')
-         > expression_g(_r1)   // 10) ss (data only)
-         > lit(',')
-         > expression_g(_r1)   // 11) pMatrix
-         > lit(',')
-         > expression_g(_r1)   // 12) biovar
-         > lit(',')
-         > expression_g(_r1)   // 13) tlag
-         > lit(',')
-         > expression_g(_r1)   // 14) relative tolerance (data only)
-         > lit(',')
-         > expression_g(_r1)   // 15) absolute tolerance (data only)
-         > lit(',')
-         > expression_g(_r1)   // 16) maximum number of steps
-         > lit(')')
-           [validate_generalOdeModel_control_f(_val,
-             boost::phoenix::ref(var_map_), _pass,
-             boost::phoenix::ref(error_msgs_))];
+        > lit('(')            // >> allows backtracking to non-control
+        > identifier_r        // 1) system function name (function only)
+        > lit(',')
+        > expression_g(_r1)   // 2) nCmt
+        > lit(',')
+        > expression_g(_r1)   // 3) time
+        > lit(',')
+        > expression_g(_r1)   // 4) amt
+        > lit(',')
+        > expression_g(_r1)   // 5) rate
+        > lit(',')
+        > expression_g(_r1)   // 6) ii
+        > lit(',')
+        > expression_g(_r1)   // 7) evid (data only)
+        > lit(',')
+        > expression_g(_r1)   // 8) cmt (data only)
+        > lit(',')
+        > expression_g(_r1)   // 9) addl (data only)
+        > lit(',')
+        > expression_g(_r1)   // 10) ss (data only)
+        > lit(',')
+        > expression_g(_r1)   // 11) pMatrix
+        > lit(',')
+        > expression_g(_r1)   // 12) biovar
+        > lit(',')
+        > expression_g(_r1)   // 13) tlag
+        > lit(',')
+        > expression_g(_r1)   // 14) relative tolerance (data only)
+        > lit(',')
+        > expression_g(_r1)   // 15) absolute tolerance (data only)
+        > lit(',')
+        > expression_g(_r1)   // 16) maximum number of steps
+        > lit(')')
+        [validate_generalOdeModel_control_f(_val,
+                               boost::phoenix::ref(var_map_), _pass,
+                               boost::phoenix::ref(error_msgs_))];
 
       factor_r.name("expression");
       factor_r =
@@ -343,6 +340,7 @@ namespace stan {
         | generalOdeModel_control_r(_r1)[assign_lhs_f(_val, _1)]
         | (fun_r(_r1)[assign_lhs_f(_b, _1)]
            > eps[set_fun_type_named_f(_val, _b, _r1, _pass,
+                                      boost::phoenix::ref(var_map_),
                                       boost::phoenix::ref(error_msgs_))])
         | (variable_r[assign_lhs_f(_a, _1)]
            > eps[set_var_type_f(_a, _val, boost::phoenix::ref(var_map_),

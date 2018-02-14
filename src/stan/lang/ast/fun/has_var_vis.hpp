@@ -138,7 +138,7 @@ namespace stan {
 
       /**
        * Return true if the specified expression contains a non-data
-       * variable. 
+       * variable.
        *
        * @param e expression
        * @return true if expression contains a non-data variable
