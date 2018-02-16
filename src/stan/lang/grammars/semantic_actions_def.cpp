@@ -1893,7 +1893,6 @@ namespace stan {
       if (univar_fun.integration_function_name_ == "univariate_integral_rk45"
         || univar_fun.integration_function_name_ == "univariate_integral_bdf"){
         sys_arg_types.push_back(function_arg_type(expr_type(double_type(), 0)));
-        sys_arg_types.push_back(function_arg_type(expr_type(double_type(), 0)));
         sys_arg_types.push_back(function_arg_type(expr_type(double_type(), 1)));
         sys_arg_types.push_back(function_arg_type(expr_type(double_type(), 1)));
         sys_arg_types.push_back(function_arg_type(expr_type(int_type(), 1)));
@@ -1904,7 +1903,7 @@ namespace stan {
         error_msgs << "first argument to "
                    << "univariate_integral"
                    << " must be the name of a function with signature"
-                   << " (real, real, real[], real[], int[]) : real ";
+                   << " (real, real[], real[], int[]) : real ";
         pass = false;
       }
       // test regular argument types

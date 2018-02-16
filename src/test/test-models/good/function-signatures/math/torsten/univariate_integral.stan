@@ -1,17 +1,18 @@
 
+
 functions {
-  real fun_ord0(real t, real y, real[] theta, real[] x_r, int[] x_i) {
+  real fun_ord0(real t, real[] theta, real[] x_r, int[] x_i) {
     real res;
     res = 2.0;
     return res;
   }
-  real fun_ord1(real t, real y, real[] theta, real[] x_r, int[] x_i) {
+  real fun_ord1(real t, real[] theta, real[] x_r, int[] x_i) {
     real k = 1.2;
     real res;
     res = k * t;
     return res;
   }
-  real fun_ord2(real t, real y, real[] theta, real[] x_r, int[] x_i) {
+  real fun_ord2(real t, real[] theta, real[] x_r, int[] x_i) {
     real a = 2.3;
     real b = 2.0;
     real c = 1.5;
