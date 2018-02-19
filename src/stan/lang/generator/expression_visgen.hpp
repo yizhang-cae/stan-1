@@ -220,6 +220,23 @@ namespace stan {
         o_ << ")";
       }
 
+      void operator()(const univariate_integral_control& fx) const {
+        o_ << fx.integration_function_name_
+           << '('
+           << fx.system_function_name_
+           << "_functor__(), ";
+        generate_expression(fx.t0_, NOT_USER_FACING, o_);
+        o_ << ", ";
+        generate_expression(fx.t1_, NOT_USER_FACING, o_);
+        o_ << ", ";
+        generate_expression(fx.theta_, user_facing_, o_);
+        o_ << ", ";
+        generate_expression(fx.x_r_, NOT_USER_FACING, o_);
+        o_ << ", ";
+        generate_expression(fx.x_i_, NOT_USER_FACING, o_);
+        o_ << ", pstream__)";
+      }
+
       void operator()(const generalOdeModel_control& fx) const {
         o_ << fx.integration_function_name_
            << '('

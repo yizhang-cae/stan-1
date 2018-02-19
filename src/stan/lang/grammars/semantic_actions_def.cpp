@@ -252,6 +252,9 @@ namespace stan {
                                          const algebra_solver_control&)
       const;
     template void assign_lhs::operator()(expression&,
+                                         const univariate_integral_control&)
+      const;
+    template void assign_lhs::operator()(expression&,
                                          const generalOdeModel_control&)
       const;
     template void assign_lhs::operator()(array_expr&,
@@ -1879,6 +1882,87 @@ namespace stan {
     validate_algebra_solver_control_f;
 
     template <class T>
+    void validate_univariate_integral(const T& univar_fun,
+                                      const variable_map& var_map,
+                                      bool& pass,
+                                      std::ostream& error_msgs) {
+      pass = true;
+      expr_type sys_result_type(double_type(), 0);
+      std::vector<function_arg_type> sys_arg_types;
+
+      if (univar_fun.integration_function_name_ == "univariate_integral_rk45"
+        || univar_fun.integration_function_name_ == "univariate_integral_bdf"){
+        sys_arg_types.push_back(function_arg_type(expr_type(double_type(), 0)));
+        sys_arg_types.push_back(function_arg_type(expr_type(double_type(), 1)));
+        sys_arg_types.push_back(function_arg_type(expr_type(double_type(), 1)));
+        sys_arg_types.push_back(function_arg_type(expr_type(int_type(), 1)));
+      }
+      function_signature_t system_signature(sys_result_type, sys_arg_types);
+      if (!function_signatures::instance()
+          .is_defined(univar_fun.system_function_name_, system_signature)) {
+        error_msgs << "first argument to "
+                   << "univariate_integral"
+                   << " must be the name of a function with signature"
+                   << " (real, real[], real[], int[]) : real ";
+        pass = false;
+      }
+      // test regular argument types
+      if (univar_fun.t0_.expression_type() != expr_type(double_type(), 0)) {
+        error_msgs << "second argument to "
+                   << "univariate_integral"
+                   << " must have type real for initial condition;"
+                   << " found type="
+                   << univar_fun.t0_.expression_type()
+                   << ". ";
+        pass = false;
+      }
+      if (univar_fun.t1_.expression_type() != expr_type(double_type(), 0)) {
+        error_msgs << "third argument to "
+                   << "univariate_integral"
+                   << " must have type real for initial condition;"
+                   << " found type="
+                   << univar_fun.t1_.expression_type()
+                   << ". ";
+        pass = false;
+      }
+      if (univar_fun.theta_.expression_type() != expr_type(double_type(), 1)) {
+        error_msgs << "fourth argument to "
+                   << "univariate_integral"
+                   << " must have type vector for integral interval limit;"
+                   << " found type="
+                   << univar_fun.theta_.expression_type()
+                   << ". ";
+        pass = false;
+      }
+      if (univar_fun.x_r_.expression_type() != expr_type(double_type(), 1)) {
+        error_msgs << "fifth argument to "
+                   << "univariate_integral"
+                   << " must have type real[] for real data; found type="
+                   << univar_fun.x_r_.expression_type()
+                   << ". ";
+        pass = false;
+      }
+      if (univar_fun.x_i_.expression_type() != expr_type(int_type(), 1)) {
+        error_msgs << "sixth argument to "
+                   << "univariate_integral"
+                   << " must have type int[] for integer data; found type="
+                   << univar_fun.x_r_.expression_type()
+                   << ". ";
+        pass = false;
+      }
+    }
+
+    void validate_univariate_integral_control::operator()(
+                          const univariate_integral_control& univar_fun,
+                          const variable_map& var_map,
+                          bool& pass,
+                          std::ostream& error_msgs) const {
+      validate_univariate_integral(univar_fun, var_map, pass, error_msgs);
+    }
+    boost::phoenix::function<validate_univariate_integral_control>
+    validate_univariate_integral_control_f;
+
+    template <class T>
     void validate_generalOdeModel(const T& ode_fun,
                                   const variable_map& var_map,
                                   bool& pass,
@@ -2874,6 +2958,12 @@ namespace stan {
       const {
       return boost::apply_visitor(*this, x.theta_.expr_);
     }
+    bool data_only_expression::operator()(const univariate_integral_control& x)
+      const {
+      return ((boost::apply_visitor(*this, x.t0_.expr_)
+        && boost::apply_visitor(*this, x.t1_.expr_))
+        && boost::apply_visitor(*this, x.theta_.expr_));
+    }  // include all arguments with a template type
     bool data_only_expression::operator()(const generalOdeModel_control& x)
       const {
       return ((((((boost::apply_visitor(*this, x.time_.expr_)

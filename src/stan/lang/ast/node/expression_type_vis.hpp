@@ -19,6 +19,7 @@ namespace stan {
     struct integrate_ode_control;
     struct algebra_solver;
     struct algebra_solver_control;
+    struct univariate_integral_control;
     struct generalOdeModel_control;
     struct mixOdeModel_control;
     struct index_op;
@@ -44,6 +45,7 @@ namespace stan {
       expr_type operator()(const integrate_ode_control& e) const;
       expr_type operator()(const algebra_solver& e) const;
       expr_type operator()(const algebra_solver_control& e) const;
+      expr_type operator()(const univariate_integral_control& e) const;
       expr_type operator()(const generalOdeModel_control& e) const;
       expr_type operator()(const index_op& e) const;
       expr_type operator()(const index_op_sliced& e) const;

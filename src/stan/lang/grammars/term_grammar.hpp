@@ -106,6 +106,11 @@ namespace stan {
       algebra_solver_control_r;
 
       boost::spirit::qi::rule<Iterator,
+                              univariate_integral_control(scope),
+                              whitespace_grammar<Iterator> >
+      univariate_integral_control_r;
+
+      boost::spirit::qi::rule<Iterator,
                               generalOdeModel_control(scope),
                               whitespace_grammar<Iterator> >
       generalOdeModel_control_r;

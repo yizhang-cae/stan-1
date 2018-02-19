@@ -114,11 +114,12 @@
 #include <stan/lang/ast/node/variable_def.hpp>
 #include <stan/lang/ast/node/variable_dims_def.hpp>
 #include <stan/lang/ast/node/while_statement_def.hpp>
-
 #include <stan/lang/ast/sigs/function_signatures_def.hpp>
 #include <stan/lang/ast/sigs/function_arg_type_def.hpp>
 
 // Torsten
 #include <stan/lang/ast/node/generalOdeModel_control_def.hpp>
+#include <stan/lang/ast/node/univariate_integral_control_def.hpp>
+
 
 #endif

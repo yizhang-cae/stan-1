@@ -19,3 +19,6 @@ TEST(lang_parser, mixOde1CptModel_function_signatures) {
 TEST(lang_parser, mixOde2CptModel_function_signatures) {
     test_parsable("function-signatures/math/torsten/mixOde2CptModel");
 }
+TEST(lang_parser, univariate_integral_function_signatures) {
+    test_parsable("function-signatures/math/torsten/univariate_integral");
+}

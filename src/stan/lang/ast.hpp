@@ -131,5 +131,6 @@
 
 // Torsten
 #include <stan/lang/ast/node/generalOdeModel_control.hpp>
+#include <stan/lang/ast/node/univariate_integral_control.hpp>
 
 #endif
