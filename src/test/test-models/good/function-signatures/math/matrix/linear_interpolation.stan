@@ -1,34 +1,40 @@
-data {
+data { 
   int d_int;
-  int d2_int;
-  int d3_int;
-  real d_real_array[d_int];
-  real d2_real_array[d2_int];
-  real d3_real_array[d3_int];
+  real x_vec[d_int];
+  real y_vec[d_int];
+  real xout;
+  int dout_int;
+  real xout_vec[dout_int];
 }
 transformed data {
-  real transformed_data_real_array[d_int];
+  real yout;
+  real yout_vec[dout_int];
 
-  transformed_data_real_array <- linear_interpolation(d_real_array, d2_real_array, d3_real_array);
+  yout = linear_interpolation(xout, x_vec, y_vec);
+  yout_vec = linear_interpolation(xout_vec, x_vec, y_vec);
 }
 parameters {
-  real p_real_array[d_int];
-  real p2_real_array[d2_int];
-  real p3_real_array[d3_int];
+  real px_vec[d_int];
+  real py_vec[d_int];
+  real pxout;
+  real pxout_vec[dout_int];
   real y_p;
 }
 transformed parameters {
-  real transformed_param_real_array[d_int];
+  real tp_yout;
+  real tp_yout_vec[dout_int];
 
-  transformed_param_real_array <- linear_interpolation(d_real_array, d2_real_array, d3_real_array);
-  transformed_param_real_array <- linear_interpolation(d_real_array, d2_real_array, p3_real_array);
-  transformed_param_real_array <- linear_interpolation(d_real_array, p2_real_array, d3_real_array);
-  transformed_param_real_array <- linear_interpolation(d_real_array, p2_real_array, p3_real_array);
-  transformed_param_real_array <- linear_interpolation(p_real_array, d2_real_array, d3_real_array);
-  transformed_param_real_array <- linear_interpolation(p_real_array, d2_real_array, p3_real_array);
-  transformed_param_real_array <- linear_interpolation(p_real_array, p2_real_array, d3_real_array);
-  transformed_param_real_array <- linear_interpolation(p_real_array, p2_real_array, p3_real_array);
+  tp_yout = linear_interpolation(xout, x_vec, y_vec);
+  tp_yout = linear_interpolation(xout, px_vec, py_vec);
+  tp_yout = linear_interpolation(pxout, x_vec, y_vec);
+  tp_yout = linear_interpolation(pxout, px_vec, py_vec);
+
+  tp_yout_vec = linear_interpolation(xout_vec, x_vec, y_vec);
+  tp_yout_vec = linear_interpolation(xout_vec, px_vec, py_vec);
+  tp_yout_vec = linear_interpolation(pxout_vec, x_vec, y_vec);
+  tp_yout_vec = linear_interpolation(pxout_vec, px_vec, py_vec);
 }
+
 model {  
   y_p ~ normal(0,1);
 }

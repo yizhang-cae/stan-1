@@ -14,11 +14,6 @@ namespace stan {
      */
     struct algebra_solver {
       /**
-       * Name of solver.
-       */
-       std::string solver_name_;
-
-      /**
        * Name of the algebra system.
        */
       std::string system_function_name_;
@@ -26,22 +21,22 @@ namespace stan {
       /**
        * Initial guess for solution.
        */
-      expression x_;
+      expression y_;
 
       /**
        * Parameters.
        */
-      expression y_;
+      expression theta_;
 
       /**
        * Real-valued data.
        */
-      expression dat_;
+      expression x_r_;
 
       /**
        * Integer-valued data.
        */
-      expression dat_int_;
+      expression x_i_;
 
       /**
        * Construct a default algebra solver node.
@@ -52,17 +47,16 @@ namespace stan {
        * Construct an algebraic solver.
        *
        * @param system_function_name name of ODE system
-       * @param x initial guess for solution
-       * @param y parameters
-       * @param dat real-valued data
-       * @param dat_int integer-valued data
+       * @param y initial guess for solution
+       * @param theta parameters
+       * @param x_r real-valued data
+       * @param x_i integer-valued data
        */
-      algebra_solver(const std::string& solver_name,
-                     const std::string& system_function_name,
-                     const expression& x,
+      algebra_solver(const std::string& system_function_name,
                      const expression& y,
-                     const expression& dat,
-                     const expression& dat_int);
+                     const expression& theta,
+                     const expression& x_r,
+                     const expression& x_i);
     };
 
   }

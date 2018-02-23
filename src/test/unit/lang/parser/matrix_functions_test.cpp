@@ -19,6 +19,10 @@ TEST(lang_parser, csr_to_dense_matrix_function_signatures) {
 }
 
 
+TEST(lang_parser, append_array_matrix_function_signatures) {
+  test_parsable("function-signatures/math/matrix/append_array");
+}
+
 TEST(lang_parser, append_col_matrix_function_signatures) {
   test_parsable("function-signatures/math/matrix/append_col");
 }
@@ -157,6 +161,10 @@ TEST(lang_parser, log_sum_exp_matrix_function_signatures) {
 
 TEST(lang_parser, division_matrix_function_signatures) {
   test_parsable("function-signatures/math/matrix/matrix_division");
+}
+
+TEST(lang_parser, linear_interpolation_matrix_function_signatures) {
+    test_parsable("function-signatures/math/matrix/linear_interpolation");
 }
 
 TEST(lang_parser, matrix_exp_matrix_function_signatures) {

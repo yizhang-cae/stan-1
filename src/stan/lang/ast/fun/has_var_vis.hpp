@@ -19,6 +19,7 @@ namespace stan {
     struct integrate_ode_control;
     struct algebra_solver;
     struct algebra_solver_control;
+    struct univariate_integral_control;
     struct generalOdeModel_control;
     struct index_op;
     struct index_op_sliced;
@@ -138,7 +139,16 @@ namespace stan {
 
       /**
        * Return true if the specified expression contains a non-data
-       * variable. 
+       * variable.
+       *
+       * @param e expression
+       * @return true if expression contains a non-data variable
+       */
+      bool operator()(const univariate_integral_control& e) const;
+
+      /**
+       * Return true if the specified expression contains a non-data
+       * variable.
        *
        * @param e expression
        * @return true if expression contains a non-data variable

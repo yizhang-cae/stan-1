@@ -39,8 +39,10 @@ namespace stan {
 
     expression::expression(const algebra_solver_control& expr) : expr_(expr) { }
 
-    expression::expression(const generalOdeModel_control& expr) : expr_(expr)
-      { }
+    expression::expression(const
+                           univariate_integral_control& expr) : expr_(expr) {}
+
+    expression::expression(const generalOdeModel_control& expr) : expr_(expr) {}
 
     expression::expression(const fun& expr) : expr_(expr) { }
 
@@ -81,11 +83,11 @@ namespace stan {
 
     int expression::total_dims() const {
       int sum = expression_type().num_dims_;
-      if (expression_type().type() == VECTOR_T)
+      if (expression_type().type().is_vector_type())
         ++sum;
-      if (expression_type().type() == ROW_VECTOR_T)
+      if (expression_type().type().is_row_vector_type())
         ++sum;
-      if (expression_type().type() == MATRIX_T)
+      if (expression_type().type().is_matrix_type())
         sum += 2;
       return sum;
     }

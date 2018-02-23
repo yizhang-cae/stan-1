@@ -50,6 +50,12 @@ namespace stan {
       return false;
     }
 
+    bool is_nil_vis::operator()(const
+                                univariate_integral_control& /* x */)
+      const {
+      return false;
+    }
+
     bool is_nil_vis::operator()(const generalOdeModel_control& /* x */) const {
       return false;
     }
