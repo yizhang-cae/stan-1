@@ -70,14 +70,8 @@ namespace stan {
       return false;  // no refs persist out of algebra_solver_control() call
     }
 
-    bool var_occurs_vis::operator()(const
-                                    univariate_integral_control& e)
-      const {
-      return false;  // no refs persist outof univariate_integral_control() call
-    }
-
-    bool var_occurs_vis::operator()(const generalOdeModel_control& e) const {
-      return false;  // no refs persist out of generalOdeModel_control() call
+    bool var_occurs_vis::operator()(const map_rect& e) const {
+      return false;  // no refs persist out of map_rect() call
     }
 
     bool var_occurs_vis::operator()(const index_op& e) const {

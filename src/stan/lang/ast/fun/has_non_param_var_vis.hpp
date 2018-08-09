@@ -21,6 +21,8 @@ namespace stan {
        */
       explicit has_non_param_var_vis(const variable_map& var_map);
 
+#include <stan/torsten/has_non_param_var_vis.hpp>
+
       /**
        * Return true if the specified expression contains a variable
        * not declared as a parameter.
@@ -127,16 +129,7 @@ namespace stan {
        * @param[in] e expression
        * @return true if contains a variable not declared as a parameter
        */
-      bool operator()(const univariate_integral_control& e) const;
-
-      /**
-       * Return true if the specified expression contains a variable
-       * not declared as a parameter.
-       *
-       * @param[in] e expression
-       * @return true if contains a variable not declared as a parameter
-       */
-      bool operator()(const generalOdeModel_control& e) const;
+       bool operator()(const map_rect& e) const;
 
       /**
        * Return true if the specified expression contains a variable

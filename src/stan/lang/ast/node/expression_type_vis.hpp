@@ -2,6 +2,7 @@
 #define STAN_LANG_AST_NODE_EXPRESSION_TYPE_VIS_HPP
 
 #include <stan/lang/ast/expr_type.hpp>
+#include <stan/torsten/torsten_structs.hpp>
 #include <boost/variant/static_visitor.hpp>
 
 namespace stan {
@@ -19,9 +20,7 @@ namespace stan {
     struct integrate_ode_control;
     struct algebra_solver;
     struct algebra_solver_control;
-    struct univariate_integral_control;
-    struct generalOdeModel_control;
-    struct mixOdeModel_control;
+    struct map_rect;
     struct index_op;
     struct index_op_sliced;
     struct conditional_op;
@@ -33,6 +32,7 @@ namespace stan {
      * variant types making up an expression.
      */
     struct expression_type_vis : public boost::static_visitor<expr_type> {
+#include <stan/torsten/expression_type_vis.hpp>
       expr_type operator()(const nil& e) const;
       expr_type operator()(const int_literal& e) const;
       expr_type operator()(const double_literal& e) const;
@@ -45,8 +45,7 @@ namespace stan {
       expr_type operator()(const integrate_ode_control& e) const;
       expr_type operator()(const algebra_solver& e) const;
       expr_type operator()(const algebra_solver_control& e) const;
-      expr_type operator()(const univariate_integral_control& e) const;
-      expr_type operator()(const generalOdeModel_control& e) const;
+      expr_type operator()(const map_rect& e) const;
       expr_type operator()(const index_op& e) const;
       expr_type operator()(const index_op_sliced& e) const;
       expr_type operator()(const conditional_op& e) const;

@@ -34,6 +34,8 @@ namespace stan {
       expression_grammar<Iterator>& expression_g;
       indexes_grammar<Iterator> indexes_g;
 
+#include <stan/torsten/term_grammar.hpp>
+
       boost::spirit::qi::rule<Iterator,
                               std::vector<expression>(scope),
                               whitespace_grammar<Iterator> >
@@ -106,14 +108,9 @@ namespace stan {
       algebra_solver_control_r;
 
       boost::spirit::qi::rule<Iterator,
-                              univariate_integral_control(scope),
+                              map_rect(scope),
                               whitespace_grammar<Iterator> >
-      univariate_integral_control_r;
-
-      boost::spirit::qi::rule<Iterator,
-                              generalOdeModel_control(scope),
-                              whitespace_grammar<Iterator> >
-      generalOdeModel_control_r;
+      map_rect_r;
 
       boost::spirit::qi::rule<Iterator,
                               std::string(),

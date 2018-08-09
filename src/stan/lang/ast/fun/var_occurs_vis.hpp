@@ -1,6 +1,7 @@
 #ifndef STAN_LANG_AST_FUN_VAR_OCCURS_VIS_HPP
 #define STAN_LANG_AST_FUN_VAR_OCCURS_VIS_HPP
 
+#include <stan/torsten/torsten_structs.hpp>
 #include <boost/variant/static_visitor.hpp>
 #include <string>
 
@@ -19,8 +20,7 @@ namespace stan {
     struct integrate_ode_control;
     struct algebra_solver;
     struct algebra_solver_control;
-    struct univariate_integral_control;
-    struct generalOdeModel_control;
+    struct map_rect;
     struct index_op;
     struct index_op_sliced;
     struct conditional_op;
@@ -35,6 +35,8 @@ namespace stan {
        * @param e variable to detect
        */
       explicit var_occurs_vis(const variable& e);
+
+#include <stan/torsten/var_occurs_vis.hpp>
 
       /**
        * Return true if the variable occurs in the specified
@@ -154,17 +156,7 @@ namespace stan {
        * @param[in] e expression
        * @return true if the variable occurs in the arguments
        */
-      bool operator()(const univariate_integral_control& e) const;
-
-
-      /**
-       * Return true if the variable occurs in the specified
-       * expression.
-       *
-       * @param[in] e expression
-       * @return true if the variable occurs in the arguments
-       */
-      bool operator()(const generalOdeModel_control& e) const;
+      bool operator()(const map_rect& e) const;
 
       /**
        * Return true if the variable occurs in the specified

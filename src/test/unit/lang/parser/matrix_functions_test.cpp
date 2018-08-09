@@ -167,6 +167,10 @@ TEST(lang_parser, matrix_exp_matrix_function_signatures) {
     test_parsable("function-signatures/math/matrix/matrix_exp");
 }
 
+TEST(lang_parser, matrix_exp_multiply_matrix_function_signatures) {
+    test_parsable("function-signatures/math/matrix/matrix_exp_multiply");
+}
+
 TEST(lang_parser, max_matrix_function_signatures) {
   test_parsable("function-signatures/math/matrix/max");
 }
@@ -215,6 +219,14 @@ TEST(lang_parser, qr_R_matrix_function_signatures) {
   test_parsable("function-signatures/math/matrix/qr_R");
 }
 
+TEST(lang_parser, qr_thin_Q_matrix_function_signatures) {
+  test_parsable("function-signatures/math/matrix/qr_thin_Q");
+}
+
+TEST(lang_parser, qr_thin_R_matrix_function_signatures) {
+  test_parsable("function-signatures/math/matrix/qr_thin_R");
+}
+
 TEST(lang_parser, quad_form_matrix_function_signatures) {
   test_parsable("function-signatures/math/matrix/quad_form");
 }
@@ -261,6 +273,10 @@ TEST(lang_parser, rows_dot_product_matrix_function_signatures) {
 
 TEST(lang_parser, rows_dot_self_matrix_function_signatures) {
   test_parsable("function-signatures/math/matrix/rows_dot_self");
+}
+
+TEST(lang_parser, scale_matrix_exp_multiply_matrix_function_signatures) {
+    test_parsable("function-signatures/math/matrix/scale_matrix_exp_multiply");
 }
 
 TEST(lang_parser, singular_values_matrix_function_signatures) {

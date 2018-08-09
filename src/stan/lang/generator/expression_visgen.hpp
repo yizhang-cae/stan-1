@@ -35,6 +35,8 @@ namespace stan {
           user_facing_(user_facing) {
       }
 
+#include <stan/torsten/expression_visgen.hpp>
+
       void operator()(const nil& /*x*/) const {
         o_ << "nil";
       }
@@ -220,73 +222,18 @@ namespace stan {
         o_ << ")";
       }
 
-      void operator()(const univariate_integral_control& fx) const {
-        o_ << fx.integration_function_name_
-           << '('
-           << fx.system_function_name_
-           << "_functor__(), ";
-        generate_expression(fx.t0_, NOT_USER_FACING, o_);
+      void operator()(const map_rect& fx) const {
+        o_ << "map_rect";
+        o_ << "<" << fx.call_id_ << ", " << fx.fun_name_ << "_functor__>";
+        o_ << "(";
+        generate_expression(fx.shared_params_, user_facing_, o_);
         o_ << ", ";
-        generate_expression(fx.t1_, NOT_USER_FACING, o_);
+        generate_expression(fx.job_params_, user_facing_, o_);
         o_ << ", ";
-        generate_expression(fx.theta_, user_facing_, o_);
+        generate_expression(fx.job_data_r_, NOT_USER_FACING, o_);
         o_ << ", ";
-        generate_expression(fx.x_r_, NOT_USER_FACING, o_);
-        o_ << ", ";
-        generate_expression(fx.x_i_, NOT_USER_FACING, o_);
+        generate_expression(fx.job_data_i_, NOT_USER_FACING, o_);
         o_ << ", pstream__)";
-      }
-
-      void operator()(const generalOdeModel_control& fx) const {
-        o_ << fx.integration_function_name_
-           << '('
-           << fx.system_function_name_
-           << "_functor__(), ";
-
-        generate_expression(fx.nCmt_, NOT_USER_FACING, o_);
-        o_ << ", ";
-
-        generate_expression(fx.time_, NOT_USER_FACING, o_);
-        o_ << ", ";
-
-        generate_expression(fx.amt_, NOT_USER_FACING, o_);
-        o_ << ", ";
-
-        generate_expression(fx.rate_, NOT_USER_FACING, o_);
-        o_ << ", ";
-
-        generate_expression(fx.ii_, NOT_USER_FACING, o_);
-        o_ << ", ";
-
-        generate_expression(fx.evid_, NOT_USER_FACING, o_);
-        o_ << ", ";
-
-        generate_expression(fx.cmt_, NOT_USER_FACING, o_);
-        o_ << ", ";
-
-        generate_expression(fx.addl_, NOT_USER_FACING, o_);
-        o_ << ", ";
-
-        generate_expression(fx.ss_, NOT_USER_FACING, o_);
-        o_ << ", ";
-
-        generate_expression(fx.pMatrix_, NOT_USER_FACING, o_);
-        o_ << ", ";
-
-        generate_expression(fx.biovar_, NOT_USER_FACING, o_);
-        o_ << ", ";
-
-        generate_expression(fx.tlag_, NOT_USER_FACING, o_);
-        o_ << ", pstream__, ";
-
-        generate_expression(fx.rel_tol_, NOT_USER_FACING, o_);
-        o_ << ", ";
-
-        generate_expression(fx.abs_tol_, NOT_USER_FACING, o_);
-        o_ << ", ";
-
-        generate_expression(fx.max_num_steps_, NOT_USER_FACING, o_);
-        o_ << ")";
       }
 
       void operator()(const fun& fx) const {

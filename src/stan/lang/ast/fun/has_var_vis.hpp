@@ -3,6 +3,7 @@
 
 #include <stan/lang/ast/variable_map.hpp>
 #include <boost/variant/static_visitor.hpp>
+#include <stan/torsten/torsten_structs.hpp>
 
 namespace stan {
   namespace lang {
@@ -19,8 +20,7 @@ namespace stan {
     struct integrate_ode_control;
     struct algebra_solver;
     struct algebra_solver_control;
-    struct univariate_integral_control;
-    struct generalOdeModel_control;
+    struct map_rect;
     struct index_op;
     struct index_op_sliced;
     struct conditional_op;
@@ -29,7 +29,7 @@ namespace stan {
 
     /**
      * Visitor to detect if an expression contains a non-data
-     * variable. 
+     * variable.
      */
     struct has_var_vis : public boost::static_visitor<bool> {
       /**
@@ -38,9 +38,11 @@ namespace stan {
        */
       explicit has_var_vis(const variable_map& var_map);
 
+#include <stan/torsten/has_var_vis.hpp>
+
       /**
        * Return true if the specified expression contains a non-data
-       * variable. 
+       * variable.
        *
        * @param e expression
        * @return true if expression contains a non-data variable
@@ -49,7 +51,7 @@ namespace stan {
 
       /**
        * Return true if the specified expression contains a non-data
-       * variable. 
+       * variable.
        *
        * @param e expression
        * @return true if expression contains a non-data variable
@@ -58,7 +60,7 @@ namespace stan {
 
       /**
        * Return true if the specified expression contains a non-data
-       * variable. 
+       * variable.
        *
        * @param e expression
        * @return true if expression contains a non-data variable
@@ -67,7 +69,7 @@ namespace stan {
 
       /**
        * Return true if the specified expression contains a non-data
-       * variable. 
+       * variable.
        *
        * @param e expression
        * @return true if expression contains a non-data variable
@@ -76,7 +78,7 @@ namespace stan {
 
       /**
        * Return true if the specified expression contains a non-data
-       * variable. 
+       * variable.
        *
        * @param e expression
        * @return true if expression contains a non-data variable
@@ -85,7 +87,7 @@ namespace stan {
 
       /**
        * Return true if the specified expression contains a non-data
-       * variable. 
+       * variable.
        *
        * @param e expression
        * @return true if expression contains a non-data variable
@@ -94,7 +96,7 @@ namespace stan {
 
       /**
        * Return true if the specified expression contains a non-data
-       * variable. 
+       * variable.
        *
        * @param e expression
        * @return true if expression contains a non-data variable
@@ -103,7 +105,7 @@ namespace stan {
 
       /**
        * Return true if the specified expression contains a non-data
-       * variable. 
+       * variable.
        *
        * @param e expression
        * @return true if expression contains a non-data variable
@@ -112,7 +114,7 @@ namespace stan {
 
       /**
        * Return true if the specified expression contains a non-data
-       * variable. 
+       * variable.
        *
        * @param e expression
        * @return true if expression contains a non-data variable
@@ -121,7 +123,7 @@ namespace stan {
 
       /**
        * Return true if the specified expression contains a non-data
-       * variable. 
+       * variable.
        *
        * @param e expression
        * @return true if expression contains a non-data variable
@@ -130,7 +132,7 @@ namespace stan {
 
       /**
        * Return true if the specified expression contains a non-data
-       * variable. 
+       * variable.
        *
        * @param e expression
        * @return true if expression contains a non-data variable
@@ -144,7 +146,7 @@ namespace stan {
        * @param e expression
        * @return true if expression contains a non-data variable
        */
-      bool operator()(const univariate_integral_control& e) const;
+      bool operator()(const map_rect& e) const;
 
       /**
        * Return true if the specified expression contains a non-data
@@ -153,20 +155,11 @@ namespace stan {
        * @param e expression
        * @return true if expression contains a non-data variable
        */
-      bool operator()(const generalOdeModel_control& e) const;
-
-      /**
-       * Return true if the specified expression contains a non-data
-       * variable. 
-       *
-       * @param e expression
-       * @return true if expression contains a non-data variable
-       */
       bool operator()(const fun& e) const;
 
       /**
        * Return true if the specified expression contains a non-data
-       * variable. 
+       * variable.
        *
        * @param e expression
        * @return true if expression contains a non-data variable
@@ -175,7 +168,7 @@ namespace stan {
 
       /**
        * Return true if the specified expression contains a non-data
-       * variable. 
+       * variable.
        *
        * @param e expression
        * @return true if expression contains a non-data variable
@@ -184,7 +177,7 @@ namespace stan {
 
       /**
        * Return true if the specified expression contains a non-data
-       * variable. 
+       * variable.
        *
        * @param e expression
        * @return true if expression contains a non-data variable
@@ -193,7 +186,7 @@ namespace stan {
 
       /**
        * Return true if the specified expression contains a non-data
-       * variable. 
+       * variable.
        *
        * @param e expression
        * @return true if expression contains a non-data variable
@@ -202,7 +195,7 @@ namespace stan {
 
       /**
        * Return true if the specified expression contains a non-data
-       * variable. 
+       * variable.
        *
        * @param e expression
        * @return true if expression contains a non-data variable

@@ -104,25 +104,11 @@ namespace stan {
       return boost::apply_visitor(*this, e.y_.expr_);
     }
 
-    bool has_non_param_var_vis::operator()(const
-                                           univariate_integral_control& e)
+    bool has_non_param_var_vis::operator()(const map_rect& e)
       const {
-      return ((boost::apply_visitor(*this, e.t0_.expr_)
-        || boost::apply_visitor(*this, e.t1_.expr_))
-        || boost::apply_visitor(*this, e.theta_.expr_));
-    }
-
-    bool has_non_param_var_vis::operator()(const generalOdeModel_control& e)
-      const {
-      // CHECK - anything to do with nonlinearity ?
-      // Putting in the variables that may contain var types
-      return ((((((boost::apply_visitor(*this, e.time_.expr_)
-        || boost::apply_visitor(*this, e.amt_.expr_))
-        || boost::apply_visitor(*this, e.rate_.expr_))
-        || boost::apply_visitor(*this, e.ii_.expr_))
-        || boost::apply_visitor(*this, e.pMatrix_.expr_))
-        || boost::apply_visitor(*this, e.biovar_.expr_))
-        || boost::apply_visitor(*this, e.tlag_.expr_));
+      // if any vars, return true
+      return boost::apply_visitor(*this, e.shared_params_.expr_)
+          || boost::apply_visitor(*this, e.job_params_.expr_);
     }
 
     bool has_non_param_var_vis::operator()(const fun& e) const {
