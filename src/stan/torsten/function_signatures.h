@@ -85,3 +85,6 @@ add("linOdeModel", expr_type(matrix_type()), arg_types_121);
 add("linOdeModel", expr_type(matrix_type()), arg_types_212);
 add("linOdeModel", expr_type(matrix_type()), arg_types_211);
 add("linOdeModel", expr_type(matrix_type()), arg_types_221);
+
+add("linear_interpolation", expr_type(double_type()), expr_type(double_type()), vector_types[1], vector_types[1]);
+add("linear_interpolation", vector_types[1], vector_types[1], vector_types[1], vector_types[1]);
