@@ -26,6 +26,9 @@ MATH ?= lib/stan_math/
 CXXFLAGS += -I src -isystem $(MATH) -DFUSION_MAX_VECTOR_SIZE=12 -Wno-unused-local-typedefs
 LDLIBS_STANC = -Lbin -lstanc
 
+# Adding Torsten functions making MPL list too long, need adjust list size
+CXXFLAGS += -DBOOST_MPL_CFG_NO_PREPROCESSED_HEADERS -DBOOST_MPL_LIMIT_LIST_SIZE=30
+
 -include $(HOME)/.config/stan/make.local  # define local variables
 -include make/local                       # overwrite local variables
 
