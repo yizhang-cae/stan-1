@@ -18,6 +18,10 @@ namespace stan {
     expression_type_vis::operator()(const generalOdeModel& e) const {
       return expr_type(matrix_type(), 0);
     }
+    expr_type
+    expression_type_vis::operator()(const pop_pk_generalOdeModel& e) const {
+      return expr_type(matrix_type(), 1);
+    }
 
   }
 }

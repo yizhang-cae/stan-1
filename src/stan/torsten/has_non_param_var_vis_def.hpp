@@ -39,6 +39,19 @@ namespace stan {
         || boost::apply_visitor(*this, e.biovar_.expr_))
         || boost::apply_visitor(*this, e.tlag_.expr_));
     }
+
+    bool has_non_param_var_vis::operator()(const pop_pk_generalOdeModel& e)
+      const {
+      // CHECK - anything to do with nonlinearity ?
+      // Putting in the variables that may contain var types
+      return ((((((boost::apply_visitor(*this, e.time_.expr_)
+        || boost::apply_visitor(*this, e.amt_.expr_))
+        || boost::apply_visitor(*this, e.rate_.expr_))
+        || boost::apply_visitor(*this, e.ii_.expr_))
+        || boost::apply_visitor(*this, e.pMatrix_.expr_))
+        || boost::apply_visitor(*this, e.biovar_.expr_))
+        || boost::apply_visitor(*this, e.tlag_.expr_));
+    }
   }
 }
 

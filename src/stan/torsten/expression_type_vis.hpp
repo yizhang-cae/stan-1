@@ -4,5 +4,6 @@
 expr_type operator()(const univariate_integral_control& e) const;
 expr_type operator()(const generalOdeModel_control& e) const;
 expr_type operator()(const generalOdeModel& e) const;
+expr_type operator()(const pop_pk_generalOdeModel& e) const;
 
 #endif

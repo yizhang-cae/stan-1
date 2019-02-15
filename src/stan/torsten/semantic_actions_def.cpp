@@ -407,6 +407,234 @@ void validate_generalOdeModel_control_args(const T& ode_fun,
   }
 }
 
+/**********************************
+   pop_pk_generalOdeModel
+**********************************/
+template <class T>
+void validate_pop_pk_generalOdeModel_non_control_args(const T& ode_fun,
+                              const variable_map& var_map,
+                              bool& pass,
+                              std::ostream& error_msgs) {
+  pass = true;
+
+  expr_type sys_result_type(double_type(), 1);
+  std::vector<function_arg_type> sys_arg_types;
+  std::string expected_signature;
+
+  // build expected function argument type for generalOdeModel
+  if (ode_fun.integration_function_name_ == "pop_pk_generalOdeModel_rk45"
+      || ode_fun.integration_function_name_ == "pop_pk_generalOdeModel_bdf") {
+    sys_arg_types.push_back(function_arg_type(expr_type(double_type(),
+                                                        0)));  // t0
+    sys_arg_types.push_back(function_arg_type(expr_type(double_type(),
+                                                        1)));  // y
+    sys_arg_types.push_back(function_arg_type(expr_type(double_type(),
+                                                        1)));  // theta
+    sys_arg_types.push_back(function_arg_type(expr_type(double_type(),
+                                                        1)));  // x_r
+    sys_arg_types.push_back(function_arg_type(expr_type(int_type(),
+                                                        1)));  // x_i
+    expected_signature = "(real, real[], real[], real[], int[]) : real[]";
+  }
+
+  // build expected function argument type for mixOdeModel
+  if ((ode_fun.integration_function_name_ == "mixOde1CptModel_rk45"
+       || ode_fun.integration_function_name_ == "mixOde1CptModel_bdf")
+      || (ode_fun.integration_function_name_ == "mixOde2CptModel_rk45"
+          || ode_fun.integration_function_name_ == "mixOde2CptModel_bdf")) {
+    sys_arg_types.push_back(function_arg_type(expr_type(double_type(),
+                                                        0)));  // t0
+    sys_arg_types.push_back(function_arg_type(expr_type(double_type(),
+                                                        1)));  // y
+    sys_arg_types.push_back(function_arg_type(expr_type(double_type(),
+                                                        1)));  // y_PK
+    sys_arg_types.push_back(function_arg_type(expr_type(double_type(),
+                                                        1)));  // theta
+    sys_arg_types.push_back(function_arg_type(expr_type(double_type(),
+                                                        1)));  // x_r
+    sys_arg_types.push_back(function_arg_type(expr_type(int_type(),
+                                                        1)));  // x_i
+    expected_signature = "(real, real[], real[], real[], real[], int[]) : real[]";  // NOLINT
+  }
+
+  function_signature_t system_signature(sys_result_type, sys_arg_types);
+
+  // test function argument type
+  if (!function_signatures::instance()
+      .is_defined(ode_fun.system_function_name_, system_signature)) {
+    error_msgs << "first argument to"
+               << ode_fun.integration_function_name_
+               << " must be a function with signature "
+               << expected_signature << " ";
+    pass = false;
+  }
+
+  // test regular argument types
+  if (!ode_fun.nCmt_.expression_type().type().is_int_type()) {
+    error_msgs << "second argument to "
+               << ode_fun.integration_function_name_
+               << " must be type int"
+               << " for nCmt (number of compartments)"
+               << "; found type="
+               << ode_fun.nCmt_.expression_type()
+               << ". ";
+    pass = false;
+  }
+  if (ode_fun.time_.expression_type() != expr_type(double_type(), 2)) {
+    error_msgs << "third argument to "
+               << ode_fun.integration_function_name_
+               << " must be type real[]"
+               << "for time"
+               << "; found type="
+               << ode_fun.time_.expression_type()
+               << ". ";
+    pass = false;
+  }
+  if (ode_fun.amt_.expression_type() != expr_type(double_type(), 2)) {
+    error_msgs << "fourth argument to "
+               << ode_fun.integration_function_name_
+               << " must be type real[]"
+               << "for amount"
+               << "; found type="
+               << ode_fun.amt_.expression_type()
+               << ". ";
+    pass = false;
+  }
+  if (ode_fun.rate_.expression_type() != expr_type(double_type(), 2)) {
+    error_msgs << "fifth argument to "
+               << ode_fun.integration_function_name_
+               << " must be type real[]"
+               << "for rate"
+               << "; found type="
+               << ode_fun.rate_.expression_type()
+               << ". ";
+    pass = false;
+  }
+  if (ode_fun.ii_.expression_type() != expr_type(double_type(), 2)) {
+    error_msgs << "sixth argument to "
+               << ode_fun.integration_function_name_
+               << " must be type real[]"
+               << "for inter-dose interval"
+               << "; found type="
+               << ode_fun.ii_.expression_type()
+               << ". ";
+    pass = false;
+  }
+  if (ode_fun.evid_.expression_type() != expr_type(int_type(), 2)) {
+    error_msgs << "seventh argument to "
+               << ode_fun.integration_function_name_
+               << " must be type int[]"
+               << "for evid (event ID)"
+               << "; found type="
+               << ode_fun.evid_.expression_type()
+               << ". ";
+    pass = false;
+  }
+  if (ode_fun.cmt_.expression_type() != expr_type(int_type(), 2)) {
+    error_msgs << "eighth argument to "
+               << ode_fun.integration_function_name_
+               << " must be type int[]"
+               << "for cmt (compartment)"
+               << "; found type="
+               << ode_fun.cmt_.expression_type()
+               << ". ";
+    pass = false;
+  }
+  if (ode_fun.addl_.expression_type() != expr_type(int_type(), 2)) {
+    error_msgs << "ninth argument to "
+               << ode_fun.integration_function_name_
+               << " must be type int[]"
+               << "for addl (additional dose)"
+               << "; found type="
+               << ode_fun.addl_.expression_type()
+               << ". ";
+    pass = false;
+  }
+  if (ode_fun.ss_.expression_type() != expr_type(int_type(), 2)) {
+    error_msgs << "tenth argument to "
+               << ode_fun.integration_function_name_
+               << " must be type int[]"
+               << "for ss (steady state)"
+               << "; found type="
+               << ode_fun.ss_.expression_type()
+               << ". ";
+    pass = false;
+  }
+  if ((ode_fun.pMatrix_.expression_type() != expr_type(double_type(), 3))
+      && (ode_fun.pMatrix_.expression_type() !=
+          expr_type(double_type(), 2))) {
+    error_msgs << "eleventh argument to "
+               << ode_fun.integration_function_name_
+               << " must be type real[ ] or real[ , ]"
+               << " for the ODE parameters"
+               << "; found type="
+               << ode_fun.pMatrix_.expression_type()
+               << ". ";
+    pass = false;
+  }
+  if ((ode_fun.biovar_.expression_type() != expr_type(double_type(), 3))
+      && (ode_fun.biovar_.expression_type() !=
+          expr_type(double_type(), 2))) {
+    error_msgs << "twelth argument to "
+               << ode_fun.integration_function_name_
+               << " must be type real[ ] or real[ , ]"
+               << " for the bio-variability"
+               << "; found type="
+               << ode_fun.biovar_.expression_type()
+               << ". ";
+    pass = false;
+  }
+  if ((ode_fun.tlag_.expression_type() != expr_type(double_type(), 3))
+      && (ode_fun.tlag_.expression_type() != expr_type(double_type(), 2))) {
+    error_msgs << "thirteenth argument to "
+               << ode_fun.integration_function_name_
+               << " must be type real[ ] or real[ , ]"
+               << " for the lag times"
+               << "; found type="
+               << ode_fun.tlag_.expression_type()
+               << ". ";
+    pass = false;
+  }
+
+  // test data-only variables do not have parameters (int locals OK)
+  if (has_var(ode_fun.nCmt_, var_map)) {
+    error_msgs << "second argument to "
+               << ode_fun.integration_function_name_
+               << " for number of compartments"
+               << " must be data only and not reference parameters";
+    pass = false;
+  }
+  if (has_var(ode_fun.evid_, var_map)) {
+    error_msgs << "seventh argument to "
+               << ode_fun.integration_function_name_
+               << " for event ID (evid)"
+               << " must be data only and not reference parameters";
+    pass = false;
+  }
+  if (has_var(ode_fun.cmt_, var_map)) {
+    error_msgs << "eighth argument to "
+               << ode_fun.integration_function_name_
+               << " for compartment number (cmt)"
+               << " must be data only and not reference parameters";
+    pass = false;
+  }
+  if (has_var(ode_fun.addl_, var_map)) {
+    error_msgs << "ninth argument to "
+               << ode_fun.integration_function_name_
+               << " for additional dose (addl)"
+               << " must be data only and not reference parameters";
+    pass = false;
+  }
+  if (has_var(ode_fun.ss_, var_map)) {
+    error_msgs << "tenth argument to "
+               << ode_fun.integration_function_name_
+               << " for steady state approximation (ss)"
+               << " must be data only and not reference parameters";
+    pass = false;
+  }
+}
+
+
 void validate_generalOdeModel_control::operator()(
                       const generalOdeModel_control& ode_fun,
                       const variable_map& var_map,
@@ -456,6 +684,32 @@ bool data_only_expression::operator()(const generalOdeModel& x)
 
 template void assign_lhs::operator()(expression&,
                                      const generalOdeModel&)
+  const;
+
+// pop pk
+void validate_pop_pk_generalOdeModel::operator()(
+                      const pop_pk_generalOdeModel& ode_fun,
+                      const variable_map& var_map,
+                      bool& pass,
+                      std::ostream& error_msgs) const {
+  validate_pop_pk_generalOdeModel_non_control_args(ode_fun, var_map, pass, error_msgs);
+}
+boost::phoenix::function<validate_pop_pk_generalOdeModel>
+validate_pop_pk_generalOdeModel_f;
+
+bool data_only_expression::operator()(const pop_pk_generalOdeModel& x)
+  const {
+  return ((((((boost::apply_visitor(*this, x.time_.expr_)
+               && boost::apply_visitor(*this, x.amt_.expr_)))
+             && boost::apply_visitor(*this, x.rate_.expr_)
+             && boost::apply_visitor(*this, x.ii_.expr_))
+            && boost::apply_visitor(*this, x.pMatrix_.expr_))
+           && boost::apply_visitor(*this, x.biovar_.expr_))
+          && boost::apply_visitor(*this, x.tlag_.expr_));
+}
+
+template void assign_lhs::operator()(expression&,
+                                     const pop_pk_generalOdeModel&)
   const;
 
 #endif

@@ -118,4 +118,49 @@ generalOdeModel_r
   [validate_generalOdeModel_f(_val,
                               boost::phoenix::ref(var_map_), _pass,
                               boost::phoenix::ref(error_msgs_))];
+
+pop_pk_generalOdeModel_r.name("expression");
+pop_pk_generalOdeModel_r
+%= ( (string("pop_pk_generalOdeModel_bdf") >> no_skip[!char_("a-zA-Z0-9_")])
+     | (string("pop_pk_generalOdeModel_rk45")
+        >> no_skip[!char_("a-zA-Z0-9_")])
+     | (string("mixOde1CptModel_rk45")
+        >> no_skip[!char_("a-zA-Z0-9_")])
+     | (string("mixOde1CptModel_bdf")
+        >> no_skip[!char_("a-zA-Z0-9_")])
+     | (string("mixOde2CptModel_rk45")
+        >> no_skip[!char_("a-zA-Z0-9_")])
+     | (string("mixOde2CptModel_bdf")
+        >> no_skip[!char_("a-zA-Z0-9_")]))
+  > lit('(')
+  > identifier_r        // 1) system function name (function only)
+  > lit(',')
+  > expression_g(_r1)   // 2) nCmt
+  > lit(',')
+  > expression_g(_r1)   // 3) time
+  > lit(',')
+  > expression_g(_r1)   // 4) amt
+  > lit(',')
+  > expression_g(_r1)   // 5) rate
+  > lit(',')
+  > expression_g(_r1)   // 6) ii
+  > lit(',')
+  > expression_g(_r1)   // 7) evid (data only)
+  > lit(',')
+  > expression_g(_r1)   // 8) cmt (data only)
+  > lit(',')
+  > expression_g(_r1)   // 9) addl (data only)
+  > lit(',')
+  > expression_g(_r1)   // 10) ss (data only)
+  > lit(',')
+  > expression_g(_r1)   // 11) pMatrix
+  > lit(',')
+  > expression_g(_r1)   // 12) biovar
+  > lit(',')
+  > expression_g(_r1)   // 13) tlag
+  > lit(')')
+  [validate_pop_pk_generalOdeModel_f(_val,
+                              boost::phoenix::ref(var_map_), _pass,
+                              boost::phoenix::ref(error_msgs_))];
+
 #endif

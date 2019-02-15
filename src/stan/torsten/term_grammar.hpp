@@ -16,5 +16,10 @@ boost::spirit::qi::rule<Iterator,
                         whitespace_grammar<Iterator> >
 generalOdeModel_r;
 
+boost::spirit::qi::rule<Iterator,
+                        pop_pk_generalOdeModel(scope),
+                        whitespace_grammar<Iterator> >
+pop_pk_generalOdeModel_r;
+
 
 #endif

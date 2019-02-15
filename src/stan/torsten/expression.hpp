@@ -4,5 +4,6 @@
 expression(const univariate_integral_control& expr);  // NOLINT
 expression(const generalOdeModel_control& expr);  // NOLINT
 expression(const generalOdeModel& expr);  // NOLINT
+expression(const pop_pk_generalOdeModel& expr);  // NOLINT
 
 #endif
