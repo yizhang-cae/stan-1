@@ -137,27 +137,35 @@ pop_pk_generalOdeModel_r
   > lit(',')
   > expression_g(_r1)   // 2) nCmt
   > lit(',')
-  > expression_g(_r1)   // 3) time
+  > expression_g(_r1)   // 3) len
   > lit(',')
-  > expression_g(_r1)   // 4) amt
+  > expression_g(_r1)   // 4) time
   > lit(',')
-  > expression_g(_r1)   // 5) rate
+  > expression_g(_r1)   // 5) amt
   > lit(',')
-  > expression_g(_r1)   // 6) ii
+  > expression_g(_r1)   // 6) rate
   > lit(',')
-  > expression_g(_r1)   // 7) evid (data only)
+  > expression_g(_r1)   // 7) ii
   > lit(',')
-  > expression_g(_r1)   // 8) cmt (data only)
+  > expression_g(_r1)   // 8) evid (data only)
   > lit(',')
-  > expression_g(_r1)   // 9) addl (data only)
+  > expression_g(_r1)   // 9) cmt (data only)
   > lit(',')
-  > expression_g(_r1)   // 10) ss (data only)
+  > expression_g(_r1)   // 10) addl (data only)
   > lit(',')
-  > expression_g(_r1)   // 11) pMatrix
+  > expression_g(_r1)   // 11) ss (data only)
   > lit(',')
-  > expression_g(_r1)   // 12) biovar
+  > expression_g(_r1)   // 12) len_pMatrix
   > lit(',')
-  > expression_g(_r1)   // 13) tlag
+  > expression_g(_r1)   // 13) pMatrix
+  > lit(',')
+  > expression_g(_r1)   // 14) len_biovar
+  > lit(',')
+  > expression_g(_r1)   // 15) biovar
+  > lit(',')
+  > expression_g(_r1)   // 16) len_tlag
+  > lit(',')
+  > expression_g(_r1)   // 17) tlag
   > lit(')')
   [validate_pop_pk_generalOdeModel_f(_val,
                               boost::phoenix::ref(var_map_), _pass,

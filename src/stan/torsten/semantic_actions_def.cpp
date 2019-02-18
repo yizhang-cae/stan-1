@@ -462,7 +462,7 @@ void validate_pop_pk_generalOdeModel_non_control_args(const T& ode_fun,
   // test function argument type
   if (!function_signatures::instance()
       .is_defined(ode_fun.system_function_name_, system_signature)) {
-    error_msgs << "first argument to"
+    error_msgs << "1st argument to"
                << ode_fun.integration_function_name_
                << " must be a function with signature "
                << expected_signature << " ";
@@ -471,7 +471,7 @@ void validate_pop_pk_generalOdeModel_non_control_args(const T& ode_fun,
 
   // test regular argument types
   if (!ode_fun.nCmt_.expression_type().type().is_int_type()) {
-    error_msgs << "second argument to "
+    error_msgs << "2nd argument to "
                << ode_fun.integration_function_name_
                << " must be type int"
                << " for nCmt (number of compartments)"
@@ -480,8 +480,18 @@ void validate_pop_pk_generalOdeModel_non_control_args(const T& ode_fun,
                << ". ";
     pass = false;
   }
-  if (ode_fun.time_.expression_type() != expr_type(double_type(), 2)) {
-    error_msgs << "third argument to "
+  if (ode_fun.len_.expression_type() != expr_type(int_type(), 1)) {
+    error_msgs << "3rd argument to "
+               << ode_fun.integration_function_name_
+               << " must be type int[]"
+               << " for len"
+               << "; found type="
+               << ode_fun.time_.expression_type()
+               << ". ";
+    pass = false;
+  }
+  if (ode_fun.time_.expression_type() != expr_type(double_type(), 1)) {
+    error_msgs << "4th argument to "
                << ode_fun.integration_function_name_
                << " must be type real[]"
                << "for time"
@@ -490,8 +500,8 @@ void validate_pop_pk_generalOdeModel_non_control_args(const T& ode_fun,
                << ". ";
     pass = false;
   }
-  if (ode_fun.amt_.expression_type() != expr_type(double_type(), 2)) {
-    error_msgs << "fourth argument to "
+  if (ode_fun.amt_.expression_type() != expr_type(double_type(), 1)) {
+    error_msgs << "5th argument to "
                << ode_fun.integration_function_name_
                << " must be type real[]"
                << "for amount"
@@ -500,8 +510,8 @@ void validate_pop_pk_generalOdeModel_non_control_args(const T& ode_fun,
                << ". ";
     pass = false;
   }
-  if (ode_fun.rate_.expression_type() != expr_type(double_type(), 2)) {
-    error_msgs << "fifth argument to "
+  if (ode_fun.rate_.expression_type() != expr_type(double_type(), 1)) {
+    error_msgs << "6th argument to "
                << ode_fun.integration_function_name_
                << " must be type real[]"
                << "for rate"
@@ -510,8 +520,8 @@ void validate_pop_pk_generalOdeModel_non_control_args(const T& ode_fun,
                << ". ";
     pass = false;
   }
-  if (ode_fun.ii_.expression_type() != expr_type(double_type(), 2)) {
-    error_msgs << "sixth argument to "
+  if (ode_fun.ii_.expression_type() != expr_type(double_type(), 1)) {
+    error_msgs << "7th argument to "
                << ode_fun.integration_function_name_
                << " must be type real[]"
                << "for inter-dose interval"
@@ -520,8 +530,8 @@ void validate_pop_pk_generalOdeModel_non_control_args(const T& ode_fun,
                << ". ";
     pass = false;
   }
-  if (ode_fun.evid_.expression_type() != expr_type(int_type(), 2)) {
-    error_msgs << "seventh argument to "
+  if (ode_fun.evid_.expression_type() != expr_type(int_type(), 1)) {
+    error_msgs << "8th argument to "
                << ode_fun.integration_function_name_
                << " must be type int[]"
                << "for evid (event ID)"
@@ -530,8 +540,8 @@ void validate_pop_pk_generalOdeModel_non_control_args(const T& ode_fun,
                << ". ";
     pass = false;
   }
-  if (ode_fun.cmt_.expression_type() != expr_type(int_type(), 2)) {
-    error_msgs << "eighth argument to "
+  if (ode_fun.cmt_.expression_type() != expr_type(int_type(), 1)) {
+    error_msgs << "9th argument to "
                << ode_fun.integration_function_name_
                << " must be type int[]"
                << "for cmt (compartment)"
@@ -540,8 +550,8 @@ void validate_pop_pk_generalOdeModel_non_control_args(const T& ode_fun,
                << ". ";
     pass = false;
   }
-  if (ode_fun.addl_.expression_type() != expr_type(int_type(), 2)) {
-    error_msgs << "ninth argument to "
+  if (ode_fun.addl_.expression_type() != expr_type(int_type(), 1)) {
+    error_msgs << "10th argument to "
                << ode_fun.integration_function_name_
                << " must be type int[]"
                << "for addl (additional dose)"
@@ -550,8 +560,8 @@ void validate_pop_pk_generalOdeModel_non_control_args(const T& ode_fun,
                << ". ";
     pass = false;
   }
-  if (ode_fun.ss_.expression_type() != expr_type(int_type(), 2)) {
-    error_msgs << "tenth argument to "
+  if (ode_fun.ss_.expression_type() != expr_type(int_type(), 1)) {
+    error_msgs << "11th argument to "
                << ode_fun.integration_function_name_
                << " must be type int[]"
                << "for ss (steady state)"
@@ -560,10 +570,20 @@ void validate_pop_pk_generalOdeModel_non_control_args(const T& ode_fun,
                << ". ";
     pass = false;
   }
-  if ((ode_fun.pMatrix_.expression_type() != expr_type(double_type(), 3))
+  if (ode_fun.len_pMatrix_.expression_type() != expr_type(int_type(), 1)) {
+    error_msgs << "12th argument to "
+               << ode_fun.integration_function_name_
+               << " must be type int[]"
+               << " for len_pMatrix"
+               << "; found type="
+               << ode_fun.time_.expression_type()
+               << ". ";
+    pass = false;
+  }
+  if ((ode_fun.pMatrix_.expression_type() != expr_type(double_type(), 2))
       && (ode_fun.pMatrix_.expression_type() !=
           expr_type(double_type(), 2))) {
-    error_msgs << "eleventh argument to "
+    error_msgs << "13th argument to "
                << ode_fun.integration_function_name_
                << " must be type real[ ] or real[ , ]"
                << " for the ODE parameters"
@@ -572,10 +592,20 @@ void validate_pop_pk_generalOdeModel_non_control_args(const T& ode_fun,
                << ". ";
     pass = false;
   }
-  if ((ode_fun.biovar_.expression_type() != expr_type(double_type(), 3))
+  if (ode_fun.len_biovar_.expression_type() != expr_type(int_type(), 1)) {
+    error_msgs << "14th argument to "
+               << ode_fun.integration_function_name_
+               << " must be type int[]"
+               << " for len_biovar"
+               << "; found type="
+               << ode_fun.time_.expression_type()
+               << ". ";
+    pass = false;
+  }
+  if ((ode_fun.biovar_.expression_type() != expr_type(double_type(), 2))
       && (ode_fun.biovar_.expression_type() !=
           expr_type(double_type(), 2))) {
-    error_msgs << "twelth argument to "
+    error_msgs << "15th argument to "
                << ode_fun.integration_function_name_
                << " must be type real[ ] or real[ , ]"
                << " for the bio-variability"
@@ -584,9 +614,19 @@ void validate_pop_pk_generalOdeModel_non_control_args(const T& ode_fun,
                << ". ";
     pass = false;
   }
-  if ((ode_fun.tlag_.expression_type() != expr_type(double_type(), 3))
+  if (ode_fun.len_tlag_.expression_type() != expr_type(int_type(), 1)) {
+    error_msgs << "16th argument to "
+               << ode_fun.integration_function_name_
+               << " must be type int[]"
+               << " for len_tlag"
+               << "; found type="
+               << ode_fun.time_.expression_type()
+               << ". ";
+    pass = false;
+  }
+  if ((ode_fun.tlag_.expression_type() != expr_type(double_type(), 2))
       && (ode_fun.tlag_.expression_type() != expr_type(double_type(), 2))) {
-    error_msgs << "thirteenth argument to "
+    error_msgs << "17th argument to "
                << ode_fun.integration_function_name_
                << " must be type real[ ] or real[ , ]"
                << " for the lag times"
