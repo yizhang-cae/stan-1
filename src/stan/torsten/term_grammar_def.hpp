@@ -155,15 +155,9 @@ pop_pk_generalOdeModel_r
   > lit(',')
   > expression_g(_r1)   // 11) ss (data only)
   > lit(',')
-  > expression_g(_r1)   // 12) len_pMatrix
-  > lit(',')
   > expression_g(_r1)   // 13) pMatrix
   > lit(',')
-  > expression_g(_r1)   // 14) len_biovar
-  > lit(',')
   > expression_g(_r1)   // 15) biovar
-  > lit(',')
-  > expression_g(_r1)   // 16) len_tlag
   > lit(',')
   > expression_g(_r1)   // 17) tlag
   > lit(')')

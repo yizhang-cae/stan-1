@@ -21,11 +21,8 @@ namespace stan {
                                                                               const expression& cmt,
                                                                               const expression& addl,
                                                                               const expression& ss,
-                                                                              const expression& len_pMatrix,
                                                                               const expression& pMatrix,
-                                                                              const expression& len_biovar,
                                                                               const expression& biovar,
-                                                                              const expression& len_tlag,
                                                                               const expression& tlag)
     : integration_function_name_(integration_function_name),
       system_function_name_(system_function_name),
@@ -33,9 +30,9 @@ namespace stan {
       len_(len),
       time_(time), amt_(amt), rate_(rate), ii_(ii),
       evid_(evid), cmt_(cmt), addl_(addl), ss_(ss),
-      len_pMatrix_(len_pMatrix), pMatrix_(pMatrix),
-      len_biovar_(len_biovar), biovar_(biovar),
-      len_tlag_(len_tlag), tlag_(tlag)
+      pMatrix_(pMatrix),
+      biovar_(biovar),
+      tlag_(tlag)
     {}
   }
 }

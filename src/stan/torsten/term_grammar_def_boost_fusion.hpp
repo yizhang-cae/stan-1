@@ -58,11 +58,8 @@ BOOST_FUSION_ADAPT_STRUCT(stan::lang::pop_pk_generalOdeModel,
                           (stan::lang::expression, cmt_)
                           (stan::lang::expression, addl_)
                           (stan::lang::expression, ss_)
-                          (stan::lang::expression, len_pMatrix_)
                           (stan::lang::expression, pMatrix_)
-                          (stan::lang::expression, len_biovar_)
                           (stan::lang::expression, biovar_)
-                          (stan::lang::expression, len_tlag_)
                           (stan::lang::expression, tlag_) )
 
 #endif

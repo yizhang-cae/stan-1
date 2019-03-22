@@ -570,20 +570,10 @@ void validate_pop_pk_generalOdeModel_non_control_args(const T& ode_fun,
                << ". ";
     pass = false;
   }
-  if (ode_fun.len_pMatrix_.expression_type() != expr_type(int_type(), 1)) {
-    error_msgs << "12th argument to "
-               << ode_fun.integration_function_name_
-               << " must be type int[]"
-               << " for len_pMatrix"
-               << "; found type="
-               << ode_fun.time_.expression_type()
-               << ". ";
-    pass = false;
-  }
   if ((ode_fun.pMatrix_.expression_type() != expr_type(double_type(), 2))
       && (ode_fun.pMatrix_.expression_type() !=
           expr_type(double_type(), 2))) {
-    error_msgs << "13th argument to "
+    error_msgs << "12th argument to "
                << ode_fun.integration_function_name_
                << " must be type real[ ] or real[ , ]"
                << " for the ODE parameters"
@@ -592,20 +582,10 @@ void validate_pop_pk_generalOdeModel_non_control_args(const T& ode_fun,
                << ". ";
     pass = false;
   }
-  if (ode_fun.len_biovar_.expression_type() != expr_type(int_type(), 1)) {
-    error_msgs << "14th argument to "
-               << ode_fun.integration_function_name_
-               << " must be type int[]"
-               << " for len_biovar"
-               << "; found type="
-               << ode_fun.time_.expression_type()
-               << ". ";
-    pass = false;
-  }
   if ((ode_fun.biovar_.expression_type() != expr_type(double_type(), 2))
       && (ode_fun.biovar_.expression_type() !=
           expr_type(double_type(), 2))) {
-    error_msgs << "15th argument to "
+    error_msgs << "13th argument to "
                << ode_fun.integration_function_name_
                << " must be type real[ ] or real[ , ]"
                << " for the bio-variability"
@@ -614,19 +594,9 @@ void validate_pop_pk_generalOdeModel_non_control_args(const T& ode_fun,
                << ". ";
     pass = false;
   }
-  if (ode_fun.len_tlag_.expression_type() != expr_type(int_type(), 1)) {
-    error_msgs << "16th argument to "
-               << ode_fun.integration_function_name_
-               << " must be type int[]"
-               << " for len_tlag"
-               << "; found type="
-               << ode_fun.time_.expression_type()
-               << ". ";
-    pass = false;
-  }
   if ((ode_fun.tlag_.expression_type() != expr_type(double_type(), 2))
       && (ode_fun.tlag_.expression_type() != expr_type(double_type(), 2))) {
-    error_msgs << "17th argument to "
+    error_msgs << "14th argument to "
                << ode_fun.integration_function_name_
                << " must be type real[ ] or real[ , ]"
                << " for the lag times"

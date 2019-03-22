@@ -149,19 +149,10 @@ void operator()(const pop_pk_generalOdeModel& fx) const {
   generate_expression(fx.ss_, NOT_USER_FACING, o_);
   o_ << ", ";
 
-  generate_expression(fx.len_pMatrix_, NOT_USER_FACING, o_);
-  o_ << ", ";
-
   generate_expression(fx.pMatrix_, NOT_USER_FACING, o_);
   o_ << ", ";
 
-  generate_expression(fx.len_biovar_, NOT_USER_FACING, o_);
-  o_ << ", ";
-
   generate_expression(fx.biovar_, NOT_USER_FACING, o_);
-  o_ << ", ";
-
-  generate_expression(fx.len_tlag_, NOT_USER_FACING, o_);
   o_ << ", ";
 
   generate_expression(fx.tlag_, NOT_USER_FACING, o_);

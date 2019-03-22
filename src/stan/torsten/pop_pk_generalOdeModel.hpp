@@ -76,30 +76,14 @@ namespace stan {
       expression ss_;
 
       /**
-       * length of individual data in ragged array @c pMatrix_.
-       */
-      expression len_pMatrix_;
-
-      /**
        * ODE parameters (1D or 2D array of real).
        */
       expression pMatrix_;
 
       /**
-       * length of individual data in ragged array @c biovar_.
-       */
-      expression len_biovar_;
-
-
-      /**
        * Biovariability parameters (1D or 2D array of real).
        */
       expression biovar_;
-
-      /**
-       * length of individual data in ragged array @c tlag_.
-       */
-      expression len_tlag_;
 
       /**
        * lag time parameters (1D or 2D array of real).
@@ -150,11 +134,8 @@ namespace stan {
                              const expression& cmt,
                              const expression& addl,
                              const expression& ss,
-                             const expression& len_pMatrix,
                              const expression& pMatrix,
-                             const expression& len_biovar,
                              const expression& biovar,
-                             const expression& len_tlag,
                              const expression& tlag);
     };
   }
