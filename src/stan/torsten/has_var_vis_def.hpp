@@ -33,7 +33,7 @@ namespace stan {
               || boost::apply_visitor(*this, e.tlag_.expr_));
     }
 
-    bool has_var_vis::operator()(const pop_pk_generalOdeModel& e) const {
+    bool has_var_vis::operator()(const pmx_solve_group& e) const {
       return ((((((boost::apply_visitor(*this, e.time_.expr_)
                    || boost::apply_visitor(*this, e.amt_.expr_))
                   || boost::apply_visitor(*this, e.rate_.expr_))

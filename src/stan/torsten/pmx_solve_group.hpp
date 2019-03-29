@@ -1,5 +1,5 @@
-#ifndef STAN_LANG_AST_NODE_POP_PK_GENERALODEMODEL_CONTROL_HPP
-#define STAN_LANG_AST_NODE_POP_PK_GENERALODEMODEL_CONTROL_HPP
+#ifndef STAN_LANG_AST_NODE_POP_PK_GENERALODEMODEL_HPP
+#define STAN_LANG_AST_NODE_POP_PK_GENERALODEMODEL_HPP
 
 #include <stan/lang/ast/node/expression.hpp>
 #include <string>
@@ -10,10 +10,10 @@ namespace stan {
     struct expression;
 
     /**
-     * Structure for a Torsten generalOdeModel_* function with control
+     * Structure for a Torsten generalOdeModel_* function with default
      * parameters for the integrator.
      */
-    struct pop_pk_generalOdeModel_control {
+    struct pmx_solve_group {
       /**
        * The name of the function (* tells us which integrator is being
        * called).
@@ -29,6 +29,11 @@ namespace stan {
        * Number of compartments/equations (int)
        */
       expression nCmt_;
+
+      /**
+       * length of each individual's data in the ragged arrays
+       */
+      expression len_;
 
       /**
        * Time of events (array of real).
@@ -86,28 +91,13 @@ namespace stan {
       expression tlag_;
 
       /**
-       * Relative tolerance (real).
+       * Construct a default ODE popPK object with default.
        */
-      expression rel_tol_;
+      pmx_solve_group();
 
       /**
-       * Absolute tolerance (real).
-       */
-      expression abs_tol_;
-
-      /**
-       * Maximum number of steps (integer).
-       */
-      expression max_num_steps_;
-
-      /**
-       * Construct a default ODE integrator object with control.
-       */
-      pop_pk_generalOdeModel_control();
-
-      /**
-       * Construt an ODE integrator with control parameter with the
-       * specified values.
+       * Construt Torsten's general ODE solver with default
+       * controls, with input in the form of ragged arrays.
        *
        * @param integration_function_name name of integrator
        * @param f functor for base ordinary differential equation that 
@@ -132,25 +122,22 @@ namespace stan {
        * @param max_num_steps maximal number of steps to take within 
        *   the Boost ode solver
        */
-      pop_pk_generalOdeModel_control(const std::string& integration_function_name,
-                                     const std::string& system_function_name,
-                                     const expression& nCmt,
-                                     const expression& time,
-                                     const expression& amt,
-                                     const expression& rate,
-                                     const expression& ii,
-                                     const expression& evid,
-                                     const expression& cmt,
-                                     const expression& addl,
-                                     const expression& ss,
-                                     const expression& pMatrix,
-                                     const expression& biovar,
-                                     const expression& tlag,
-                                     const expression& rel_tol,
-                                     const expression& abs_tol,
-                                     const expression& max_steps);
+      pmx_solve_group(const std::string& integration_function_name,
+                             const std::string& system_function_name,
+                             const expression& nCmt,
+                             const expression& len,
+                             const expression& time,
+                             const expression& amt,
+                             const expression& rate,
+                             const expression& ii,
+                             const expression& evid,
+                             const expression& cmt,
+                             const expression& addl,
+                             const expression& ss,
+                             const expression& pMatrix,
+                             const expression& biovar,
+                             const expression& tlag);
     };
-
   }
 }
 #endif

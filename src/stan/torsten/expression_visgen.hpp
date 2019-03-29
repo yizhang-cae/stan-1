@@ -113,7 +113,7 @@ void operator()(const generalOdeModel& fx) const {
   o_ << ", pstream__)";
 }
 
-void operator()(const pop_pk_generalOdeModel& fx) const {
+void operator()(const pmx_solve_group& fx) const {
   o_ << fx.integration_function_name_
      << '('
      << fx.system_function_name_

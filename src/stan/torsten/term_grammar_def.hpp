@@ -119,10 +119,12 @@ generalOdeModel_r
                               boost::phoenix::ref(var_map_), _pass,
                               boost::phoenix::ref(error_msgs_))];
 
-pop_pk_generalOdeModel_r.name("expression");
-pop_pk_generalOdeModel_r
-%= ( (string("pop_pk_generalOdeModel_bdf") >> no_skip[!char_("a-zA-Z0-9_")])
-     | (string("pop_pk_generalOdeModel_rk45")
+pmx_solve_group_r.name("expression");
+pmx_solve_group_r
+%= ( (string("pmx_solve_group_rk45") >> no_skip[!char_("a-zA-Z0-9_")])
+     | (string("pmx_solve_group_adams")
+        >> no_skip[!char_("a-zA-Z0-9_")])
+     | (string("pmx_solve_group_bdf")
         >> no_skip[!char_("a-zA-Z0-9_")])
      | (string("mixOde1CptModel_rk45")
         >> no_skip[!char_("a-zA-Z0-9_")])
@@ -161,7 +163,7 @@ pop_pk_generalOdeModel_r
   > lit(',')
   > expression_g(_r1)   // 17) tlag
   > lit(')')
-  [validate_pop_pk_generalOdeModel_f(_val,
+  [validate_pmx_solve_group_f(_val,
                               boost::phoenix::ref(var_map_), _pass,
                               boost::phoenix::ref(error_msgs_))];
 

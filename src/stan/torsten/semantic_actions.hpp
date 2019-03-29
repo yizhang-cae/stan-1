@@ -32,14 +32,14 @@ extern boost::phoenix::function<validate_generalOdeModel>
 validate_generalOdeModel_f;
 
 // called from: term_grammar
-struct validate_pop_pk_generalOdeModel
+struct validate_pmx_solve_group
   : public phoenix_functor_quaternary {
-  void operator()(const pop_pk_generalOdeModel& ode_fun,
+  void operator()(const pmx_solve_group& ode_fun,
                   const variable_map& var_map, bool& pass,
                   std::ostream& error_msgs) const;
 };
-extern boost::phoenix::function<validate_pop_pk_generalOdeModel>
-validate_pop_pk_generalOdeModel_f;
+extern boost::phoenix::function<validate_pmx_solve_group>
+validate_pmx_solve_group_f;
 
 
 #endif

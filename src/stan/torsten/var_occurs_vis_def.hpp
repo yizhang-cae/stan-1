@@ -15,7 +15,7 @@ namespace stan {
     bool var_occurs_vis::operator()(const generalOdeModel& e) const {
       return false;  // no refs persist out of generalOdeModel() call
     }
-    bool var_occurs_vis::operator()(const pop_pk_generalOdeModel& e) const {
+    bool var_occurs_vis::operator()(const pmx_solve_group& e) const {
       return false;  // no refs persist out of generalOdeModel() call
     }
   }

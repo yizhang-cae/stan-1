@@ -40,7 +40,7 @@ namespace stan {
         || boost::apply_visitor(*this, e.tlag_.expr_));
     }
 
-    bool has_non_param_var_vis::operator()(const pop_pk_generalOdeModel& e)
+    bool has_non_param_var_vis::operator()(const pmx_solve_group& e)
       const {
       // CHECK - anything to do with nonlinearity ?
       // Putting in the variables that may contain var types

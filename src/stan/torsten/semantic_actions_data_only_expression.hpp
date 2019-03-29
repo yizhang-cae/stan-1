@@ -4,5 +4,5 @@
       bool operator()(const univariate_integral_control& /*x*/) const;
       bool operator()(const generalOdeModel_control& /*x*/) const;
       bool operator()(const generalOdeModel& /*x*/) const;
-      bool operator()(const pop_pk_generalOdeModel& /*x*/) const;
+      bool operator()(const pmx_solve_group& /*x*/) const;
 #endif

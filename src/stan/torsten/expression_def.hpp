@@ -12,7 +12,7 @@ namespace stan {
       expr_(expr) { }
     expression::expression(const generalOdeModel& expr) :
       expr_(expr) { }
-    expression::expression(const pop_pk_generalOdeModel& expr) :
+    expression::expression(const pmx_solve_group& expr) :
       expr_(expr) { }
   }
 }

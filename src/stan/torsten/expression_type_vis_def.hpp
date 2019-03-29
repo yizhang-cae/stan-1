@@ -19,7 +19,7 @@ namespace stan {
       return expr_type(matrix_type(), 0);
     }
     expr_type
-    expression_type_vis::operator()(const pop_pk_generalOdeModel& e) const {
+    expression_type_vis::operator()(const pmx_solve_group& e) const {
       return expr_type(matrix_type(), 1);
     }
 

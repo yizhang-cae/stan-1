@@ -4,6 +4,6 @@
 bool operator()(const univariate_integral_control& e) const;
 bool operator()(const generalOdeModel_control& e) const;
 bool operator()(const generalOdeModel& e) const;
-bool operator()(const pop_pk_generalOdeModel& e) const;
+bool operator()(const pmx_solve_group& e) const;
 
 #endif

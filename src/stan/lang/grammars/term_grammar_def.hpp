@@ -300,7 +300,7 @@ namespace stan {
         | univariate_integral_control_r(_r1)[assign_lhs_f(_val, _1)]
         | generalOdeModel_control_r(_r1)[assign_lhs_f(_val, _1)]
         | generalOdeModel_r(_r1)[assign_lhs_f(_val, _1)]
-        | pop_pk_generalOdeModel_r(_r1)[assign_lhs_f(_val, _1)]
+        | pmx_solve_group_r(_r1)[assign_lhs_f(_val, _1)]
         | map_rect_r(_r1)[assign_lhs_f(_val, _1)]
         | (fun_r(_r1)[assign_lhs_f(_b, _1)]
            > eps[set_fun_type_named_f(_val, _b, _r1, _pass,

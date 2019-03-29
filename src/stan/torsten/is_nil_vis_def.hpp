@@ -13,7 +13,7 @@ namespace stan {
     bool is_nil_vis::operator()(const generalOdeModel& /* x */) const {
       return false;
     }
-    bool is_nil_vis::operator()(const pop_pk_generalOdeModel& /* x */) const {
+    bool is_nil_vis::operator()(const pmx_solve_group& /* x */) const {
       return false;
     }
   }

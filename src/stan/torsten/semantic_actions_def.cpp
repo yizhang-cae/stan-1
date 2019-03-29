@@ -408,10 +408,10 @@ void validate_generalOdeModel_control_args(const T& ode_fun,
 }
 
 /**********************************
-   pop_pk_generalOdeModel
+   pmx_solve_group
 **********************************/
 template <class T>
-void validate_pop_pk_generalOdeModel_non_control_args(const T& ode_fun,
+void validate_pmx_solve_group_non_control_args(const T& ode_fun,
                               const variable_map& var_map,
                               bool& pass,
                               std::ostream& error_msgs) {
@@ -422,8 +422,9 @@ void validate_pop_pk_generalOdeModel_non_control_args(const T& ode_fun,
   std::string expected_signature;
 
   // build expected function argument type for generalOdeModel
-  if (ode_fun.integration_function_name_ == "pop_pk_generalOdeModel_rk45"
-      || ode_fun.integration_function_name_ == "pop_pk_generalOdeModel_bdf") {
+  if (ode_fun.integration_function_name_ == "pmx_solve_group_rk45"
+      || ode_fun.integration_function_name_ == "pmx_solve_group_adams"
+      || ode_fun.integration_function_name_ == "pmx_solve_group_bdf") {
     sys_arg_types.push_back(function_arg_type(expr_type(double_type(),
                                                         0)));  // t0
     sys_arg_types.push_back(function_arg_type(expr_type(double_type(),
@@ -697,17 +698,17 @@ template void assign_lhs::operator()(expression&,
   const;
 
 // pop pk
-void validate_pop_pk_generalOdeModel::operator()(
-                      const pop_pk_generalOdeModel& ode_fun,
+void validate_pmx_solve_group::operator()(
+                      const pmx_solve_group& ode_fun,
                       const variable_map& var_map,
                       bool& pass,
                       std::ostream& error_msgs) const {
-  validate_pop_pk_generalOdeModel_non_control_args(ode_fun, var_map, pass, error_msgs);
+  validate_pmx_solve_group_non_control_args(ode_fun, var_map, pass, error_msgs);
 }
-boost::phoenix::function<validate_pop_pk_generalOdeModel>
-validate_pop_pk_generalOdeModel_f;
+boost::phoenix::function<validate_pmx_solve_group>
+validate_pmx_solve_group_f;
 
-bool data_only_expression::operator()(const pop_pk_generalOdeModel& x)
+bool data_only_expression::operator()(const pmx_solve_group& x)
   const {
   return ((((((boost::apply_visitor(*this, x.time_.expr_)
                && boost::apply_visitor(*this, x.amt_.expr_)))
@@ -719,7 +720,7 @@ bool data_only_expression::operator()(const pop_pk_generalOdeModel& x)
 }
 
 template void assign_lhs::operator()(expression&,
-                                     const pop_pk_generalOdeModel&)
+                                     const pmx_solve_group&)
   const;
 
 #endif

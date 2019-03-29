@@ -45,7 +45,7 @@ BOOST_FUSION_ADAPT_STRUCT(stan::lang::generalOdeModel,
                           (stan::lang::expression, biovar_)
                           (stan::lang::expression, tlag_) )
 
-BOOST_FUSION_ADAPT_STRUCT(stan::lang::pop_pk_generalOdeModel,
+BOOST_FUSION_ADAPT_STRUCT(stan::lang::pmx_solve_group,
                           (std::string, integration_function_name_)
                           (std::string, system_function_name_)
                           (stan::lang::expression, nCmt_)

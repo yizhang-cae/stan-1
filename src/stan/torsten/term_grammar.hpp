@@ -17,9 +17,9 @@ boost::spirit::qi::rule<Iterator,
 generalOdeModel_r;
 
 boost::spirit::qi::rule<Iterator,
-                        pop_pk_generalOdeModel(scope),
+                        pmx_solve_group(scope),
                         whitespace_grammar<Iterator> >
-pop_pk_generalOdeModel_r;
+pmx_solve_group_r;
 
 
 #endif

@@ -7,9 +7,9 @@
 namespace stan {
   namespace lang {
 
-    pop_pk_generalOdeModel::pop_pk_generalOdeModel() { }
+    pmx_solve_group::pmx_solve_group() { }
 
-    pop_pk_generalOdeModel::pop_pk_generalOdeModel (const std::string& integration_function_name,
+    pmx_solve_group::pmx_solve_group (const std::string& integration_function_name,
                                                                               const std::string& system_function_name,
                                                                               const expression& nCmt,
                                                                               const expression& len,

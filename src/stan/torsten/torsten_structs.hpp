@@ -7,7 +7,7 @@ namespace stan {
     struct univariate_integral_control;
     struct generalOdeModel_control;
     struct generalOdeModel;
-    struct pop_pk_generalOdeModel;
+    struct pmx_solve_group;
 
   }
 }

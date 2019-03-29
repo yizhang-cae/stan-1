@@ -34,7 +34,7 @@ namespace stan {
                              boost::recursive_wrapper<univariate_integral_control>,
                              boost::recursive_wrapper<generalOdeModel_control>,
                              boost::recursive_wrapper<generalOdeModel>,
-                             boost::recursive_wrapper<pop_pk_generalOdeModel>,
+                             boost::recursive_wrapper<pmx_solve_group>,
                              boost::recursive_wrapper<nil>,
                              boost::recursive_wrapper<int_literal>,
                              boost::recursive_wrapper<double_literal>,
