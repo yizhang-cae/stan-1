@@ -20,7 +20,7 @@ namespace stan {
     }
     expr_type
     expression_type_vis::operator()(const pmx_solve_group& e) const {
-      return expr_type(matrix_type(), 1);
+      return expr_type(matrix_type(), 0);
     }
 
   }
