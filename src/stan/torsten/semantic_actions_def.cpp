@@ -136,7 +136,11 @@ void validate_generalOdeModel_non_control_args(const T& ode_fun,
 
   // build expected function argument type for generalOdeModel
   if (ode_fun.integration_function_name_ == "generalOdeModel_rk45"
-      || ode_fun.integration_function_name_ == "generalOdeModel_bdf") {
+      || ode_fun.integration_function_name_ == "generalOdeModel_bdf"
+      || ode_fun.integration_function_name_ == "pmx_solve_adams"
+      || ode_fun.integration_function_name_ == "pmx_solve_bdf"
+      || ode_fun.integration_function_name_ == "pmx_solve_rk45"
+      ) {
     sys_arg_types.push_back(function_arg_type(expr_type(double_type(),
                                                         0)));  // t0
     sys_arg_types.push_back(function_arg_type(expr_type(double_type(),
@@ -151,10 +155,15 @@ void validate_generalOdeModel_non_control_args(const T& ode_fun,
   }
 
   // build expected function argument type for mixOdeModel
-  if ((ode_fun.integration_function_name_ == "mixOde1CptModel_rk45"
-       || ode_fun.integration_function_name_ == "mixOde1CptModel_bdf")
-      || (ode_fun.integration_function_name_ == "mixOde2CptModel_rk45"
-          || ode_fun.integration_function_name_ == "mixOde2CptModel_bdf")) {
+  if (ode_fun.integration_function_name_ == "mixOde1CptModel_rk45"
+      || ode_fun.integration_function_name_ == "mixOde1CptModel_bdf"
+      || ode_fun.integration_function_name_ == "mixOde2CptModel_rk45"
+      || ode_fun.integration_function_name_ == "mixOde2CptModel_bdf"
+      || ode_fun.integration_function_name_ == "pmx_solve_onecpt_bdf"
+      || ode_fun.integration_function_name_ == "pmx_solve_onecpt_rk45"
+      || ode_fun.integration_function_name_ == "pmx_solve_twocpt_bdf"
+      || ode_fun.integration_function_name_ == "pmx_solve_twocpt_rk45"
+      ) {
     sys_arg_types.push_back(function_arg_type(expr_type(double_type(),
                                                         0)));  // t0
     sys_arg_types.push_back(function_arg_type(expr_type(double_type(),
@@ -439,10 +448,10 @@ void validate_pmx_solve_group_non_control_args(const T& ode_fun,
   }
 
   // build expected function argument type for mixOdeModel
-  if ((ode_fun.integration_function_name_ == "mixOde1CptModel_rk45"
-       || ode_fun.integration_function_name_ == "mixOde1CptModel_bdf")
-      || (ode_fun.integration_function_name_ == "mixOde2CptModel_rk45"
-          || ode_fun.integration_function_name_ == "mixOde2CptModel_bdf")) {
+  if (ode_fun.integration_function_name_ == "pmx_solve_group_onecpt_rk45"
+      || ode_fun.integration_function_name_ == "pmx_solve_group_onecpt_bdf"
+      || ode_fun.integration_function_name_ == "pmx_solve_group_twocpt_rk45"
+      || ode_fun.integration_function_name_ == "pmx_solve_group_twocpt_bdf") {
     sys_arg_types.push_back(function_arg_type(expr_type(double_type(),
                                                         0)));  // t0
     sys_arg_types.push_back(function_arg_type(expr_type(double_type(),
