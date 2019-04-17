@@ -158,4 +158,59 @@ void operator()(const pmx_solve_group& fx) const {
   generate_expression(fx.tlag_, NOT_USER_FACING, o_);
   o_ << ", pstream__)";
 }
+
+// void operator()(const pmx_solve_group_control& fx) const {
+//   o_ << fx.integration_function_name_
+//      << '('
+//      << fx.system_function_name_
+//      << "_functor__(), ";
+
+//   generate_expression(fx.nCmt_, NOT_USER_FACING, o_);
+//   o_ << ", ";
+
+//   generate_expression(fx.len_, NOT_USER_FACING, o_);
+//   o_ << ", ";
+
+//   generate_expression(fx.time_, NOT_USER_FACING, o_);
+//   o_ << ", ";
+
+//   generate_expression(fx.amt_, NOT_USER_FACING, o_);
+//   o_ << ", ";
+
+//   generate_expression(fx.rate_, NOT_USER_FACING, o_);
+//   o_ << ", ";
+
+//   generate_expression(fx.ii_, NOT_USER_FACING, o_);
+//   o_ << ", ";
+
+//   generate_expression(fx.evid_, NOT_USER_FACING, o_);
+//   o_ << ", ";
+
+//   generate_expression(fx.cmt_, NOT_USER_FACING, o_);
+//   o_ << ", ";
+
+//   generate_expression(fx.addl_, NOT_USER_FACING, o_);
+//   o_ << ", ";
+
+//   generate_expression(fx.ss_, NOT_USER_FACING, o_);
+//   o_ << ", ";
+
+//   generate_expression(fx.pMatrix_, NOT_USER_FACING, o_);
+//   o_ << ", ";
+
+//   generate_expression(fx.biovar_, NOT_USER_FACING, o_);
+//   o_ << ", ";
+
+//   generate_expression(fx.tlag_, NOT_USER_FACING, o_);
+//   o_ << ", pstream__)";
+
+//   generate_expression(fx.rel_tol_, NOT_USER_FACING, o_);
+//   o_ << ", ";
+
+//   generate_expression(fx.abs_tol_, NOT_USER_FACING, o_);
+//   o_ << ", ";
+
+//   generate_expression(fx.max_num_steps_, NOT_USER_FACING, o_);
+//   o_ << ")";
+// }
 #endif

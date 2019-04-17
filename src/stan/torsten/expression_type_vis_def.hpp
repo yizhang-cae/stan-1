@@ -2,26 +2,14 @@
 #define STAN_LANG_TORSTEN_AST_NODE_EXPRESSION_TYPE_VIS_DEF_HPP
 
 #include <stan/lang/ast.hpp>
+#include <stan/torsten/torsten_func_expression_list.h>
 
 namespace stan {
   namespace lang {
 
-    expr_type
-    expression_type_vis::operator()(const univariate_integral_control& e) const {
-      return expr_type(double_type());
-    }
-    expr_type
-    expression_type_vis::operator()(const generalOdeModel_control& e) const {
-      return expr_type(matrix_type(), 0);
-    }
-    expr_type
-    expression_type_vis::operator()(const generalOdeModel& e) const {
-      return expr_type(matrix_type(), 0);
-    }
-    expr_type
-    expression_type_vis::operator()(const pmx_solve_group& e) const {
-      return expr_type(matrix_type(), 0);
-    }
+#define TORSTEN_FUNC_EXPR(F, R) expr_type expression_type_vis::operator()(const F& e) const {return R;}
+    TORSTEN_LANG_FUNCTORS_EXPRESSION_LIST
+#undef TORSTEN_FUNC_EXPR
 
   }
 }
