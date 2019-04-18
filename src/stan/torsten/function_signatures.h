@@ -5,9 +5,10 @@
  ****************************************/
 
 /* TIME, AMT,, RATE, II, EVID, CMT, ADDL, SS */
-std::vector<function_arg_type> pmx_data_arg_types(11);
-for (int i = 0; i < 4; i++) pmx_data_arg_types.push_back(function_arg_type(vector_types[1]));
-for (int i = 0; i < 4; i++) pmx_data_arg_types.push_back(function_arg_type(int_vector_types[1]));
+const int num_pmx_args = 11;
+std::vector<function_arg_type> pmx_data_arg_types(num_pmx_args);
+for (int i = 0; i < 4; i++) pmx_data_arg_types[i] = function_arg_type(vector_types[1]);
+for (int i = 0; i < 4; i++) pmx_data_arg_types[i + 4] = function_arg_type(int_vector_types[1]);
 
 /* THETA, BIOVAR, TLAG */
 #define TORSTEN_PMX_FUNC_ARG_TYPES_TABLE \
@@ -32,15 +33,15 @@ for (int i = 0; i < 4; i++) pmx_data_arg_types.push_back(function_arg_type(int_v
 
 #undef TORSTEN_PMX_FUNC_ARG_TYPES_TABLE
 
-#define TORSTEN_PMX_FUNC_ARG_TYPES_TABLE \
-  TORSTEN_PMX_ARGS(function_arg_type(expr_type(matrix_type(), 1U)), 1U, 1U)           \
-  TORSTEN_PMX_ARGS(function_arg_type(expr_type(matrix_type()))    , 1U, 1U)           \
-  TORSTEN_PMX_ARGS(function_arg_type(expr_type(matrix_type()))    , 2U, 1U)           \
-  TORSTEN_PMX_ARGS(function_arg_type(expr_type(matrix_type()))    , 2U, 1U)           \
-  TORSTEN_PMX_ARGS(function_arg_type(expr_type(matrix_type()))    , 1U, 2U)           \
-  TORSTEN_PMX_ARGS(function_arg_type(expr_type(matrix_type(), 1U)), 1U, 2U)           \
-  TORSTEN_PMX_ARGS(function_arg_type(expr_type(matrix_type(), 1U)), 2U, 2U)           \
-  TORSTEN_PMX_ARGS(function_arg_type(expr_type(matrix_type(), 1U)), 2U, 2U)
+#define TORSTEN_PMX_FUNC_ARG_TYPES_TABLE                                    \
+  TORSTEN_PMX_ARGS(function_arg_type(expr_type(matrix_type(), 1U)), 1U, 1U) \
+  TORSTEN_PMX_ARGS(function_arg_type(expr_type(matrix_type()))    , 1U, 1U) \
+  TORSTEN_PMX_ARGS(function_arg_type(expr_type(matrix_type(), 1U)), 2U, 1U) \
+  TORSTEN_PMX_ARGS(function_arg_type(expr_type(matrix_type()))    , 2U, 1U) \
+  TORSTEN_PMX_ARGS(function_arg_type(expr_type(matrix_type(), 1U)), 1U, 2U) \
+  TORSTEN_PMX_ARGS(function_arg_type(expr_type(matrix_type()))    , 1U, 2U) \
+  TORSTEN_PMX_ARGS(function_arg_type(expr_type(matrix_type(), 1U)), 2U, 2U) \
+  TORSTEN_PMX_ARGS(function_arg_type(expr_type(matrix_type()))    , 2U, 2U)
 
 #define TORSTEN_PMX_ARGS(A, B, C) pmx_data_arg_types[8] = A; \
   pmx_data_arg_types[9]  = function_arg_type(expr_type(double_type(), B)); \

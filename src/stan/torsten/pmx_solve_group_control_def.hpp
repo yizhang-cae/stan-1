@@ -1,5 +1,5 @@
-#ifndef STAN_LANG_AST_NODE_POP_PK_GENERALODEMODEL_CONTROL_DEF_HPP
-#define STAN_LANG_AST_NODE_POP_PK_GENERALODEMODEL_CONTROL_DEF_HPP
+#ifndef STAN_LANG_AST_NODE_TORSTEN_PMX_SOLVE_GROUP_CONTROL_DEF_HPP
+#define STAN_LANG_AST_NODE_TORSTEN_PMX_SOLVE_GROUP_CONTROL_DEF_HPP
 
 #include <stan/lang/ast.hpp>
 #include <string>
@@ -13,6 +13,7 @@ namespace stan {
                            const std::string& integration_function_name,
                            const std::string& system_function_name,
                            const expression& nCmt,
+                           const expression& len,
                            const expression& time,
                            const expression& amt,
                            const expression& rate,
@@ -29,7 +30,7 @@ namespace stan {
                            const expression& max_num_steps)
       : integration_function_name_(integration_function_name),
         system_function_name_(system_function_name),
-        nCmt_(nCmt), time_(time), amt_(amt), rate_(rate), ii_(ii),
+        nCmt_(nCmt), len_(len), time_(time), amt_(amt), rate_(rate), ii_(ii),
         evid_(evid), cmt_(cmt), addl_(addl), ss_(ss), pMatrix_(pMatrix),
         biovar_(biovar), tlag_(tlag), rel_tol_(rel_tol), abs_tol_(abs_tol),
         max_num_steps_(max_num_steps) {

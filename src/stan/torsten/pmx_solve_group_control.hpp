@@ -1,5 +1,5 @@
-#ifndef STAN_LANG_AST_NODE_POP_PK_GENERALODEMODEL_CONTROL_HPP
-#define STAN_LANG_AST_NODE_POP_PK_GENERALODEMODEL_CONTROL_HPP
+#ifndef STAN_LANG_AST_NODE_TORSTEN_PMX_SOLVE_GROUP_CONTROL_HPP
+#define STAN_LANG_AST_NODE_TORSTEN_PMX_SOLVE_GROUP_CONTROL_HPP
 
 #include <stan/lang/ast/node/expression.hpp>
 #include <string>
@@ -29,6 +29,11 @@ namespace stan {
        * Number of compartments/equations (int)
        */
       expression nCmt_;
+
+      /**
+       * length of each individual's data in the ragged arrays
+       */
+      expression len_;
 
       /**
        * Time of events (array of real).
@@ -135,6 +140,7 @@ namespace stan {
       pmx_solve_group_control(const std::string& integration_function_name,
                                      const std::string& system_function_name,
                                      const expression& nCmt,
+                                     const expression& len,
                                      const expression& time,
                                      const expression& amt,
                                      const expression& rate,
