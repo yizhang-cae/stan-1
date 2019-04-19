@@ -710,9 +710,9 @@ void validate_pmx_solve_group_control_args(const T& ode_fun,
   }
 }
 
-/*****************
+/*********************************
   pmx_integrate_ode_group
- *****************/
+ *********************************/
     template <class T>
     void validate_pmx_integrate_ode_group_non_control_args(const T& ode_fun,
                                                            const variable_map& var_map,
@@ -730,9 +730,9 @@ void validate_pmx_solve_group_control_args(const T& ode_fun,
       function_signature_t system_signature(sys_result_type, sys_arg_types);
       if (!function_signatures::instance()
           .is_defined(ode_fun.system_function_name_, system_signature)) {
-        error_msgs << "first argument to "
+        error_msgs << "1st argument to "
                    << ode_fun.integration_function_name_
-                   << " must be the name of a function with signature"
+                   << " must be a function with signature"
                    << " (real, real[], real[], real[], int[]) : real[] ";
         pass = false;
       }
@@ -759,7 +759,7 @@ void validate_pmx_solve_group_control_args(const T& ode_fun,
       if (ode_fun.len_.expression_type() != expr_type(int_type(), 1)) {
         error_msgs << "4th argument to "
                    << ode_fun.integration_function_name_
-                   << " must have type real[]"
+                   << " must have type int[]"
                    << " for length of each ODE's times within ragged array; found type="
                    << ode_fun.len_.expression_type()
                    << ". ";
@@ -817,7 +817,7 @@ void validate_pmx_solve_group_control_args(const T& ode_fun,
       if (has_var(ode_fun.x_, var_map)) {
         error_msgs << "7th argument to "
                    << ode_fun.integration_function_name_
-                   << " (real data)"
+                   << " for real data"
                    << " must be data only and not reference parameters";
         pass = false;
       }
