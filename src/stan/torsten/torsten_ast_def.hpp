@@ -8,6 +8,7 @@
 #include <stan/torsten/expression_def.hpp>
 #include <stan/torsten/expression_type_vis_def.hpp>
 
+#include <stan/torsten/pmx_integrate_ode_def.hpp>
 #include <stan/torsten/pmx_integrate_ode_group_def.hpp>
 #include <stan/torsten/pmx_solve_group_def.hpp>
 #include <stan/torsten/pmx_solve_group_control_def.hpp>

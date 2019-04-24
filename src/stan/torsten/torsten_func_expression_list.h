@@ -9,6 +9,7 @@
   TORSTEN_FUNC_EXPR(generalOdeModel            , expr_type(matrix_type(), 0)) \
   TORSTEN_FUNC_EXPR(pmx_solve_group            , expr_type(matrix_type(), 0)) \
   TORSTEN_FUNC_EXPR(pmx_solve_group_control    , expr_type(matrix_type(), 0)) \
+  TORSTEN_FUNC_EXPR(pmx_integrate_ode          , expr_type(double_type(), 2)) \
   TORSTEN_FUNC_EXPR(pmx_integrate_ode_group    , expr_type(matrix_type(), 0))
 
 #endif

@@ -54,18 +54,32 @@ TEST(lang_parser, mixOdeModel_good) {
 }
 
 /*****************************************************************
+ pmx_integrate_ode
+ ****************************************************************/
+TEST(lang_parser, pmx_integrate_ode) {
+  test_parsable("torsten/pmx_integrate_ode");
+  test_throws("torsten/pmx_integrate_ode/adams_bad_functor" , "1st argument to pmx_integrate_ode_adams must be a function with signature (real, real[], real[], real[], int[]) : real[]");
+  test_throws("torsten/pmx_integrate_ode/adams_bad_y0"      , "2nd argument to pmx_integrate_ode_adams must have type real[] for intial system state;");
+  test_throws("torsten/pmx_integrate_ode/adams_bad_t0"      , "3rd argument to pmx_integrate_ode_adams must have type real or int for initial time;");
+  test_throws("torsten/pmx_integrate_ode/adams_bad_ts"      , "4th argument to pmx_integrate_ode_adams must have type real[] for requested solution times; found type=");
+  test_throws("torsten/pmx_integrate_ode/adams_bad_theta"   , "5th argument to pmx_integrate_ode_adams must have type real[] for parameters; found type=");
+  test_throws("torsten/pmx_integrate_ode/adams_bad_x_r"     , "6th argument to pmx_integrate_ode_adams for real data must be data only and not reference parameters");
+  test_throws("torsten/pmx_integrate_ode/adams_bad_x_i"     , "7th argument to pmx_integrate_ode_adams must have type int[] for integer data");
+}
+
+/*****************************************************************
  pmx_integrate_ode_group
  ****************************************************************/
 TEST(lang_parser, pmx_integrate_ode_group) {
   test_parsable("torsten/pmx_integrate_ode_group");
-  test_throws("torsten/pmx_integrate_ode_group/bdf_bad_functor", "1st argument to pmx_integrate_ode_group_bdf must be a function with signature (real, real[], real[], real[], int[]) : real[]");
-  test_throws("torsten/pmx_integrate_ode_group/bdf_bad_y0", "2nd argument to pmx_integrate_ode_group_bdf must have type real[ , ] for intial system state;");
-  test_throws("torsten/pmx_integrate_ode_group/bdf_bad_t0", "3rd argument to pmx_integrate_ode_group_bdf must have type real or int for initial time;");
-  test_throws("torsten/pmx_integrate_ode_group/bdf_bad_len", "4th argument to pmx_integrate_ode_group_bdf must have type int[] for length of each ODE's times within ragged array");
-  test_throws("torsten/pmx_integrate_ode_group/bdf_bad_ts", "5th argument to pmx_integrate_ode_group_bdf must have type real[] for requested solution times; found type=");
-  test_throws("torsten/pmx_integrate_ode_group/bdf_bad_theta", "6th argument to pmx_integrate_ode_group_bdf must have type real[ , ] for parameters; found type=");
-  test_throws("torsten/pmx_integrate_ode_group/bdf_bad_x_r", "7th argument to pmx_integrate_ode_group_bdf for real data must be data only and not reference parameters");
-  test_throws("torsten/pmx_integrate_ode_group/bdf_bad_x_i", "8th argument to pmx_integrate_ode_group_bdf must have type int[ , ] for integer data; found type=; found type=");
+  test_throws("torsten/pmx_integrate_ode_group/bdf_bad_functor" , "1st argument to pmx_integrate_ode_group_bdf must be a function with signature (real, real[], real[], real[], int[]) : real[]");
+  test_throws("torsten/pmx_integrate_ode_group/bdf_bad_y0"      , "2nd argument to pmx_integrate_ode_group_bdf must have type real[ , ] for intial system state;");
+  test_throws("torsten/pmx_integrate_ode_group/bdf_bad_t0"      , "3rd argument to pmx_integrate_ode_group_bdf must have type real or int for initial time;");
+  test_throws("torsten/pmx_integrate_ode_group/bdf_bad_len"     , "4th argument to pmx_integrate_ode_group_bdf must have type int[] for length of each ODE's times within ragged array");
+  test_throws("torsten/pmx_integrate_ode_group/bdf_bad_ts"      , "5th argument to pmx_integrate_ode_group_bdf must have type real[] for requested solution times; found type=");
+  test_throws("torsten/pmx_integrate_ode_group/bdf_bad_theta"   , "6th argument to pmx_integrate_ode_group_bdf must have type real[ , ] for parameters; found type=");
+  test_throws("torsten/pmx_integrate_ode_group/bdf_bad_x_r"     , "7th argument to pmx_integrate_ode_group_bdf for real data must be data only and not reference parameters");
+  test_throws("torsten/pmx_integrate_ode_group/bdf_bad_x_i"     , "8th argument to pmx_integrate_ode_group_bdf must have type int[ , ] for integer data");
 }
 
 /*****************************************************************

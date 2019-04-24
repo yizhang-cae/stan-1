@@ -711,6 +711,128 @@ void validate_pmx_solve_group_control_args(const T& ode_fun,
 }
 
 /*********************************
+  pmx_integrate_ode
+ *********************************/
+template <class T>
+void validate_pmx_integrate_ode_non_control_args(const T& ode_fun,
+                                                 const variable_map& var_map,
+                                                 bool& pass,
+                                                 std::ostream& error_msgs) {
+  pass = true;
+  // test function argument type
+  expr_type sys_result_type(double_type(), 1);
+  std::vector<function_arg_type> sys_arg_types;
+  sys_arg_types.push_back(function_arg_type(expr_type(double_type(), 0)));
+  sys_arg_types.push_back(function_arg_type(expr_type(double_type(), 1)));
+  sys_arg_types.push_back(function_arg_type(expr_type(double_type(), 1)));
+  sys_arg_types.push_back(function_arg_type(expr_type(double_type(), 1)));
+  sys_arg_types.push_back(function_arg_type(expr_type(int_type(), 1)));
+  function_signature_t system_signature(sys_result_type, sys_arg_types);
+  if (!function_signatures::instance()
+      .is_defined(ode_fun.system_function_name_, system_signature)) {
+    error_msgs << "1st argument to "
+               << ode_fun.integration_function_name_
+               << " must be a function with signature"
+               << " (real, real[], real[], real[], int[]) : real[] ";
+    pass = false;
+  }
+
+  // test regular argument types
+  if (ode_fun.y0_.expression_type() != expr_type(double_type(), 1)) {
+    error_msgs << "2nd argument to "
+               << ode_fun.integration_function_name_
+               << " must have type real[] for intial system state;"
+               << " found type="
+               << ode_fun.y0_.expression_type()
+               << ". ";
+    pass = false;
+  }
+  if (!ode_fun.t0_.expression_type().is_primitive()) {
+    error_msgs << "3rd argument to "
+               << ode_fun.integration_function_name_
+               << " must have type real or int for initial time;"
+               << " found type="
+               << ode_fun.t0_.expression_type()
+               << ". ";
+    pass = false;
+  }
+  if (ode_fun.ts_.expression_type() != expr_type(double_type(), 1)) {
+    error_msgs << "4th argument to "
+               << ode_fun.integration_function_name_
+               << " must have type real[]"
+               << " for requested solution times; found type="
+               << ode_fun.ts_.expression_type()
+               << ". ";
+    pass = false;
+  }
+  if (ode_fun.theta_.expression_type() != expr_type(double_type(), 1)) {
+    error_msgs << "5th argument to "
+               << ode_fun.integration_function_name_
+               << " must have type real[] for parameters; found type="
+               << ode_fun.theta_.expression_type()
+               << ". ";
+    pass = false;
+  }
+  if (ode_fun.x_.expression_type() != expr_type(double_type(), 1)) {
+    error_msgs << "6th argument to "
+               << ode_fun.integration_function_name_
+               << " must have type real[] for real data; found type="
+               << ode_fun.x_.expression_type()
+               << ". ";
+    pass = false;
+  }
+  if (ode_fun.x_int_.expression_type() != expr_type(int_type(), 1)) {
+    error_msgs << "7th argument to "
+               << ode_fun.integration_function_name_
+               << " must have type int[] for integer data; found type="
+               << ode_fun.x_int_.expression_type()
+               << ". ";
+    pass = false;
+  }
+
+  // test data-only variables do not have parameters (int locals OK)
+  if (has_var(ode_fun.t0_, var_map)) {
+    error_msgs << "3rd argument to "
+               << ode_fun.integration_function_name_
+               << " (initial times)"
+               << " must be data only and not reference parameters";
+    pass = false;
+  }
+  if (has_var(ode_fun.ts_, var_map)) {
+    error_msgs << "4th argument to "
+               << ode_fun.integration_function_name_
+               << " (solution times)"
+               << " must be data only and not reference parameters";
+    pass = false;
+  }
+  if (has_var(ode_fun.x_, var_map)) {
+    error_msgs << "6th argument to "
+               << ode_fun.integration_function_name_
+               << " for real data"
+               << " must be data only and not reference parameters";
+    pass = false;
+  }
+}
+
+void validate_pmx_integrate_ode::operator()(const pmx_integrate_ode& ode_fun,
+                                            const variable_map& var_map,
+                                            bool& pass,
+                                            std::ostream& error_msgs) const {
+  validate_pmx_integrate_ode_non_control_args(ode_fun, var_map, pass, error_msgs);
+}
+boost::phoenix::function<validate_pmx_integrate_ode>
+validate_pmx_integrate_ode_f;
+
+bool data_only_expression::operator()(const pmx_integrate_ode& x) const {
+  return boost::apply_visitor(*this, x.y0_.expr_)
+    && boost::apply_visitor(*this, x.theta_.expr_);
+}
+
+template void assign_lhs::operator()(expression&,
+                                     const pmx_integrate_ode&)
+  const;
+
+/*********************************
   pmx_integrate_ode_group
  *********************************/
     template <class T>

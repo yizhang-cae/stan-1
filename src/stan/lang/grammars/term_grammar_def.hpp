@@ -302,6 +302,7 @@ namespace stan {
         | generalOdeModel_r(_r1)[assign_lhs_f(_val, _1)]
         | pmx_solve_group_control_r(_r1)[assign_lhs_f(_val, _1)]
         | pmx_solve_group_r(_r1)[assign_lhs_f(_val, _1)]
+        | pmx_integrate_ode_r(_r1)[assign_lhs_f(_val, _1)]
         | pmx_integrate_ode_group_r(_r1)[assign_lhs_f(_val, _1)]
         | map_rect_r(_r1)[assign_lhs_f(_val, _1)]
         | (fun_r(_r1)[assign_lhs_f(_b, _1)]

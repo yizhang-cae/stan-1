@@ -243,4 +243,28 @@ pmx_integrate_ode_group_r
   [validate_pmx_integrate_ode_group_f(_val, boost::phoenix::ref(var_map_),
                                       _pass, boost::phoenix::ref(error_msgs_))];
 
+pmx_integrate_ode_r.name("expression");
+pmx_integrate_ode_r
+%= (   (string("pmx_integrate_ode_bdf")   >> no_skip[!char_("a-zA-Z0-9_")])
+     | (string("pmx_integrate_ode_adams") >> no_skip[!char_("a-zA-Z0-9_")])
+     )
+  > lit('(')
+  > identifier_r          // 1) system function name (function only)
+  > lit(',')
+  > expression_g(_r1)     // 2) y0
+  > lit(',')
+  > expression_g(_r1)     // 3) t0 (data only)
+  > lit(',')
+  > expression_g(_r1)     // 4) ts (data only)
+  > lit(',')
+  > expression_g(_r1)     // 5) theta
+  > lit(',')
+  > expression_g(_r1)     // 6) x (data only)
+  > lit(',')
+  > expression_g(_r1)     // 7) x_int (data only)
+  > lit(')')
+  [validate_pmx_integrate_ode_f(_val, boost::phoenix::ref(var_map_),
+                                _pass, boost::phoenix::ref(error_msgs_))];
+
+
 #endif
