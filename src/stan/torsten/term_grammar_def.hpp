@@ -245,7 +245,8 @@ pmx_integrate_ode_group_r
 
 pmx_integrate_ode_r.name("expression");
 pmx_integrate_ode_r
-%= (   (string("pmx_integrate_ode_bdf")   >> no_skip[!char_("a-zA-Z0-9_")])
+%= (   (string("pmx_integrate_ode_rk45")  >> no_skip[!char_("a-zA-Z0-9_")])
+     | (string("pmx_integrate_ode_bdf")   >> no_skip[!char_("a-zA-Z0-9_")])
      | (string("pmx_integrate_ode_adams") >> no_skip[!char_("a-zA-Z0-9_")])
      )
   > lit('(')
