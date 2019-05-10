@@ -156,3 +156,9 @@ TEST(lang_parser, mixOde1CptModel_function_signatures) {
 TEST(lang_parser, mixOde2CptModel_function_signatures) {
     test_parsable("torsten/mixOde2CptModel");
 }
+
+// linear intepo
+TEST(lang_parser, linear_interpolation_matrix_function_signatures) {
+  test_parsable("function-signatures/math/matrix/linear_interpolation");
+}
+
