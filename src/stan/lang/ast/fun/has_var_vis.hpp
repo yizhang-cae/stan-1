@@ -3,6 +3,7 @@
 
 #include <stan/lang/ast/variable_map.hpp>
 #include <boost/variant/static_visitor.hpp>
+#include <stan/torsten/torsten_structs.hpp>
 
 namespace stan {
   namespace lang {
@@ -36,6 +37,8 @@ namespace stan {
        * @param[in] var_map global variable declaration mapping
        */
       explicit has_var_vis(const variable_map& var_map);
+
+#include <stan/torsten/has_var_vis.hpp>
 
       /**
        * Return true if the specified expression contains a non-data

@@ -98,6 +98,7 @@ BOOST_FUSION_ADAPT_STRUCT(stan::lang::double_literal,
                           (double, val_)
                           (stan::lang::bare_expr_type, type_) )
 
+#include <stan/torsten/term_grammar_def_boost_fusion.hpp>
 
 namespace stan {
 
@@ -134,6 +135,8 @@ namespace stan {
 
       using boost::phoenix::begin;
       using boost::phoenix::end;
+
+#include <stan/torsten/term_grammar_def.hpp>
 
       term_r.name("expression");
       term_r
@@ -332,6 +335,13 @@ namespace stan {
         | integrate_ode_r(_r1)[assign_lhs_f(_val, _1)]
         | algebra_solver_control_r(_r1)[assign_lhs_f(_val, _1)]
         | algebra_solver_r(_r1)[assign_lhs_f(_val, _1)]
+        | univariate_integral_control_r(_r1)[assign_lhs_f(_val, _1)]
+        | generalOdeModel_control_r(_r1)[assign_lhs_f(_val, _1)]
+        | generalOdeModel_r(_r1)[assign_lhs_f(_val, _1)]
+        | pmx_solve_group_control_r(_r1)[assign_lhs_f(_val, _1)]
+        | pmx_solve_group_r(_r1)[assign_lhs_f(_val, _1)]
+        | pmx_integrate_ode_r(_r1)[assign_lhs_f(_val, _1)]
+        | pmx_integrate_ode_group_r(_r1)[assign_lhs_f(_val, _1)]
         | map_rect_r(_r1)[assign_lhs_f(_val, _1)]
         | (fun_r(_r1)[assign_lhs_f(_b, _1)]
            > eps[set_fun_type_named_f(_val, _b, _r1, _pass,

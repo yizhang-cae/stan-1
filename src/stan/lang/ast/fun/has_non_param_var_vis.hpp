@@ -21,6 +21,8 @@ namespace stan {
        */
       explicit has_non_param_var_vis(const variable_map& var_map);
 
+#include <stan/torsten/has_non_param_var_vis.hpp>
+
       /**
        * Return true if the specified expression contains a variable
        * not declared as a parameter.

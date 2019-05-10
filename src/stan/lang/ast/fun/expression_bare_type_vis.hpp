@@ -23,6 +23,9 @@
 #include <boost/variant/static_visitor.hpp>
 #include <string>
 
+// Torsten
+#include <stan/torsten/torsten_ast.hpp>
+
 namespace stan {
 namespace lang {
 
@@ -31,6 +34,9 @@ struct expression_bare_type_vis : public boost::static_visitor<bare_expr_type> {
    * Construct a visitor.
    */
   expression_bare_type_vis();
+
+// Torsten
+#include <stan/torsten/expression_bare_type_vis.hpp>
 
   /**
    * Return the bare_expr_type corresponding to this expression

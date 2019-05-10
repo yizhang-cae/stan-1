@@ -73,3 +73,46 @@ TEST(unitLang, algebra_solverTest) {
   test_pg("algebra_solver", expected);
   test_pg_count("algebra_solver", expected, 1);
 }
+
+// torsten
+TEST(unitLang, univariate_integral) {
+  std::string expected;
+  expected = "stan::math::assign(y_hat, "
+    "univariate_integral_rk45(foo_functor__(), t0, t1, theta, x, x_int, pstream__));";
+  test_pg("univariate_integral", expected);
+  test_pg_count("univariate_integral", expected, 1);
+}
+
+TEST(unitLang, generalOdeModel) {
+  std::string expected;
+  expected = "stan::math::assign(x, "
+    "generalOdeModel_rk45(twoCptModelODE_functor__(), "
+    "nCmt, time, amt, rate, ii, evid, cmt, addl, ss, "
+    "theta_data, biovar_data, tlag_data, pstream__, rtol, atol, max_step));";
+  test_pg("generalOdeModel_control", expected);
+  test_pg_count("generalOdeModel_control", expected, 1);
+
+  expected = "stan::math::assign(x, "
+    "generalOdeModel_rk45(twoCptModelODE_functor__(), "
+    "nCmt, time, amt, rate, ii, evid, cmt, addl, ss, "
+    "theta_data, biovar_data, tlag_data, pstream__));";
+  test_pg("generalOdeModel", expected);
+  test_pg_count("generalOdeModel", expected, 1);
+}
+
+TEST(unitLang, mixOdeModel) {
+  std::string expected;
+  expected = "stan::math::assign(x, "
+    "mixOde2CptModel_bdf(foo_functor__(), "
+    "nCmt, time, amt, rate, ii, evid, cmt, addl, ss, "
+    "theta, biovar_data, tlag_data, pstream__));";
+  test_pg("mixOdeModel", expected);
+  test_pg_count("mixOdeModel", expected, 1);
+
+  expected = "stan::math::assign(x, "
+    "mixOde2CptModel_bdf(foo_functor__(), "
+    "nCmt, time, amt, rate, ii, evid, cmt, addl, ss, "
+    "theta, biovar_data, tlag_data, pstream__, rtol, atol, max_step));";
+  test_pg("mixOdeModel_control", expected);
+  test_pg_count("mixOdeModel_control", expected, 1);
+}

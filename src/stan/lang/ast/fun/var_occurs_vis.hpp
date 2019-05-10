@@ -1,6 +1,7 @@
 #ifndef STAN_LANG_AST_FUN_VAR_OCCURS_VIS_HPP
 #define STAN_LANG_AST_FUN_VAR_OCCURS_VIS_HPP
 
+#include <stan/torsten/torsten_structs.hpp>
 #include <boost/variant/static_visitor.hpp>
 #include <string>
 
@@ -35,6 +36,8 @@ namespace stan {
        * @param e variable to detect
        */
       explicit var_occurs_vis(const variable& e);
+
+#include <stan/torsten/var_occurs_vis.hpp>
 
       /**
        * Return true if the variable occurs in the specified

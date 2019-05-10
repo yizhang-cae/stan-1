@@ -149,4 +149,8 @@
 #include <stan/lang/ast/node/variable_dims_def.hpp>
 #include <stan/lang/ast/node/while_statement_def.hpp>
 
+// Torsten
+#include <stan/torsten/torsten_ast_def.hpp>
+
+
 #endif

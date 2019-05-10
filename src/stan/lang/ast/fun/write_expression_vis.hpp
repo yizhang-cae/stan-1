@@ -24,6 +24,9 @@
 #include <ostream>
 #include <string>
 
+// Torsten
+#include <stan/torsten/torsten_ast.hpp>
+
 namespace stan {
 namespace lang {
 
@@ -35,6 +38,9 @@ struct write_expression_vis : public boost::static_visitor<std::string> {
    * Construct a visitor.
    */
   write_expression_vis();
+
+// Torsten
+#include <stan/torsten/write_expression_vis.hpp>
 
   /**
    * Return string representation for expression.

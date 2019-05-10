@@ -36,6 +36,8 @@ namespace stan {
           user_facing_(user_facing) {
       }
 
+#include <stan/torsten/expression_visgen.hpp>
+
       void operator()(const nil& /*x*/) const {
         o_ << "nil";
       }

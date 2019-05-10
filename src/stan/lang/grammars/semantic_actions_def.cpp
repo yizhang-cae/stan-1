@@ -2987,6 +2987,8 @@ void deprecate_pound_comment::operator()(std::ostream &error_msgs) const {
 }
 boost::phoenix::function<deprecate_pound_comment> deprecate_pound_comment_f;
 
+#include <stan/torsten/semantic_actions_def.cpp>
+
 }  // namespace lang
 }  // namespace stan
 #endif

@@ -2,6 +2,7 @@
 #define STAN_LANG_AST_FUN_IS_NIL_VIS_HPP
 
 #include <boost/variant/static_visitor.hpp>
+#include <stan/torsten/torsten_structs.hpp>
 
 namespace stan {
   namespace lang {
@@ -31,6 +32,7 @@ namespace stan {
      * making up an expression is nil.
      */
     struct is_nil_vis : public boost::static_visitor<bool> {
+#include <stan/torsten/is_nil_vis.hpp>
       bool operator()(const nil& x) const;
       bool operator()(const int_literal& x) const;
       bool operator()(const double_literal& x) const;

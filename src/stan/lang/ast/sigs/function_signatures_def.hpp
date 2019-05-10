@@ -483,6 +483,7 @@ namespace stan {
 
     function_signatures::function_signatures() {
 #include <stan/lang/function_signatures.h>  // NOLINT
+#include <stan/torsten/function_signatures.h>  // NOLINT
     }
 
     bool function_signatures::has_user_defined_key(const std::string& key)

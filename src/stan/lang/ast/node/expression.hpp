@@ -2,6 +2,7 @@
 #define STAN_LANG_AST_NODE_EXPRESSION_HPP
 
 #include <boost/variant/recursive_variant.hpp>
+#include <stan/torsten/torsten_structs.hpp>
 #include <ostream>
 #include <string>
 #include <vector>
@@ -32,7 +33,15 @@ namespace stan {
     struct unary_op;
 
     struct expression {
-      typedef boost::variant<boost::recursive_wrapper<nil>,
+      typedef boost::variant<
+                             boost::recursive_wrapper<univariate_integral_control>,
+                             boost::recursive_wrapper<generalOdeModel_control>,
+                             boost::recursive_wrapper<generalOdeModel>,
+                             boost::recursive_wrapper<pmx_solve_group_control>,
+                             boost::recursive_wrapper<pmx_solve_group>,
+                             boost::recursive_wrapper<pmx_integrate_ode>,
+                             boost::recursive_wrapper<pmx_integrate_ode_group>,
+                             boost::recursive_wrapper<nil>,
                              boost::recursive_wrapper<int_literal>,
                              boost::recursive_wrapper<double_literal>,
                              boost::recursive_wrapper<array_expr>,
@@ -55,6 +64,8 @@ namespace stan {
 
       expression();
       expression(const expression& e);
+
+#include <stan/torsten/expression.hpp>
 
       expression(const nil& expr);  // NOLINT(runtime/explicit)
       expression(const int_literal& expr);  // NOLINT(runtime/explicit)

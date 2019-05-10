@@ -34,6 +34,8 @@ namespace stan {
       expression_grammar<Iterator>& expression_g;
       indexes_grammar<Iterator> indexes_g;
 
+#include <stan/torsten/term_grammar.hpp>
+
       boost::spirit::qi::rule<Iterator,
                               std::vector<expression>(scope),
                               whitespace_grammar<Iterator> >

@@ -766,6 +766,7 @@ struct data_only_expression : public boost::static_visitor<bool> {
   std::stringstream &error_msgs_;
   variable_map &var_map_;
   data_only_expression(std::stringstream &error_msgs, variable_map &var_map);
+#include <stan/torsten/semantic_actions_data_only_expression.hpp>
   bool operator()(const nil & /*e*/) const;
   bool operator()(const int_literal & /*x*/) const;
   bool operator()(const double_literal & /*x*/) const;
@@ -994,6 +995,7 @@ struct deprecate_pound_comment : public phoenix_functor_unary {
 extern boost::phoenix::function<deprecate_pound_comment>
     deprecate_pound_comment_f;
 
-}  // namespace lang
-}  // namespace stan
+#include <stan/torsten/semantic_actions.hpp>
+  }
+}
 #endif
