@@ -27,6 +27,7 @@ include make/libstanc                     # bin/libstanc.a
 include make/doxygen                      # doxygen
 include make/cpplint                      # cpplint
 include make/tests                        # tests
+include make/torsten.mk			  # torsten
 
 INC_FIRST = -I $(if $(STAN),$(STAN)/src,src)
 LDLIBS_STANC ?= -Ltest -lstanc
