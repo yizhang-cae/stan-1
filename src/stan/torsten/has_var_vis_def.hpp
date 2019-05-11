@@ -65,6 +65,12 @@ namespace stan {
         || boost::apply_visitor(*this, e.theta_.expr_);
     }
 
+    bool has_var_vis::operator()(const pmx_integrate_ode_control& e) const {
+      // only init state and params may contain vars
+      return boost::apply_visitor(*this, e.y0_.expr_)
+        || boost::apply_visitor(*this, e.theta_.expr_);
+    }
+
   }
 }
 #endif

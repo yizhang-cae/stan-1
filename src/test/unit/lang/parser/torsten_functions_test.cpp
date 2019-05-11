@@ -68,6 +68,20 @@ TEST(lang_parser, pmx_integrate_ode) {
 }
 
 /*****************************************************************
+ pmx_integrate_ode_control
+ ****************************************************************/
+TEST(lang_parser, pmx_integrate_ode_control) {
+  test_parsable("torsten/pmx_integrate_ode_control");
+  test_throws("torsten/pmx_integrate_ode_control/rk45_bad_functor" , "1st argument to pmx_integrate_ode_rk45 must be a function with signature (real, real[], real[], real[], int[]) : real[]");
+  test_throws("torsten/pmx_integrate_ode_control/rk45_bad_y0"      , "2nd argument to pmx_integrate_ode_rk45 must have type real[] for intial system state;");
+  test_throws("torsten/pmx_integrate_ode_control/rk45_bad_t0"      , "3rd argument to pmx_integrate_ode_rk45 must have type real or int for initial time;");
+  test_throws("torsten/pmx_integrate_ode_control/rk45_bad_ts"      , "4th argument to pmx_integrate_ode_rk45 must have type real[] for requested solution times; found type=");
+  test_throws("torsten/pmx_integrate_ode_control/rk45_bad_theta"   , "5th argument to pmx_integrate_ode_rk45 must have type real[] for parameters; found type=");
+  test_throws("torsten/pmx_integrate_ode_control/rk45_bad_x_r"     , "6th argument to pmx_integrate_ode_rk45 for real data must be data only and not reference parameters");
+  test_throws("torsten/pmx_integrate_ode_control/rk45_bad_x_i"     , "7th argument to pmx_integrate_ode_rk45 must have type int[] for integer data");
+}
+
+/*****************************************************************
  pmx_integrate_ode_group
  ****************************************************************/
 TEST(lang_parser, pmx_integrate_ode_group) {

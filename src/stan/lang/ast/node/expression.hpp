@@ -40,6 +40,7 @@ namespace stan {
                              boost::recursive_wrapper<pmx_solve_group_control>,
                              boost::recursive_wrapper<pmx_solve_group>,
                              boost::recursive_wrapper<pmx_integrate_ode>,
+                             boost::recursive_wrapper<pmx_integrate_ode_control>,
                              boost::recursive_wrapper<pmx_integrate_ode_group>,
                              boost::recursive_wrapper<nil>,
                              boost::recursive_wrapper<int_literal>,

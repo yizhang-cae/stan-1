@@ -829,9 +829,62 @@ bool data_only_expression::operator()(const pmx_integrate_ode& x) const {
     && boost::apply_visitor(*this, x.theta_.expr_);
 }
 
-template void assign_lhs::operator()(expression&,
-                                     const pmx_integrate_ode&)
-  const;
+template void assign_lhs::operator()(expression&, const pmx_integrate_ode&) const;
+
+/*********************************
+  pmx_integrate_ode_control
+ *********************************/
+void validate_pmx_integrate_ode_control:: operator()(const pmx_integrate_ode_control &ode_fun,
+                                                     const variable_map &var_map,
+                                                     bool &pass, std::ostream &error_msgs) const {
+  validate_pmx_integrate_ode_non_control_args(ode_fun, var_map, pass, error_msgs);
+  if (!ode_fun.rel_tol_.bare_type().is_primitive()) {
+    error_msgs << "Eighth argument to " << ode_fun.integration_function_name_
+               << " (relative tolerance) must have type real or int;"
+               << " found type=" << ode_fun.rel_tol_.bare_type() << ". ";
+    pass = false;
+  }
+  if (!ode_fun.abs_tol_.bare_type().is_primitive()) {
+    error_msgs << "Ninth argument to " << ode_fun.integration_function_name_
+               << " (absolute tolerance) must have type real or int;"
+               << " found type=" << ode_fun.abs_tol_.bare_type() << ". ";
+    pass = false;
+  }
+  if (!ode_fun.max_num_steps_.bare_type().is_primitive()) {
+    error_msgs << "Tenth argument to " << ode_fun.integration_function_name_
+               << " (max steps) must have type real or int;"
+               << " found type=" << ode_fun.max_num_steps_.bare_type() << ". ";
+    pass = false;
+  }
+
+  // test data-only variables do not have parameters (int locals OK)
+  if (has_var(ode_fun.rel_tol_, var_map)) {
+    error_msgs << "Eighth argument to " << ode_fun.integration_function_name_
+               << " (relative tolerance) must be data only"
+               << " and not depend on parameters.";
+    pass = false;
+  }
+  if (has_var(ode_fun.abs_tol_, var_map)) {
+    error_msgs << "Ninth argument to " << ode_fun.integration_function_name_
+               << " (absolute tolerance ) must be data only"
+               << " and not depend parameters.";
+    pass = false;
+  }
+  if (has_var(ode_fun.max_num_steps_, var_map)) {
+    error_msgs << "Tenth argument to " << ode_fun.integration_function_name_
+               << " (max steps) must be data only"
+               << " and not depend on parameters.";
+    pass = false;
+  }
+}
+boost::phoenix::function<validate_pmx_integrate_ode_control> validate_pmx_integrate_ode_control_f;
+
+bool data_only_expression::operator()(const pmx_integrate_ode_control& x) const {
+  return boost::apply_visitor(*this, x.y0_.expr_)
+    && boost::apply_visitor(*this, x.theta_.expr_);
+}
+
+template void assign_lhs::operator()(expression &, const pmx_integrate_ode_control &) const;
 
 /*********************************
   pmx_integrate_ode_group
@@ -1086,5 +1139,6 @@ bool data_only_expression::operator()(const pmx_integrate_ode_group& x) const {
 template void assign_lhs::operator()(expression&,
                                      const pmx_integrate_ode_group&)
   const;
+
 
 #endif

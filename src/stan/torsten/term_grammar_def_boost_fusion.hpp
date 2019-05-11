@@ -103,4 +103,17 @@ BOOST_FUSION_ADAPT_STRUCT(stan::lang::pmx_integrate_ode,
                           (stan::lang::expression, x_)
                           (stan::lang::expression, x_int_) )
 
+BOOST_FUSION_ADAPT_STRUCT(stan::lang::pmx_integrate_ode_control,
+                          (std::string, integration_function_name_)
+                          (std::string, system_function_name_)
+                          (stan::lang::expression, y0_)
+                          (stan::lang::expression, t0_)
+                          (stan::lang::expression, ts_)
+                          (stan::lang::expression, theta_)
+                          (stan::lang::expression, x_)
+                          (stan::lang::expression, x_int_)
+                          (stan::lang::expression, rel_tol_)
+                          (stan::lang::expression, abs_tol_)
+                          (stan::lang::expression, max_num_steps_) )
+
 #endif
