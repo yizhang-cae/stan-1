@@ -12,6 +12,7 @@
 #include <stan/torsten/pmx_integrate_ode_def.hpp>
 #include <stan/torsten/pmx_integrate_ode_control_def.hpp>
 #include <stan/torsten/pmx_integrate_ode_group_def.hpp>
+#include <stan/torsten/pmx_integrate_ode_group_control_def.hpp>
 #include <stan/torsten/pmx_solve_group_def.hpp>
 #include <stan/torsten/pmx_solve_group_control_def.hpp>
 #include <stan/torsten/generalOdeModel_def.hpp>

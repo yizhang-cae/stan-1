@@ -47,6 +47,17 @@ std::string write_expression_vis::operator()(const pmx_integrate_ode_group& e) c
   return ss.str();
 }
 
+std::string write_expression_vis::operator()(const pmx_integrate_ode_group_control& e) const {
+  std::stringstream ss;
+  ss << e.integration_function_name_ << "(" << e.system_function_name_ << ", "
+     << e.y0_.to_string() << ", " << e.t0_.to_string() << ", "
+     << e.len_.to_string() << ", "
+     << e.ts_.to_string() << ", " << e.x_.to_string() << ", "
+     << e.x_int_.to_string() << ", " << e.rel_tol_.to_string() << ", "
+     << e.abs_tol_.to_string() << ", " << e.max_num_steps_.to_string() << ")";
+  return ss.str();
+}
+
 std::string write_expression_vis::operator()(const generalOdeModel& e) const {
   std::stringstream ss;
   ss << e.integration_function_name_ << "(" << e.system_function_name_ << ", "

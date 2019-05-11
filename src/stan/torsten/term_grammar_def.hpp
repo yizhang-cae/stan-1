@@ -217,6 +217,38 @@ pmx_solve_group_r
                               boost::phoenix::ref(var_map_), _pass,
                               boost::phoenix::ref(error_msgs_))];
 
+pmx_integrate_ode_group_control_r.name("expression");
+pmx_integrate_ode_group_control_r
+%= (   (string("pmx_integrate_ode_group_rk45")  >> no_skip[!char_("a-zA-Z0-9_")])
+     | (string("pmx_integrate_ode_group_bdf")   >> no_skip[!char_("a-zA-Z0-9_")])
+     | (string("pmx_integrate_ode_group_adams") >> no_skip[!char_("a-zA-Z0-9_")])
+     )
+  >> lit('(')              // >> allows backtracking to non-control
+  >> identifier_r          // 1) system function name (function only)
+  >> lit(',')
+  >> expression_g(_r1)     // 2) y0
+  >> lit(',')
+  >> expression_g(_r1)     // 3) t0 (data only)
+  >> lit(',')
+  >> expression_g(_r1)     // 4) len(data only)
+  >> lit(',')
+  >> expression_g(_r1)     // 5) ts (data only)
+  >> lit(',')
+  >> expression_g(_r1)     // 6) theta
+  >> lit(',')
+  >> expression_g(_r1)     // 7) x (data only)
+  >> lit(',')
+  >> expression_g(_r1)     // 8) x_int (data only)
+  >> lit(',')
+  >> expression_g(_r1)     // 9) relative tolerance (data only)
+  >> lit(',')
+  >> expression_g(_r1)     // 10) absolute tolerance (data only)
+  >> lit(',')
+  >> expression_g(_r1)     // 11) maximum number of steps (data only)
+  > lit(')')
+  [validate_pmx_integrate_ode_group_control_f(_val, boost::phoenix::ref(var_map_),
+                                        _pass, boost::phoenix::ref(error_msgs_))];
+
 pmx_integrate_ode_group_r.name("expression");
 pmx_integrate_ode_group_r
 %= (   (string("pmx_integrate_ode_group_rk45")  >> no_skip[!char_("a-zA-Z0-9_")])
