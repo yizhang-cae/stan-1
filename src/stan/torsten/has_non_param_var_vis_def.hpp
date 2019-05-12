@@ -81,12 +81,14 @@ namespace stan {
     bool has_non_param_var_vis::operator()(const pmx_integrate_ode_control& e) const {
       // if any vars, return true because integration will be nonlinear
       return boost::apply_visitor(*this, e.y0_.expr_)
+        || boost::apply_visitor(*this, e.ts_.expr_)
         || boost::apply_visitor(*this, e.theta_.expr_);
     }
 
     bool has_non_param_var_vis::operator()(const pmx_integrate_ode& e) const {
       // if any vars, return true because integration will be nonlinear
       return boost::apply_visitor(*this, e.y0_.expr_)
+        || boost::apply_visitor(*this, e.ts_.expr_)
         || boost::apply_visitor(*this, e.theta_.expr_);
     }
   }

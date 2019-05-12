@@ -35,6 +35,7 @@ transformed data {
 parameters {
   real x_p;
   real theta_p[n];  
+  real ts_v[np * nt];
 }
 
 transformed parameters {
@@ -44,6 +45,10 @@ transformed parameters {
   yp = pmx_integrate_ode_adams (ode, y0_p, t0, ts, theta_p, x_r, x_i, rtol, atol, max_num_steps);
   yp = pmx_integrate_ode_bdf   (ode, y0_p, t0, ts, theta_p, x_r, x_i, rtol, atol, max_num_steps);
   yp = pmx_integrate_ode_rk45  (ode, y0_p, t0, ts, theta_p, x_r, x_i, rtol, atol, max_num_steps);
+
+  yp = pmx_integrate_ode_adams (ode, y0_p, t0, ts_v, theta_p, x_r, x_i, rtol, atol, max_num_steps);
+  yp = pmx_integrate_ode_bdf   (ode, y0_p, t0, ts_v, theta_p, x_r, x_i, rtol, atol, max_num_steps);
+  yp = pmx_integrate_ode_rk45  (ode, y0_p, t0, ts_v, theta_p, x_r, x_i, rtol, atol, max_num_steps);
 }
 
 model {

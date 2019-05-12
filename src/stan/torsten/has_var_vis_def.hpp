@@ -66,14 +66,16 @@ namespace stan {
     }
 
     bool has_var_vis::operator()(const pmx_integrate_ode_control& e) const {
-      // only init state and params may contain vars
+      // possible vars: init state, time steps, and params
       return boost::apply_visitor(*this, e.y0_.expr_)
+        || boost::apply_visitor(*this, e.ts_.expr_)
         || boost::apply_visitor(*this, e.theta_.expr_);
     }
 
     bool has_var_vis::operator()(const pmx_integrate_ode& e) const {
-      // only init state and params may contain vars
+      // possible vars: init state, time steps, and params
       return boost::apply_visitor(*this, e.y0_.expr_)
+        || boost::apply_visitor(*this, e.ts_.expr_)
         || boost::apply_visitor(*this, e.theta_.expr_);
     }
 

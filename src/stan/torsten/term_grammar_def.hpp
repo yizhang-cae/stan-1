@@ -288,7 +288,7 @@ pmx_integrate_ode_control_r
   >> lit(',')
   >> expression_g(_r1)     // 3) t0 (data only)
   >> lit(',')
-  >> expression_g(_r1)     // 4) ts (data only)
+  >> expression_g(_r1)     // 4) ts
   >> lit(',')
   >> expression_g(_r1)     // 5) theta
   >> lit(',')
@@ -318,7 +318,7 @@ pmx_integrate_ode_r
   > lit(',')
   > expression_g(_r1)     // 3) t0 (data only)
   > lit(',')
-  > expression_g(_r1)     // 4) ts (data only)
+  > expression_g(_r1)     // 4) ts
   > lit(',')
   > expression_g(_r1)     // 5) theta
   > lit(',')

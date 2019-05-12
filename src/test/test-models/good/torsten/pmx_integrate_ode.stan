@@ -31,14 +31,16 @@ transformed data {
 parameters {
   real x_p;
   real theta_p[n];  
+  real ts_v[np * nt];
 }
 
 transformed parameters {
   real yp[n, np * nt];
   real y0_p[n];
-
   yp = pmx_integrate_ode_adams (ode, y0_p, t0, ts, theta_p, x_r, x_i);
   yp = pmx_integrate_ode_bdf   (ode, y0_p, t0, ts, theta_p, x_r, x_i);
+  yp = pmx_integrate_ode_adams (ode, y0_p, t0, ts_v, theta_p, x_r, x_i);
+  yp = pmx_integrate_ode_bdf   (ode, y0_p, t0, ts_v, theta_p, x_r, x_i);
 }
 
 model {

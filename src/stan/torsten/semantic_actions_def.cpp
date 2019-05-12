@@ -799,13 +799,13 @@ void validate_pmx_integrate_ode_non_control_args(const T& ode_fun,
                << " must be data only and not reference parameters";
     pass = false;
   }
-  if (has_var(ode_fun.ts_, var_map)) {
-    error_msgs << "4th argument to "
-               << ode_fun.integration_function_name_
-               << " (solution times)"
-               << " must be data only and not reference parameters";
-    pass = false;
-  }
+  // if (has_var(ode_fun.ts_, var_map)) {
+  //   error_msgs << "4th argument to "
+  //              << ode_fun.integration_function_name_
+  //              << " (solution times)"
+  //              << " must be data only and not reference parameters";
+  //   pass = false;
+  // }
   if (has_var(ode_fun.x_, var_map)) {
     error_msgs << "6th argument to "
                << ode_fun.integration_function_name_
