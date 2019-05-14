@@ -1,7 +1,7 @@
 #ifndef STAN_LANG_TORSTEN_AST_NODE_EXPRESSION_DEF_HPP
 #define STAN_LANG_TORSTEN_AST_NODE_EXPRESSION_DEF_HPP
 
-#include <stan/lang/ast.hpp>
+// #include <stan/lang/ast.hpp>
 #include <stan/torsten/torsten_func_expression_list.h>
 
 namespace stan {
