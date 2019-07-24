@@ -1117,9 +1117,9 @@ template void assign_lhs::operator()(expression&,
                                      const pmx_solve_group_control&)
   const;
 
-/*****************
+/*************************
  pmx_integrate_ode_group
-*****************/
+*************************/
 
 void validate_pmx_integrate_ode_group::operator()(
                       const pmx_integrate_ode_group& ode_fun,
@@ -1127,6 +1127,9 @@ void validate_pmx_integrate_ode_group::operator()(
                       bool& pass,
                       std::ostream& error_msgs) const {
   validate_pmx_integrate_ode_group_non_control_args(ode_fun, var_map, pass, error_msgs);
+
+  // collect ODE functor names to be used in MPI master-slave control
+  pmx_integrate_ode_group::CALLED_FUNCTORS.push_back(ode_fun.system_function_name_);
 }
 boost::phoenix::function<validate_pmx_integrate_ode_group>
 validate_pmx_integrate_ode_group_f;

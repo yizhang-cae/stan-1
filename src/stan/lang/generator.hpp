@@ -89,6 +89,7 @@
 #include <stan/lang/generator/generate_set_param_ranges.hpp>
 #include <stan/lang/generator/generate_statement.hpp>
 #include <stan/lang/generator/generate_statements.hpp>
+#include <stan/lang/generator/generate_torsten_mpi.hpp>
 #include <stan/lang/generator/generate_transform_inits_method.hpp>
 #include <stan/lang/generator/generate_try.hpp>
 #include <stan/lang/generator/generate_typedef.hpp>

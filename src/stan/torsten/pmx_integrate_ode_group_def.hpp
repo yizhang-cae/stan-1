@@ -19,6 +19,9 @@ namespace stan {
         system_function_name_(system_function_name),
         y0_(y0), t0_(t0), len_(len), ts_(ts), theta_(theta), x_(x), x_int_(x_int) {  }
 
+    // initialize static member
+    std::vector<std::string> pmx_integrate_ode_group::CALLED_FUNCTORS;
+
   }
 }
 #endif

@@ -13,6 +13,9 @@ namespace stan {
      * Structure for integrate diff eq statement.
      */
     struct pmx_integrate_ode_group {
+
+      static std::vector<std::string> CALLED_FUNCTORS;
+
       /**
        * The name of the integrator.
        */
