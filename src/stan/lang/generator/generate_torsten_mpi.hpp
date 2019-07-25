@@ -52,47 +52,6 @@ void generate_torsten_mpi(const std::string& model_name,
   o << "}" << EOL << "}" << EOL;
 }
 
-// void generate_torsten_mpi(const std::string& model_name,
-//                            std::ostream& o) {
-//   o << "struct pmx_ode_group_mpi_functor {" << std::endl
-//     << "int id;" << std::endl << std::endl
-//     << "pmx_ode_group_mpi_functor(int i) : id(i) {}" << std::endl << std::endl
-//     << "template<typename T0, typename T1, typename T2>" << std::endl
-//     << "inline std::vector<typename stan::return_type<T1, T2>::type>" << std::endl
-//     << "operator()("
-//     << "const T0& t, "
-//     << "const std::vector<T1>& y, "
-//     << "const std::vector<T2>& theta, "
-//     << "const std::vector<double>& x_r, "
-//     << "const std::vector<int>& x_i, "
-//     << "std::ostream* msgs) const {" << std::endl;
-    
-//   size_t n = pmx_integrate_ode_group::CALLED_FUNCTORS.size();
-//   for (size_t i = 0; i < n; ++i) {
-//     std::string fs = pmx_integrate_ode_group::CALLED_FUNCTORS[i];
-//     o << "if (id == " << i << ") {" << std::endl
-//       << "return " << model_name << "_namespace::" << fs << "_functor__(t, y, theta, x_r, x_i, msgs);" << std::endl
-//       << "}" << std::endl;
-//   }
-
-//   o << "}" << std::endl;
-//   o << "};" << std::endl;
-// }
-
-// void generate_torsten_mpi(const std::string& model_name,
-//                            std::ostream& o) {
-//   o << "#undef PMX_ODE_GROUP_FUNCTOR_CALL" << std::endl
-//     << "#define PMX_ODE_GROUP_FUNCTOR_CALL(CALLID, RESULT, __VA_ARGS__) \\" << std::endl << "{ \\" << std::endl;
-
-//   size_t n = pmx_integrate_ode_group::CALLED_FUNCTORS.size();
-//   for (size_t i = 0; i < n; ++i) {
-//     std::string fs = pmx_integrate_ode_group::CALLED_FUNCTORS[i];
-//     o << "if (CALLID == " << i << ") RESULT = " << model_name << "_namespace::" << fs << "_functor__(__VA_ARGS__);\\" << std::endl;
-//   }
-
-//   o << "}" << std::endl;
-// }
-
 }
 }
 #endif

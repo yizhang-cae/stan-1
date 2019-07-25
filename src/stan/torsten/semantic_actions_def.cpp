@@ -997,6 +997,9 @@ template void assign_lhs::operator()(expression &, const pmx_integrate_ode_contr
                    << " must be data only and not reference parameters";
         pass = false;
       }
+
+      // collect ODE functor names to be used in MPI master-slave control
+      pmx_integrate_ode_group::CALLED_FUNCTORS.push_back(ode_fun.system_function_name_);
     }
 
 /*****************
@@ -1127,9 +1130,6 @@ void validate_pmx_integrate_ode_group::operator()(
                       bool& pass,
                       std::ostream& error_msgs) const {
   validate_pmx_integrate_ode_group_non_control_args(ode_fun, var_map, pass, error_msgs);
-
-  // collect ODE functor names to be used in MPI master-slave control
-  pmx_integrate_ode_group::CALLED_FUNCTORS.push_back(ode_fun.system_function_name_);
 }
 boost::phoenix::function<validate_pmx_integrate_ode_group>
 validate_pmx_integrate_ode_group_f;
@@ -1144,9 +1144,9 @@ template void assign_lhs::operator()(expression&, const pmx_integrate_ode_group&
 /*********************************
   pmx_integrate_ode_group_control
  *********************************/
-void validate_pmx_integrate_ode_group_control:: operator()(const pmx_integrate_ode_group_control &ode_fun,
-                                                     const variable_map &var_map,
-                                                     bool &pass, std::ostream &error_msgs) const {
+void validate_pmx_integrate_ode_group_control::operator()(const pmx_integrate_ode_group_control &ode_fun,
+                                                          const variable_map &var_map,
+                                                          bool &pass, std::ostream &error_msgs) const {
   validate_pmx_integrate_ode_group_non_control_args(ode_fun, var_map, pass, error_msgs);
   if (!ode_fun.rel_tol_.bare_type().is_primitive()) {
     error_msgs << "Eighth argument to " << ode_fun.integration_function_name_
