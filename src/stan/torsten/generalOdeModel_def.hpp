@@ -9,7 +9,7 @@ namespace stan {
 
     generalOdeModel::generalOdeModel() { }
 
-    generalOdeModel::generalOdeModel (
+    generalOdeModel::generalOdeModel(
                            const std::string& integration_function_name,
                            const std::string& system_function_name,
                            const expression& nCmt,
