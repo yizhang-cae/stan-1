@@ -58,7 +58,7 @@ void operator()(const generalOdeModel_control& fx) const {
   o_ << ", ";
 
   generate_expression(fx.tlag_, NOT_USER_FACING, o_);
-  o_ << ", pstream__, ";
+  o_ << ", ";
 
   generate_expression(fx.rel_tol_, NOT_USER_FACING, o_);
   o_ << ", ";
@@ -67,6 +67,9 @@ void operator()(const generalOdeModel_control& fx) const {
   o_ << ", ";
 
   generate_expression(fx.max_num_steps_, NOT_USER_FACING, o_);
+
+  o_ << ", pstream__";
+
   o_ << ")";
 }
 
@@ -110,7 +113,7 @@ void operator()(const generalOdeModel_control_ss& fx) const {
   o_ << ", ";
 
   generate_expression(fx.tlag_, NOT_USER_FACING, o_);
-  o_ << ", pstream__, ";
+  o_ << ", ";
 
   generate_expression(fx.rel_tol_, NOT_USER_FACING, o_);
   o_ << ", ";
@@ -128,6 +131,8 @@ void operator()(const generalOdeModel_control_ss& fx) const {
   o_ << ", ";
 
   generate_expression(fx.ss_max_num_steps_, NOT_USER_FACING, o_);
+
+  o_ << ", pstream__";
   o_ << ")";
 }
 
@@ -209,12 +214,13 @@ void operator()(const pmx_integrate_ode_control& fx) const {
   generate_expression(fx.x_, NOT_USER_FACING, o_);
   o_ << ", ";
   generate_expression(fx.x_int_, NOT_USER_FACING, o_);
-  o_ << ", pstream__, ";
+  o_ << ", ";
   generate_expression(fx.rel_tol_, NOT_USER_FACING, o_);
   o_ << ", ";
   generate_expression(fx.abs_tol_, NOT_USER_FACING, o_);
   o_ << ", ";
   generate_expression(fx.max_num_steps_, NOT_USER_FACING, o_);
+  o_ << ", pstream__";
   o_ << ")";
 }
 
@@ -257,12 +263,13 @@ void operator()(const pmx_integrate_ode_group_control& fx) const {
   generate_expression(fx.x_, NOT_USER_FACING, o_);
   o_ << ", ";
   generate_expression(fx.x_int_, NOT_USER_FACING, o_);
-  o_ << ", pstream__, ";
+  o_ << ", ";
   generate_expression(fx.rel_tol_, NOT_USER_FACING, o_);
   o_ << ", ";
   generate_expression(fx.abs_tol_, NOT_USER_FACING, o_);
   o_ << ", ";
   generate_expression(fx.max_num_steps_, NOT_USER_FACING, o_);
+  o_ << ", pstream__";
   o_ << ")";
 }
 
@@ -355,7 +362,7 @@ void operator()(const pmx_solve_group_control& fx) const {
   o_ << ", ";
 
   generate_expression(fx.tlag_, NOT_USER_FACING, o_);
-  o_ << ", pstream__, ";
+  o_ << ", ";
 
   generate_expression(fx.rel_tol_, NOT_USER_FACING, o_);
   o_ << ", ";
@@ -364,6 +371,7 @@ void operator()(const pmx_solve_group_control& fx) const {
   o_ << ", ";
 
   generate_expression(fx.max_num_steps_, NOT_USER_FACING, o_);
+  o_ << ", pstream__";
   o_ << ")";
 }
 #endif
