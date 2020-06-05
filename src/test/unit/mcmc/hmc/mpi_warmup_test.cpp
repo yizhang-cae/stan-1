@@ -281,7 +281,7 @@ draw_vecs[3] <<
      EXPECT_FALSE(cc_adapter.is_cross_chain_adapted());
 
      if (cc_adapter.is_cross_chain_adapt_window_end()) {
-       int curr_win_count = cc_adapter.current_cross_chain_window_counter();
+       int curr_win_count = cc_adapter.num_active_cross_chain_windows();
        for (int win = 0; win < curr_win_count; ++win) {
          const std::vector<const double* > p{
            draws[0] + win * window_size,

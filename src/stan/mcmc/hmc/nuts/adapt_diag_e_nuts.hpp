@@ -32,6 +32,7 @@ class adapt_diag_e_nuts : public diag_e_nuts<Model, BaseRNG>,
                                                 s.accept_stat());
 
       if (this -> use_cross_chain_adapt()) {
+        /// cross chain adapter has its own var adaptor so needs to add sample
         this -> add_cross_chain_sample(s.log_prob());
         bool update = this -> cross_chain_adaptation(logger);
         if (this -> is_cross_chain_adapted()) {
@@ -43,7 +44,6 @@ class adapt_diag_e_nuts : public diag_e_nuts<Model, BaseRNG>,
 
           this->stepsize_adaptation_.set_mu(log(10 * this->nom_epsilon_));
           this->stepsize_adaptation_.restart();
-
           this->set_cross_chain_stepsize();          
         }
       } else {
