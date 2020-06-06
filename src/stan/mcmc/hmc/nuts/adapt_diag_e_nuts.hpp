@@ -16,7 +16,7 @@ namespace mcmc {
 template <class Model, class BaseRNG>
 class adapt_diag_e_nuts : public diag_e_nuts<Model, BaseRNG>,
                           public stepsize_var_adapter,
-                          public mpi_cross_chain_adapter<adapt_diag_e_nuts<Model, BaseRNG>> {
+                          public mpi_cross_chain_adapter {
  public:
   adapt_diag_e_nuts(const Model& model, BaseRNG& rng)
       : diag_e_nuts<Model, BaseRNG>(model, rng),
@@ -33,10 +33,12 @@ class adapt_diag_e_nuts : public diag_e_nuts<Model, BaseRNG>,
 
       if (this -> use_cross_chain_adapt()) {
         /// cross chain adapter has its own var adaptor so needs to add sample
-        this -> add_cross_chain_sample(s.log_prob());
-        bool update = this -> cross_chain_adaptation(logger);
+        this -> add_cross_chain_sample(s.log_prob(), this -> z().q);
+        bool update = this -> cross_chain_adaptation(this -> z().inv_e_metric_, logger);
         if (this -> is_cross_chain_adapted()) {
           update = false;
+          double new_stepsize = this -> cross_chain_stepsize(this -> get_nominal_stepsize());
+          this -> set_nominal_stepsize(new_stepsize);
         }
 
         if (update) {
@@ -44,7 +46,8 @@ class adapt_diag_e_nuts : public diag_e_nuts<Model, BaseRNG>,
 
           this->stepsize_adaptation_.set_mu(log(10 * this->nom_epsilon_));
           this->stepsize_adaptation_.restart();
-          this->set_cross_chain_stepsize();          
+          double new_stepsize = this -> cross_chain_stepsize(this -> get_nominal_stepsize());
+          this -> set_nominal_stepsize(new_stepsize);
         }
       } else {
         bool update = this->var_adaptation_.learn_variance(this->z_.inv_e_metric_,

@@ -16,7 +16,7 @@ namespace mcmc {
 template <class Model, class BaseRNG>
 class adapt_dense_e_nuts : public dense_e_nuts<Model, BaseRNG>,
                            public stepsize_covar_adapter,
-                           public mpi_cross_chain_adapter<adapt_dense_e_nuts<Model, BaseRNG>> {
+                           public mpi_cross_chain_adapter {
  public:
   adapt_dense_e_nuts(const Model& model, BaseRNG& rng)
       : dense_e_nuts<Model, BaseRNG>(model, rng),
@@ -32,10 +32,12 @@ class adapt_dense_e_nuts : public dense_e_nuts<Model, BaseRNG>,
                                                 s.accept_stat());
 
       if (this -> use_cross_chain_adapt()) {
-        this -> add_cross_chain_sample(s.log_prob());
-        bool update = this -> cross_chain_adaptation(logger);
+        this -> add_cross_chain_sample(s.log_prob(), this -> z().q);
+        bool update = this -> cross_chain_adaptation(this -> z().inv_e_metric_, logger);
         if (this -> is_cross_chain_adapted()) {
           update = false;
+          double new_stepsize = this -> cross_chain_stepsize(this -> get_nominal_stepsize());
+          this -> set_nominal_stepsize(new_stepsize);
         }
 
         if (update) {
@@ -43,8 +45,8 @@ class adapt_dense_e_nuts : public dense_e_nuts<Model, BaseRNG>,
 
           this->stepsize_adaptation_.set_mu(log(10 * this->nom_epsilon_));
           this->stepsize_adaptation_.restart();
-
-          this->set_cross_chain_stepsize();          
+          double new_stepsize = this -> cross_chain_stepsize(this -> get_nominal_stepsize());
+          this -> set_nominal_stepsize(new_stepsize);
         }
       } else {
         bool update = this->covar_adaptation_.learn_covariance(

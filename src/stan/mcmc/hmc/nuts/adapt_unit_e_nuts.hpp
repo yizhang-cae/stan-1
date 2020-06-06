@@ -16,7 +16,7 @@ namespace mcmc {
 template <class Model, class BaseRNG>
 class adapt_unit_e_nuts : public unit_e_nuts<Model, BaseRNG>,
                           public stepsize_adapter,
-                          public mpi_cross_chain_adapter<adapt_unit_e_nuts<Model, BaseRNG>> {
+                          public mpi_cross_chain_adapter {
  public:
   adapt_unit_e_nuts(const Model& model, BaseRNG& rng)
       : unit_e_nuts<Model, BaseRNG>(model, rng) {}
