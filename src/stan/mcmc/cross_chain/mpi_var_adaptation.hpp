@@ -1,7 +1,7 @@
 #ifndef STAN_MCMC_MPI_VAR_ADAPTATION_HPP
 #define STAN_MCMC_MPI_VAR_ADAPTATION_HPP
 
-#include <stan/mcmc/mpi_metric_adaptation.hpp>
+#include <stan/mcmc/cross_chain/mpi_metric_adaptation.hpp>
 #include <stan/math/prim/fun/Eigen.hpp>
 #include <vector>
 

@@ -1,7 +1,7 @@
 #ifdef MPI_ADAPTED_WARMUP
 
 #include <gtest/gtest.h>
-#include <stan/mcmc/hmc/mpi_cross_chain_adapter.hpp>
+#include <stan/mcmc/cross_chain/mpi_cross_chain_adapter.hpp>
 #include <stan/analyze/mcmc/compute_potential_scale_reduction.hpp>
 #include <stan/math/mpi/envionment.hpp>
 #include <stan/callbacks/stream_logger.hpp>

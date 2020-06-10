@@ -4,7 +4,7 @@
 #include <stan/callbacks/logger.hpp>
 #include <stan/mcmc/stepsize_covar_adapter.hpp>
 #include <stan/mcmc/hmc/nuts/dense_e_nuts.hpp>
-#include <stan/mcmc/hmc/mpi_cross_chain_adapter.hpp>
+#include <stan/mcmc/cross_chain/mpi_cross_chain_adapter.hpp>
 
 namespace stan {
 namespace mcmc {

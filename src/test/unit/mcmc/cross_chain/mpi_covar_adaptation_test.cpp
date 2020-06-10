@@ -1,7 +1,7 @@
 #ifdef STAN_LANG_MPI
 
 #include <stan/mcmc/covar_adaptation.hpp>
-#include <stan/mcmc/mpi_covar_adaptation.hpp>
+#include <stan/mcmc/cross_chain/mpi_covar_adaptation.hpp>
 #include <stan/math/mpi/envionment.hpp>
 #include <test/unit/services/instrumented_callbacks.hpp>
 #include <gtest/gtest.h>

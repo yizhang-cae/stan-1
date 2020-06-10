@@ -5,8 +5,8 @@
 #include <stan/callbacks/interrupt.hpp>
 #include <stan/mcmc/hmc/base_hmc.hpp>
 #include <stan/mcmc/stepsize_covar_adapter.hpp>
-#include <stan/mcmc/mpi_var_adaptation.hpp>
-#include <stan/mcmc/mpi_covar_adaptation.hpp>
+#include <stan/mcmc/cross_chain/mpi_var_adaptation.hpp>
+#include <stan/mcmc/cross_chain/mpi_covar_adaptation.hpp>
 #include <stan/services/util/mcmc_writer.hpp>
 #include <stan/analyze/mcmc/autocovariance.hpp>
 #include <stan/analyze/mcmc/compute_effective_sample_size.hpp>
@@ -430,28 +430,6 @@ namespace mcmc {
       }
       return update;
     }
-
-    /*
-     * Calculate harmonic mean of chain stepsize as new stepsize
-     */
-    // inline void set_cross_chain_stepsize() {
-    //   using stan::math::mpi::Session;
-    //   using stan::math::mpi::Communicator;
-
-    //   const Communicator& comm = Session::inter_chain_comm(num_chains_);
-    //   bool is_inter_rank = Session::is_in_inter_chain_comm(num_chains_);
-    //   double new_stepsize;
-    //   Sampler& sampler = static_cast<Sampler&>(*this);
-    //   if (is_inter_rank) {
-    //     double chain_stepsize = sampler.get_nominal_stepsize();
-    //     chain_stepsize = 1.0/(chain_stepsize * chain_stepsize); // harmonic mean
-    //     MPI_Allreduce(&chain_stepsize, &new_stepsize, 1, MPI_DOUBLE, MPI_SUM, comm.comm());
-    //     new_stepsize = sqrt(num_chains_ / new_stepsize);
-    //   }
-    //   const Communicator& intra_comm = Session::intra_chain_comm(num_chains_);
-    //   MPI_Bcast(&new_stepsize, 1, MPI_DOUBLE, 0, intra_comm.comm());
-    //   sampler.set_nominal_stepsize(new_stepsize);
-    // }
 
     inline bool use_cross_chain_adapt() {
       return num_chains_ > 1;
