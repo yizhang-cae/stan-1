@@ -61,7 +61,7 @@ namespace mcmc {
       target_rhat_(target_rhat),
       target_ess_(target_ess),
       lp_draws_(window_size),
-      all_lp_draws_(window_size_ * max_num_windows_, num_chains_),
+      all_lp_draws_(),
       lp_acc_(max_num_windows_),
       draw_count_acc_(),
       rhat_(Eigen::ArrayXd::Zero(max_num_windows_)),
@@ -82,7 +82,6 @@ namespace mcmc {
       target_rhat_ = target_rhat;
       target_ess_ = target_ess;
       lp_draws_.resize(window_size);
-      all_lp_draws_.resize(window_size_ * max_num_windows_, num_chains_);
       lp_acc_.clear();
       lp_acc_.resize(max_num_windows_);
       draw_count_acc_ = {};
@@ -151,11 +150,12 @@ namespace mcmc {
      * minimum of ESS and the number_total_draws *
      * log10(number_total_draws).
      */
-    inline double compute_effective_sample_size(int win, int win_count) {
+    inline double compute_effective_sample_size(int win, int win_count,
+                                                const Eigen::MatrixXd& all_lp_draws) {
       std::vector<const double*> draws(num_chains_);
       size_t num_draws = (win_count - win) * window_size_;
       for (int chain = 0; chain < num_chains_; ++chain) {
-        draws[chain] = &all_lp_draws_(win * window_size_, chain);
+        draws[chain] = &all_lp_draws(win * window_size_, chain);
       }
       return stan::analyze::compute_effective_sample_size(draws, num_draws);
     }
@@ -213,11 +213,13 @@ namespace mcmc {
      * - lp__ draws in the latest window
      * 
      * @param all_chain_gather vector to be filled with gathered data in rank 0.
+     * @param all_lp_draws lp__ draws from all the chains, filled by rank 0
      * 
      * @return number of gathered data from each chain. For
      *         non-inter-chain rank this is 0.
      */
-    inline int cross_chain_gather(std::vector<double>& all_chain_gather) {
+    inline int cross_chain_gather(std::vector<double>& all_chain_gather,
+                                  Eigen::MatrixXd& all_lp_draws) {
       using boost::accumulators::tag::mean;
       using boost::accumulators::tag::variance;
 
@@ -255,11 +257,12 @@ namespace mcmc {
             all_chain_gather.resize(n_gather * num_chains_);
             MPI_Gather(chain_gather.data(), n_gather, MPI_DOUBLE,
                        all_chain_gather.data(), n_gather, MPI_DOUBLE, 0, comm.comm());
+            all_lp_draws.resize(window_size_ * max_num_windows_, num_chains_);
             int begin_row = (win_count - 1) * window_size_;
             for (int chain = 0; chain < num_chains_; ++chain) {
               int j = n_gather * chain + nd_win * win_count;
               for (int i = 0; i < window_size_; ++i) {
-                all_lp_draws_(begin_row + i, chain) = all_chain_gather[j + i];
+                all_lp_draws(begin_row + i, chain) = all_chain_gather[j + i];
               }
             }
           } else {
@@ -284,7 +287,6 @@ namespace mcmc {
 
       double new_stepsize = chain_stepsize;
       if(is_adapted_ && is_cross_chain_adapt_window_end()) {
-        // std::cout << "taki test chain_stepsize: " << chain_stepsize << "\n";
         const Communicator& comm = Session::inter_chain_comm(num_chains_);
         if (Session::is_in_inter_chain_comm(num_chains_)) {
           chain_stepsize = 1.0/chain_stepsize;
@@ -295,6 +297,77 @@ namespace mcmc {
         MPI_Bcast(&new_stepsize, 1, MPI_DOUBLE, 0, intra_comm.comm());
       }
       return new_stepsize;
+    }
+
+    /** 
+     * find adapted window that has maximum ESS and also meets rhat &
+     * ess target
+     * 
+     * @param all_chain_gather all chain information used to calculate
+     * rhat & ess. This calculation only occurs in rank 0.
+     * 
+     * @return adapted window id. A nonnegative id indicates actual
+     * widow that meets convergence condition and has the max ESS.
+     * A negative id indicates non-convergence, and abs(id) - 1 is the
+     * actual id that has the maximum ESS.
+     */
+    inline int cross_chain_adapted_window(int n_gather,
+                                          const std::vector<double>& all_chain_gather,
+                                          const Eigen::MatrixXd& all_lp_draws,
+                                          callbacks::logger& logger) {
+      using boost::accumulators::accumulator_set;
+      using boost::accumulators::stats;
+      using boost::accumulators::tag::mean;
+      using boost::accumulators::tag::variance;
+      using math::mpi::Communicator;
+      using math::mpi::Session;
+
+      const Communicator& comm = Session::inter_chain_comm(num_chains_);
+      const int win_count = num_active_cross_chain_windows();
+      int adapted_win = -999;
+      if (comm.rank() == 0) {
+        rhat_.setZero();
+        ess_.setZero();
+        double max_ess = 0.0;
+
+        /**
+         * loop through windows to check convergence
+         */
+        for (int win = 0; win < win_count; ++win) {
+          bool win_adapted;
+          accumulator_set<double, stats<variance>> acc_chain_mean;
+          accumulator_set<double, stats<mean>> acc_chain_var;
+          accumulator_set<double, stats<mean>> acc_step;
+          Eigen::VectorXd chain_mean(num_chains_);
+          Eigen::VectorXd chain_var(num_chains_);
+          for (int chain = 0; chain < num_chains_; ++chain) {
+            chain_mean(chain) = all_chain_gather[chain * n_gather + nd_win * win];
+            acc_chain_mean(chain_mean(chain));
+            chain_var(chain) = all_chain_gather[chain * n_gather + nd_win * win + 1];
+            acc_chain_var(chain_var(chain));
+          }
+          size_t num_draws = (win_count - win) * window_size_;
+          double var_between = num_draws * boost::accumulators::variance(acc_chain_mean)
+            * num_chains_ / (num_chains_ - 1);
+          double var_within = boost::accumulators::mean(acc_chain_var);
+          rhat_(win) = sqrt((var_between / var_within + num_draws - 1) / num_draws);
+          ess_[win] = compute_effective_sample_size(win, win_count, all_lp_draws);
+          win_adapted = rhat_(win) < target_rhat_ && ess_[win] > target_ess_;
+
+          msg_adaptation(win, logger);
+
+          /// get the win with the largest ESS
+          if(ess_[win] > max_ess) {
+            max_ess = ess_[win];
+            adapted_win = -(win + 1);
+            if (win_adapted) {
+              adapted_win = std::abs(adapted_win) - 1;
+            }
+          }
+        }
+      }
+      MPI_Bcast(&adapted_win, 1, MPI_INT, 0, comm.comm());      
+      return adapted_win;
     }
 
     /*
@@ -321,59 +394,21 @@ namespace mcmc {
       bool update = false;
 
       std::vector<double> all_chain_gather;
-      int n_gather = cross_chain_gather(all_chain_gather);
+      int n_gather = cross_chain_gather(all_chain_gather, all_lp_draws_);
 
       if ((!is_adapted_) && is_cross_chain_adapt_window_end()) {
         if (Session::is_in_inter_chain_comm(num_chains_)) {
           const Communicator& comm = Session::inter_chain_comm(num_chains_);
           const int win_count = num_active_cross_chain_windows();
-          int adapted_win = -999; // initialize with invalid win id
-          if (comm.rank() == 0) {
-            rhat_ = Eigen::ArrayXd::Zero(max_num_windows_);
-            ess_ = Eigen::ArrayXd::Zero(max_num_windows_);
-            double max_ess = 0.0;
 
-            /**
-             * loop through windows to check convergence
-             */
-            for (int win = 0; win < win_count; ++win) {
-              bool win_adapted;
-              accumulator_set<double, stats<variance>> acc_chain_mean;
-              accumulator_set<double, stats<mean>> acc_chain_var;
-              accumulator_set<double, stats<mean>> acc_step;
-              Eigen::VectorXd chain_mean(num_chains_);
-              Eigen::VectorXd chain_var(num_chains_);
-              for (int chain = 0; chain < num_chains_; ++chain) {
-                chain_mean(chain) = all_chain_gather[chain * n_gather + nd_win * win];
-                acc_chain_mean(chain_mean(chain));
-                chain_var(chain) = all_chain_gather[chain * n_gather + nd_win * win + 1];
-                acc_chain_var(chain_var(chain));
-              }
-              size_t num_draws = (win_count - win) * window_size_;
-              double var_between = num_draws * boost::accumulators::variance(acc_chain_mean)
-                * num_chains_ / (num_chains_ - 1);
-              double var_within = boost::accumulators::mean(acc_chain_var);
-              rhat_(win) = sqrt((var_between / var_within + num_draws - 1) / num_draws);
-              ess_[win] = compute_effective_sample_size(win, win_count);
-              win_adapted = rhat_(win) < target_rhat_ && ess_[win] > target_ess_;
-
-              msg_adaptation(win, logger);
-
-              /// get the win with the largest ESS
-              // std::cout << "taki test: " << win << " " << win_count << " " << ess_[win] << "\n";
-              if(ess_[win] > max_ess) {
-                max_ess = ess_[win];
-                adapted_win = -(win + 1);
-                if (win_adapted) {
-                  adapted_win = std::abs(adapted_win) - 1;
-                }
-              }
-            }
-          }
-          MPI_Bcast(&adapted_win, 1, MPI_INT, 0, comm.comm());
+          // test convergence and return adapt window if any.
+          int adapted_win = cross_chain_adapted_window(n_gather,
+                                                       all_chain_gather,
+                                                       all_lp_draws_,
+                                                       logger);
           set_cross_chain_adapted((adapted_win >= 0));
 
-          /// learn metric
+          /// learn metric based on the window with max ESS
           int max_ess_win = is_adapted_ ? adapted_win : (-adapted_win - 1);
           var_adapt -> learn_metric(inv_e_metric, max_ess_win, win_count, comm);
         }
