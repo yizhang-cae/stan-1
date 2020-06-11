@@ -5,7 +5,7 @@
 #include <stan/callbacks/interrupt.hpp>
 #include <stan/mcmc/base_mcmc.hpp>
 #include <stan/services/util/mcmc_writer.hpp>
-#include <src/stan/mcmc/cross_chain/mpi_cross_chain.hpp>
+#include <stan/mcmc/cross_chain/mpi_cross_chain.hpp>
 #include <string>
 
 namespace stan {
