@@ -4,7 +4,7 @@
 #ifdef MPI_ADAPTED_WARMUP
 
 #include <stan/callbacks/writer.hpp>
-#include <stan/math/mpi/envionment.hpp>
+#include <stan/math/mpi/environment.hpp>
 #include <ostream>
 #include <vector>
 #include <string>

@@ -2,10 +2,10 @@
 #define STAN_MCMC_MPI_COVAR_ADAPTATION_HPP
 
 #include <stan/math/prim/fun/Eigen.hpp>
-#include <stan/mcmc/cross_chain/mpi_metric_adaptation.hpp>
 #include <vector>
 
 #ifdef STAN_LANG_MPI
+#include <stan/mcmc/cross_chain/mpi_metric_adaptation.hpp>
 #include <stan/math/mpi/mpi_covar_estimator.hpp>
 #endif
 

@@ -10,7 +10,7 @@
 #include <string>
 
 #ifdef STAN_LANG_MPI
-#include <stan/math/mpi/envionment.hpp>
+#include <stan/math/mpi/environment.hpp>
 #endif
 
 namespace stan {

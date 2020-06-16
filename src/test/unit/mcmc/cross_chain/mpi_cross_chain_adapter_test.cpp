@@ -3,7 +3,7 @@
 #include <gtest/gtest.h>
 #include <stan/mcmc/cross_chain/mpi_cross_chain_adapter.hpp>
 #include <stan/analyze/mcmc/compute_potential_scale_reduction.hpp>
-#include <stan/math/mpi/envionment.hpp>
+#include <stan/math/mpi/environment.hpp>
 #include <stan/callbacks/stream_logger.hpp>
 #include <stan/mcmc/hmc/nuts/adapt_unit_e_nuts.hpp>
 #include <boost/random/additive_combine.hpp>
@@ -21,6 +21,8 @@
 #include <test/unit/services/check_adaptation.hpp>
 #include <iostream>
 #include <gtest/gtest.h>
+
+#include <stan/math/mpi/session_def.cpp>
 
 using Eigen::MatrixXd;
 using Eigen::Matrix;

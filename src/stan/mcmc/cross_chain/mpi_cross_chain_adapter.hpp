@@ -18,7 +18,7 @@
 #include <string>
 
 #ifdef MPI_ADAPTED_WARMUP
-#include <stan/math/mpi/envionment.hpp>
+#include <stan/math/mpi/environment.hpp>
 #endif
 
 namespace stan {
