@@ -198,7 +198,7 @@ namespace mcmc {
       message << std::setw(3);
       message << num_cross_chain_draws();
       message << " window: " << win + 1 << " / " << num_active_cross_chain_windows();
-      message << std::setw(5) << std::setprecision(2);
+      message << std::setw(7) << std::setprecision(4);
       message << " Rhat: " << std::fixed << cross_chain_adapt_rhat()[win];
       const Eigen::ArrayXd& ess(cross_chain_adapt_ess());
       message << " ESS: " << std::fixed << ess_[win];
@@ -286,7 +286,7 @@ namespace mcmc {
       using stan::math::mpi::Communicator;
 
       double new_stepsize = chain_stepsize;
-      if(is_adapted_ && is_cross_chain_adapt_window_end()) {
+      if(is_cross_chain_adapt_window_end()) {
         const Communicator& comm = Session::inter_chain_comm(num_chains_);
         if (Session::is_in_inter_chain_comm(num_chains_)) {
           chain_stepsize = 1.0/chain_stepsize;

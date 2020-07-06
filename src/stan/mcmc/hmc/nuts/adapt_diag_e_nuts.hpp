@@ -37,8 +37,10 @@ class adapt_diag_e_nuts : public diag_e_nuts<Model, BaseRNG>,
         bool update = this -> cross_chain_adaptation(this -> z().inv_e_metric_, logger);
         if (this -> is_cross_chain_adapted()) {
           update = false;
-          double new_stepsize = this -> cross_chain_stepsize(this -> get_nominal_stepsize());
-          this -> set_nominal_stepsize(new_stepsize);
+          if (this -> is_cross_chain_adapt_window_end()) {
+            double new_stepsize = this -> cross_chain_stepsize(this -> get_nominal_stepsize());
+            this -> set_nominal_stepsize(new_stepsize);
+          }
         }
 
         if (update) {
