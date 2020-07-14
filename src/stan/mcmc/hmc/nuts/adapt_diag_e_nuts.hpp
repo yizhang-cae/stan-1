@@ -35,29 +35,18 @@ class adapt_diag_e_nuts : public diag_e_nuts<Model, BaseRNG>,
         /// cross chain adapter has its own var adaptor so needs to add sample
         this -> add_cross_chain_sample(s.log_prob(), this -> z().q);
         bool update = this -> cross_chain_adaptation(this -> z().inv_e_metric_, logger);
-        if (this -> is_cross_chain_adapted()) {
-          update = false;
-          if (this -> is_cross_chain_adapt_window_end()) {
-            double new_stepsize = this -> cross_chain_stepsize(this -> get_nominal_stepsize());
-            this -> set_nominal_stepsize(new_stepsize);
-          }
-        }
-
         if (update) {
-          this->init_stepsize(logger);
-
-          this->stepsize_adaptation_.set_mu(log(10 * this->nom_epsilon_));
-          this->stepsize_adaptation_.restart();
+          // this->init_stepsize(logger);
           double new_stepsize = this -> cross_chain_stepsize(this -> get_nominal_stepsize());
           this -> set_nominal_stepsize(new_stepsize);
+          this->stepsize_adaptation_.set_mu(log(10 * this->nom_epsilon_));
+          this->stepsize_adaptation_.restart();
         }
       } else {
         bool update = this->var_adaptation_.learn_variance(this->z_.inv_e_metric_,
                                                            this->z_.q);
-
         if (update) {
           this->init_stepsize(logger);
-
           this->stepsize_adaptation_.set_mu(log(10 * this->nom_epsilon_));
           this->stepsize_adaptation_.restart();
         }
@@ -68,9 +57,7 @@ class adapt_diag_e_nuts : public diag_e_nuts<Model, BaseRNG>,
 
   void disengage_adaptation() {
     base_adapter::disengage_adaptation();
-    if (!this -> is_cross_chain_adapted()) {
-      this->stepsize_adaptation_.complete_adaptation(this->nom_epsilon_);
-    }
+    this->stepsize_adaptation_.complete_adaptation(this->nom_epsilon_);
   }
 };
 

@@ -133,7 +133,10 @@ namespace mcmc {
       draw_count_acc_(0);     // move counter
       int n_win = num_active_cross_chain_windows();
 
-      if ((!is_adapted_) && Session::is_in_inter_chain_comm(num_chains_)) {
+      // For term buffer we only need to add dummy sample by move the counter
+      if (is_adapted_) {
+        term_buffer_counter_++;
+      } else if (Session::is_in_inter_chain_comm(num_chains_)) {
         lp_draws_[i] = lp;
         for (int win = 0; win < n_win; ++win) {
           lp_acc_[win](lp);
@@ -422,14 +425,15 @@ namespace mcmc {
           // set_cross_chain_stepsize();
         }
         update = true;
-      } else {
-        if (is_adapted_) {
-          term_buffer_counter_++;          
-        }
-        update = false;
       }
       return update;
     }
+
+    // inline void cross_chain_term_buffer() {
+    //   if (is_adapted_) {
+    //     term_buffer_counter_++;
+    //   }
+    // }
 
     inline bool use_cross_chain_adapt() {
       return num_chains_ > 1;
