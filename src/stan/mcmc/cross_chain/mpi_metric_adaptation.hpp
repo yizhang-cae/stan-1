@@ -13,8 +13,6 @@ namespace mcmc {
 
   class mpi_metric_adaptation {
   public:
-    static const int init_bufer_size = 75;
-
     virtual void add_sample(const Eigen::VectorXd& q, int curr_win_count) {};
 
     virtual void restart() {}

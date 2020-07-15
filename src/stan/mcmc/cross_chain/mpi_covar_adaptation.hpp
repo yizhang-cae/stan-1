@@ -19,7 +19,6 @@ namespace mcmc {
   using est_t = stan::math::welford_covar_estimator;
   int num_chains_;
   int window_size_;
-  int init_draw_counter_;
   int draw_req_counter_;
 public:
   std::vector<est_t> estimators;
@@ -27,18 +26,14 @@ public:
   std::vector<Eigen::MatrixXd> draws;
   std::vector<size_t> num_draws;
 
-  mpi_covar_adaptation(int count, int n_params, int num_chains, int num_iterations, int window_size)
+  mpi_covar_adaptation(int n_params, int num_chains, int num_iterations, int window_size)
     : num_chains_(num_chains),
       window_size_(window_size),
-      init_draw_counter_(count), draw_req_counter_(0),
+      draw_req_counter_(0),
       estimators(num_iterations / window_size, est_t(n_params)),
       reqs(window_size),
       draws(window_size, Eigen::MatrixXd(n_params, num_chains)),
       num_draws(num_iterations / window_size, 0)
-  {}
-
-  mpi_covar_adaptation(int n_params, int num_chains, int num_iterations, int window_size)
-    : mpi_covar_adaptation(0, n_params, num_chains, num_iterations, window_size)
   {}
 
     void reset_req() {
@@ -50,15 +45,12 @@ public:
   virtual void add_sample(const Eigen::VectorXd& q, int curr_win_count) {
     const stan::math::mpi::Communicator& comm =
       stan::math::mpi::Session::inter_chain_comm(num_chains_);
-    init_draw_counter_++;
-    if (init_draw_counter_ > init_bufer_size) {
-      MPI_Iallgather(q.data(), q.size(), MPI_DOUBLE,
-                    draws[draw_req_counter_].data(), q.size(), MPI_DOUBLE,
-                     comm.comm(), &reqs[draw_req_counter_]);
-      draw_req_counter_++;
-      for (int win = 0; win < curr_win_count; ++win) {
-        num_draws[win]++;
-      }
+    MPI_Iallgather(q.data(), q.size(), MPI_DOUBLE,
+                   draws[draw_req_counter_].data(), q.size(), MPI_DOUBLE,
+                   comm.comm(), &reqs[draw_req_counter_]);
+    draw_req_counter_++;
+    for (int win = 0; win < curr_win_count; ++win) {
+      num_draws[win]++;
     }
   }
 

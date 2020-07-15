@@ -28,6 +28,8 @@ namespace mcmc {
   class mpi_cross_chain_adapter {
   protected:
     bool is_adapted_;
+    int init_buffer_;
+    int term_buffer_;
     int term_buffer_counter_;
     int window_size_; 
     int num_chains_;
@@ -46,14 +48,16 @@ namespace mcmc {
     mpi_metric_adaptation* var_adapt;
   public:
     const static int nd_win = 2;
-    const static int term_buffer_ = 50;
 
     mpi_cross_chain_adapter() = default;
 
-    mpi_cross_chain_adapter(int num_iterations, int window_size,
+    mpi_cross_chain_adapter(int init_buffer, int term_buffer,
+                            int num_iterations, int window_size,
                             int num_chains,
                             double target_rhat, double target_ess) :
       is_adapted_(false),
+      init_buffer_(init_buffer),
+      term_buffer_(term_buffer),
       term_buffer_counter_(0),
       window_size_(window_size),
       num_chains_(num_chains),
@@ -70,11 +74,14 @@ namespace mcmc {
 
     inline void set_cross_chain_metric_adaptation(mpi_metric_adaptation* ptr) {var_adapt = ptr;}
 
-    inline void set_cross_chain_adaptation_params(int num_iterations,
+    inline void set_cross_chain_adaptation_params(int init_buffer, int term_buffer,
+                                                  int num_iterations,
                                                   int window_size,
                                                   int num_chains,
                                                   double target_rhat, double target_ess) {
       is_adapted_ = false;
+      init_buffer_ = init_buffer;
+      term_buffer_ = term_buffer;
       term_buffer_counter_ = 0,
       window_size_ = window_size;
       num_chains_ = num_chains;
@@ -142,8 +149,10 @@ namespace mcmc {
           lp_acc_[win](lp);
         }
 
-        // add current samples to var/covar adapter
-        var_adapt -> add_sample(q, n_win);
+        // add current samples to var/covar adapter after init buffer
+        if (num_cross_chain_draws() > init_buffer_) {
+          var_adapt -> add_sample(q, n_win);          
+        }
       }
     }
 
@@ -445,7 +454,8 @@ namespace mcmc {
   public:
     inline void set_cross_chain_metric_adaptation(mpi_metric_adaptation* ptr) {}
 
-    inline void set_cross_chain_adaptation_params(int num_iterations,
+    inline void set_cross_chain_adaptation_params(int init_buffer, int term_buffer,
+                                                  int num_iterations,
                                                   int window_size,
                                                   int num_chains,
                                                   double target_rhat, double target_ess) {}

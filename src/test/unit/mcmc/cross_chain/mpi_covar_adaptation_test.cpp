@@ -39,11 +39,11 @@ TEST(McmcVarAdaptation, mpi_learn_covariance) {
     throw std::domain_error("this test function was called with inconsistent MPI COMM size");
 
   const int n_learn_chain = n_learn / num_chains;
-  stan::mcmc::mpi_covar_adaptation mpi_adapter(stan::mcmc::mpi_metric_adaptation::init_bufer_size,
-                                               n, num_chains, n_learn_chain, n_learn_chain);
+  stan::mcmc::mpi_covar_adaptation mpi_adapter(n, num_chains, n_learn_chain, n_learn_chain);
   Eigen::MatrixXd mpi_covar(Eigen::MatrixXd::Zero(n, n));  
-  for (int i = 0; i < n_learn_chain; ++i)
+  for (int i = 0; i < n_learn_chain; ++i) {
     mpi_adapter.add_sample(q, 1);
+  }
 
   mpi_adapter.learn_metric(mpi_covar, 0, 1, comm);
 
@@ -87,8 +87,7 @@ TEST(McmcVarAdaptation, mpi_data_learn_covariance) {
   if (n_learn % num_chains != 0)
     throw std::domain_error("this test function was called with inconsistent MPI COMM size");
   const int n_learn_chain = n_learn / num_chains;
-  stan::mcmc::mpi_covar_adaptation mpi_adapter(stan::mcmc::mpi_metric_adaptation::init_bufer_size,
-                                               n, num_chains, n_learn_chain, n_learn_chain);
+  stan::mcmc::mpi_covar_adaptation mpi_adapter(n, num_chains, n_learn_chain, n_learn_chain);
   Eigen::MatrixXd mpi_covar(Eigen::MatrixXd::Zero(n, n));
   for (int i = 0; i < n_learn_chain; ++i) {
     Eigen::VectorXd q =

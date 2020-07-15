@@ -67,7 +67,7 @@ TEST_F(CrossChainAdapterTest, stepsize) {
   Eigen::VectorXd q = Eigen::VectorXd::Zero(n_par);
 
   stan::mcmc::mpi_cross_chain_adapter adapter;
-  adapter.set_cross_chain_adaptation_params(num_warmup,
+  adapter.set_cross_chain_adaptation_params(75, 50, num_warmup,
                                             cross_chain_window_size, num_chains,
                                             cross_chain_rhat, cross_chain_ess);  
   stan::mcmc::mpi_var_adaptation var_adapt(n_par, num_warmup, cross_chain_window_size);
@@ -99,7 +99,7 @@ TEST_F(CrossChainAdapterTest, gather) {
   }
 
   stan::mcmc::mpi_cross_chain_adapter adapter;
-  adapter.set_cross_chain_adaptation_params(num_warmup,
+  adapter.set_cross_chain_adaptation_params(75, 50, num_warmup,
                                             cross_chain_window_size, num_chains,
                                             cross_chain_rhat, cross_chain_ess);  
   stan::mcmc::mpi_var_adaptation var_adapt(n_par, num_warmup, cross_chain_window_size);
@@ -178,7 +178,7 @@ TEST_F(CrossChainAdapterTest, negative_adapted_window) {
   }
 
   stan::mcmc::mpi_cross_chain_adapter adapter;
-  adapter.set_cross_chain_adaptation_params(num_warmup,
+  adapter.set_cross_chain_adaptation_params(75, 50, num_warmup,
                                             cross_chain_window_size, num_chains,
                                             cross_chain_rhat, cross_chain_ess);  
   stan::mcmc::mpi_var_adaptation var_adapt(n_par, num_warmup, cross_chain_window_size);
@@ -327,7 +327,7 @@ TEST_F(CrossChainAdapterTest, positive_adapted_window) {
   cross_chain_rhat = 1.12;
   cross_chain_ess = 15.0;
   stan::mcmc::mpi_cross_chain_adapter adapter;
-  adapter.set_cross_chain_adaptation_params(num_warmup,
+  adapter.set_cross_chain_adaptation_params(75, 50, num_warmup,
                                             cross_chain_window_size, num_chains,
                                             cross_chain_rhat, cross_chain_ess);
   stan::mcmc::mpi_var_adaptation var_adapt(n_par, num_warmup, cross_chain_window_size);

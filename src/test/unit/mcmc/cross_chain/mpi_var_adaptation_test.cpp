@@ -30,8 +30,7 @@ TEST(McmcVarAdaptation, mpi_learn_variance) {
   stan::math::mpi::Communicator comm(MPI_COMM_STAN);
   const int num_chains = comm.size();
   const int n_learn_chain = n_learn / num_chains;
-  stan::mcmc::mpi_var_adaptation mpi_adapter(stan::mcmc::mpi_metric_adaptation::init_bufer_size,
-                                             n, 1, 1);
+  stan::mcmc::mpi_var_adaptation mpi_adapter(n, 1, 1);
   Eigen::VectorXd mpi_var(Eigen::VectorXd::Zero(n));  
   for (int i = 0; i < n_learn_chain; ++i)
     mpi_adapter.add_sample(q, 1);
@@ -76,8 +75,7 @@ TEST(McmcVarAdaptation, mpi_data_learn_variance) {
   stan::math::mpi::Communicator comm(MPI_COMM_STAN);
   const int num_chains = comm.size();
   const int n_learn_chain = n_learn / num_chains;
-  stan::mcmc::mpi_var_adaptation mpi_adapter(stan::mcmc::mpi_metric_adaptation::init_bufer_size,
-                                             n, 1, 1);
+  stan::mcmc::mpi_var_adaptation mpi_adapter(n, 1, 1);
   Eigen::VectorXd mpi_var(Eigen::VectorXd::Zero(n));  
   for (int i = 0; i < n_learn_chain; ++i) {
     Eigen::VectorXd q =
