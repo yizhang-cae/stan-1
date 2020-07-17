@@ -16,6 +16,7 @@
 #include <boost/accumulators/statistics/variance.hpp>
 #include <boost/accumulators/statistics/count.hpp>
 #include <string>
+#include <chrono>
 
 #ifdef MPI_ADAPTED_WARMUP
 #include <stan/math/mpi/environment.hpp>
@@ -409,8 +410,9 @@ namespace mcmc {
       int n_gather = cross_chain_gather(all_chain_gather, all_lp_draws_);
 
       if ((!is_adapted_) && is_cross_chain_adapt_window_end()) {
+        const Communicator& comm = Session::inter_chain_comm(num_chains_);
+        auto t0 = std::chrono::high_resolution_clock::now();
         if (Session::is_in_inter_chain_comm(num_chains_)) {
-          const Communicator& comm = Session::inter_chain_comm(num_chains_);
           const int win_count = num_active_cross_chain_windows();
 
           // test convergence and return adapt window if any.
@@ -434,6 +436,16 @@ namespace mcmc {
           // set_cross_chain_stepsize();
         }
         update = true;
+
+        // print aggregating time cost
+        if (comm.rank() == 0) {
+          auto t1 = std::chrono::high_resolution_clock::now();
+          std::stringstream message;
+          message << "cross-chain adaptation time: ";
+          message << std::chrono::duration_cast<std::chrono::seconds>(t1 - t0).count();
+          message << " seconds";
+          logger.info(message);
+        }
       }
       return update;
     }
