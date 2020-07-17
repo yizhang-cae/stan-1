@@ -37,7 +37,7 @@ class adapt_diag_e_nuts : public diag_e_nuts<Model, BaseRNG>,
         bool update = this -> cross_chain_adaptation(this -> z().inv_e_metric_, logger);
         if (update) {
           // this->init_stepsize(logger);
-          double new_stepsize = this -> cross_chain_stepsize(this -> get_nominal_stepsize());
+          double new_stepsize = this -> cross_chain_stepsize(this->nom_epsilon_);
           this -> set_nominal_stepsize(new_stepsize);
           this->stepsize_adaptation_.set_mu(log(10 * this->nom_epsilon_));
           this->stepsize_adaptation_.restart();

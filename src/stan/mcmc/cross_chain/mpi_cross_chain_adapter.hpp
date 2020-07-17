@@ -404,6 +404,7 @@ namespace mcmc {
       using stan::math::mpi::Session;
       using stan::math::mpi::Communicator;
 
+      auto t0 = std::chrono::high_resolution_clock::now();
       bool update = false;
 
       std::vector<double> all_chain_gather;
@@ -411,7 +412,6 @@ namespace mcmc {
 
       if ((!is_adapted_) && is_cross_chain_adapt_window_end()) {
         const Communicator& comm = Session::inter_chain_comm(num_chains_);
-        auto t0 = std::chrono::high_resolution_clock::now();
         if (Session::is_in_inter_chain_comm(num_chains_)) {
           const int win_count = num_active_cross_chain_windows();
 
