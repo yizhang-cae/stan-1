@@ -471,13 +471,15 @@ namespace mcmc {
                                                   int window_size,
                                                   int num_chains,
                                                   double target_rhat, double target_ess) {}
-    inline void add_cross_chain_sample(double s) {}
+    inline void add_cross_chain_sample(double lp, const Eigen::VectorXd& q) {}
 
-    inline bool cross_chain_adaptation(callbacks::logger& logger) { return false; }
+    template<typename T_metric>
+    inline bool cross_chain_adaptation(T_metric& inv_e_metric,
+                                       callbacks::logger& logger) { return false; }
 
     inline bool is_cross_chain_adapted() { return false; }
 
-    inline void set_cross_chain_stepsize() {}
+    inline double cross_chain_stepsize(double chain_stepsize) { return 0.0; }
 
     inline bool use_cross_chain_adapt() { return false; }
   };
