@@ -125,6 +125,30 @@ namespace util {
     }
 #endif
   }
+
+  /*
+   * modify cmdstan::command file
+   */
+  void set_cross_chain_intra_file(std::string& file_name, int num_chains) {
+#ifdef MPI_ADAPTED_WARMUP
+    using stan::math::mpi::Session;
+    using stan::math::mpi::Communicator;
+
+    const Communicator& comm = Session::intra_chain_comm(num_chains);
+    if (Session::is_in_inter_chain_comm(num_chains)) {
+      int len = file_name.size();
+      MPI_Bcast(&len, 1, MPI_INT, 0, comm.comm());
+      std::vector<char> str(file_name.c_str(), file_name.c_str() + file_name.size() + 1);
+      MPI_Bcast(str.data(), len, MPI_CHAR, 0, comm.comm());
+    } else {
+      int len;
+      MPI_Bcast(&len, 1, MPI_INT, 0, comm.comm());
+      std::vector<char> str(len);
+      MPI_Bcast(str.data(), len, MPI_CHAR, 0, comm.comm());      
+      file_name = std::string(str.begin(), str.end());
+    }
+#endif
+  }
 }
 }
 }
