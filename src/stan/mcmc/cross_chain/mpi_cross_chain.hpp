@@ -1,6 +1,8 @@
 #ifndef STAN_SERVICES_UTIL_MPI_CROSS_CHAIN_HPP
 #define STAN_SERVICES_UTIL_MPI_CROSS_CHAIN_HPP
 
+#include <boost/filesystem.hpp>
+#include <boost/regex.hpp>
 #include <stan/callbacks/writer.hpp>
 #include <stan/callbacks/interrupt.hpp>
 #include <stan/mcmc/base_mcmc.hpp>
@@ -122,6 +124,41 @@ namespace util {
     if (Session::is_in_inter_chain_comm(num_chains)) {
       const Communicator& comm = Session::inter_chain_comm(num_chains);
       file_name = "mpi." + std::to_string(comm.rank()) + "." + file_name;
+    }
+#endif
+  }
+
+  /*
+   * modify cmdstan::command file
+   */
+  void set_cross_chain_init_file(std::string& file_name, int num_chains) {
+#ifdef MPI_ADAPTED_WARMUP
+    using stan::math::mpi::Session;
+    using stan::math::mpi::Communicator;
+
+    if (Session::is_in_inter_chain_comm(num_chains)) {
+      const Communicator& comm = Session::inter_chain_comm(num_chains);
+
+      const std::string target_path( "./" );
+      const boost::regex my_filter(file_name);
+
+      std::vector<std::string> all_init;
+      boost::filesystem::directory_iterator end_itr; // Default ctor yields past-the-end
+      for( boost::filesystem::directory_iterator i(target_path); i != end_itr; ++i ) {
+        // Skip if not a file
+        if (!boost::filesystem::is_regular_file(i->status())) continue;
+
+        boost::smatch what;
+        if (!boost::regex_match(i->path().filename().string(), what, my_filter)) continue;
+
+        // File matches, store it
+        all_init.push_back(i->path().filename().string());
+      }
+
+      std::sort(all_init.begin(), all_init.end());
+
+      std::string chain_init_file = all_init[comm.rank() % all_init.size()];
+      file_name = chain_init_file;
     }
 #endif
   }
