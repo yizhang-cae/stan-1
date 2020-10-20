@@ -3,7 +3,7 @@
 #include <gtest/gtest.h>
 #include <stan/mcmc/hmc/mpi_cross_chain_adapter.hpp>
 #include <stan/analyze/mcmc/compute_potential_scale_reduction.hpp>
-#include <stan/math/mpi/environment.hpp>
+#include <stan/math/torsten/mpi.hpp>
 #include <stan/callbacks/stream_logger.hpp>
 #include <stan/mcmc/hmc/nuts/adapt_unit_e_nuts.hpp>
 #include <boost/random/additive_combine.hpp>

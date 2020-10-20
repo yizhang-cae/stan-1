@@ -4,7 +4,7 @@
 #include <stan/math/prim/fun/Eigen.hpp>
 
 #ifdef STAN_LANG_MPI
-#include <stan/math/mpi/environment.hpp>
+#include <stan/math/torsten/mpi/session.hpp>
 #endif
 
 namespace stan {

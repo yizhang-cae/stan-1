@@ -6,7 +6,7 @@
 
 #ifdef STAN_LANG_MPI
 #include <stan/mcmc/cross_chain/mpi_metric_adaptation.hpp>
-#include <stan/math/mpi/mpi_covar_estimator.hpp>
+#include <stan/math/torsten/mpi/mpi_covar_estimator.hpp>
 #endif
 
 namespace stan {

@@ -19,7 +19,7 @@
 #include <chrono>
 
 #ifdef MPI_ADAPTED_WARMUP
-#include <stan/math/mpi/environment.hpp>
+#include <stan/math/torsten/mpi/session.hpp>
 #endif
 
 namespace stan {

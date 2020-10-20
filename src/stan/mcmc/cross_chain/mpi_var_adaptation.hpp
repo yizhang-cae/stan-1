@@ -6,7 +6,7 @@
 #include <vector>
 
 #ifdef STAN_LANG_MPI
-#include <stan/math/mpi/mpi_var_estimator.hpp>
+#include <stan/math/torsten/mpi/mpi_var_estimator.hpp>
 #endif
 
 namespace stan {

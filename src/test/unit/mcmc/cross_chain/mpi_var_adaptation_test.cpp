@@ -2,11 +2,11 @@
 
 #include <stan/mcmc/var_adaptation.hpp>
 #include <stan/mcmc/cross_chain/mpi_var_adaptation.hpp>
-#include <stan/math/mpi/environment.hpp>
+#include <stan/math/torsten/mpi.hpp>
 #include <test/unit/services/instrumented_callbacks.hpp>
 #include <gtest/gtest.h>
 
-#include <stan/math/mpi/session_def.cpp>
+TORSTEN_MPI_SESSION_INIT;
 
 TEST(McmcVarAdaptation, mpi_learn_variance) {
   stan::test::unit::instrumented_logger logger;
