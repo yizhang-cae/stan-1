@@ -4,9 +4,10 @@ import org.stan.Utils
 def utils = new org.stan.Utils()
 def skipRemainingStages = false
 
-def setupCXX(failOnError = true, CXX = env.CXX) {
+def setupCXX(failOnError = true, CXX = env.CXX, String stanc3_bin_url = "nightly") {
     errorStr = failOnError ? "-Werror " : ""
-    writeFile(file: "make/local", text: "CXX=${CXX} ${errorStr}")
+    stanc3_bin_url_str = stanc3_bin_url != "nightly" ? "\nSTANC3_TEST_BIN_URL=${stanc3_bin_url}\n" : ""
+    writeFile(file: "make/local", text: "CXX=${CXX} ${errorStr}${stanc3_bin_url_str}")
 }
 
 def runTests(String testPath, Boolean separateMakeStep=true) {
@@ -32,6 +33,7 @@ def deleteDirWin() {
     deleteDir()
 }
 
+String stanc3_bin_url() { params.stanc3_bin_url ?: "nightly" }
 String cmdstan_pr() { params.cmdstan_pr ?: "downstream_tests" }
 String stan_pr() {
     if (env.BRANCH_NAME == 'downstream_tests') {
@@ -40,6 +42,13 @@ String stan_pr() {
         'master'
     } else {
         env.BRANCH_NAME
+    }
+}
+String integration_tests_flags() { 
+    if (params.compile_all_model) {
+        '--no-ignore-models '
+    } else {
+        ''
     }
 }
 
@@ -56,10 +65,15 @@ pipeline {
                 + "e.g. PR-640.")
         string(defaultValue: 'downstream_tests', name: 'cmdstan_pr',
           description: 'PR to test CmdStan upstream against e.g. PR-630')
+        string(defaultValue: 'nightly', name: 'stanc3_bin_url',
+          description: 'Custom stanc3 binary url')
+        booleanParam(defaultValue: false, name: 'run_tests_all_os', description: 'Run unit and integration tests on all OS.')
+        booleanParam(defaultValue: false, name: 'compile_all_models', description: 'Run integration tests on the full test model suite.')
     }
     options {
         skipDefaultCheckout()
         preserveStashes(buildCount: 7)
+        parallelsAlwaysFailFast()
     }
     stages {
         stage('Kill previous builds') {
@@ -71,45 +85,6 @@ pipeline {
             steps {
                 script {
                     utils.killOldBuilds()
-                }
-            }
-        }
-        stage('Linting & Doc checks') {
-            agent any
-            steps {
-                script {
-                    sh "printenv"
-                    retry(3) { checkout scm }
-                    sh """
-                       make math-revert
-                       make clean-all
-                       git clean -xffd
-                    """
-                    utils.checkout_pr("math", "lib/stan_math", params.math_pr)
-                    stash 'StanSetup'
-                    setupCXX(true, env.GCC)
-                    parallel(
-                        CppLint: { sh "make cpplint" },
-                        API_docs: { sh 'make doxygen' },
-                    )
-                }
-            }
-            post {
-                always {
-
-                    recordIssues id: "lint_doc_checks",
-                    name: "Linting & Doc checks",
-                    enabledForFailure: true,
-                    aggregatingResults : true,
-                    tools: [
-                        cppLint(id: "cpplint", name: "Linting & Doc checks@CPPLINT")
-                    ],
-                    blameDisabled: false,
-                    qualityGates: [[threshold: 1, type: 'TOTAL', unstable: true]],
-                    healthy: 10, unhealthy: 100, minimumSeverity: 'HIGH',
-                    referenceJobName: env.BRANCH_NAME
-
-                    deleteDir()
                 }
             }
         }
@@ -161,10 +136,49 @@ pipeline {
                 }
             }
         }
+        stage('Linting & Doc checks') {
+            agent any
+            steps {
+                script {
+                    sh "printenv"
+                    retry(3) { checkout scm }
+                    sh """
+                       make math-revert
+                       make clean-all
+                       git clean -xffd
+                    """
+                    utils.checkout_pr("math", "lib/stan_math", params.math_pr)
+                    stash 'StanSetup'
+                    setupCXX(true, env.GCC)
+                    parallel(
+                        CppLint: { sh "make cpplint" },
+                        API_docs: { sh 'make doxygen' },
+                    )
+                }
+            }
+            post {
+                always {
+
+                    recordIssues id: "lint_doc_checks",
+                    name: "Linting & Doc checks",
+                    enabledForFailure: true,
+                    aggregatingResults : true,
+                    tools: [
+                        cppLint(id: "cpplint", name: "Linting & Doc checks@CPPLINT")
+                    ],
+                    blameDisabled: false,
+                    qualityGates: [[threshold: 1, type: 'TOTAL', unstable: true]],
+                    healthy: 10, unhealthy: 100, minimumSeverity: 'HIGH',
+                    referenceJobName: env.BRANCH_NAME
+
+                    deleteDir()
+                }
+            }
+        }
         stage('Verify changes') {
             agent { label 'linux' }
             steps {
-                script {         
+                script {
 
                     retry(3) { checkout scm }
                     sh 'git clean -xffd'
@@ -172,8 +186,8 @@ pipeline {
                     // These paths will be passed to git diff
                     // If there are changes to them, CI/CD will continue else skip
                     def paths = ['make', 'src/stan', 'src/test', 'Jenkinsfile', 'makefile', 'runTests.py',
-                        'lib/stan_math/stan', 'lib/stan_math/make', 'lib/stan_math/lib', 'lib/stan_math/test', 
-                        'lib/stan_math/runTests.py', 'lib/stan_math/runChecks.py', 'lib/stan_math/makefile', 
+                        'lib/stan_math/stan', 'lib/stan_math/make', 'lib/stan_math/lib', 'lib/stan_math/test',
+                        'lib/stan_math/runTests.py', 'lib/stan_math/runChecks.py', 'lib/stan_math/makefile',
                         'lib/stan_math/Jenkinsfile', 'lib/stan_math/.clang-format'
                     ].join(" ")
 
@@ -195,13 +209,20 @@ pipeline {
             parallel {
                 stage('Windows Headers & Unit') {
                     agent { label 'windows' }
+                    when {
+                        expression {
+                            ( env.BRANCH_NAME == "develop" ||
+                            env.BRANCH_NAME == "master" ||
+                            params.run_tests_all_os ) &&
+                            !skipRemainingStages
+                        }
+                    }
                     steps {
                         deleteDirWin()
                             unstash 'StanSetup'
-                            setupCXX()
                             bat "mingw32-make -f lib/stan_math/make/standalone math-libs"
                             bat "mingw32-make -j${env.PARALLEL} test-headers"
-                            setupCXX(false)
+                            setupCXX(false, env.CXX, stanc3_bin_url())
                             runTestsWin("src/test/unit")
                     }
                     post { always { deleteDirWin() } }
@@ -210,17 +231,25 @@ pipeline {
                     agent { label 'linux' }
                     steps {
                         unstash 'StanSetup'
-                        setupCXX(true, env.GCC)
-                        sh "g++ --version"
+                        setupCXX(true, env.GCC, stanc3_bin_url())
+                        sh "make -j${env.PARALLEL} test-headers"
                         runTests("src/test/unit")
                     }
                     post { always { deleteDir() } }
                 }
                 stage('Mac Unit') {
                     agent { label 'osx' }
+                    when {
+                        expression {
+                            ( env.BRANCH_NAME == "develop" ||
+                            env.BRANCH_NAME == "master" ||
+                            params.run_tests_all_os ) &&
+                            !skipRemainingStages
+                        }
+                    }
                     steps {
                         unstash 'StanSetup'
-                        setupCXX(false)
+                        setupCXX(false, env.CXX, stanc3_bin_url())
                         runTests("src/test/unit")
                     }
                     post { always { deleteDir() } }
@@ -232,58 +261,129 @@ pipeline {
                 stage('Integration Linux') {
                     agent { label 'linux' }
                     steps {
-                        unstash 'StanSetup'
-                        setupCXX(true, env.GCC)
-                        runTests("src/test/integration", separateMakeStep=false)
+                        sh """
+                            git clone --recursive https://github.com/stan-dev/performance-tests-cmdstan
+                        """
+                        script {
+                            if (params.cmdstan_pr != 'downstream_tests') {
+                                if(params.cmdstan_pr.contains("PR-")){
+                                    pr_number = params.cmdstan_pr.split("-")[1]
+                                    sh """
+                                        cd performance-tests-cmdstan/cmdstan
+                                        git fetch origin pull/${pr_number}/head:pr/${pr_number}
+                                        git checkout pr/${pr_number}
+                                    """
+                                }else{
+                                    sh """
+                                        cd performance-tests-cmdstan/cmdstan
+                                        git checkout develop && git pull && git checkout ${params.cmdstan_pr}
+                                    """
+                                }
+                            }
+                            if (params.stanc3_bin_url != 'nightly') {
+                                sh """
+                                    cd performance-tests-cmdstan/cmdstan
+                                    echo 'STANC3_TEST_BIN_URL=${params.stanc3_bin_url}' >> make/local
+                                """
+                            }
+                        }
+                        dir('performance-tests-cmdstan/cmdstan/stan'){
+                            unstash 'StanSetup'
+                            script {
+                                if (params.stanc3_bin_url != 'nightly') {
+                                    sh """
+                                        echo 'STANC3_TEST_BIN_URL=${params.stanc3_bin_url}' >> make/local
+                                    """
+                                }
+                            }
+                        }        
+                        sh """
+                            cd performance-tests-cmdstan/cmdstan
+                            echo 'O=0' >> make/local
+                            echo 'CXX=${env.CXX}' >> make/local
+                            make -j${env.PARALLEL} build
+                            cd ..
+                            ./runPerformanceTests.py -j${env.PARALLEL} ${integration_tests_flags()}--runs=0 cmdstan/stan/src/test/test-models/good
+                        """
+                        sh """
+                            cd performance-tests-cmdstan/cmdstan/stan
+                            ./runTests.py src/test/integration/compile_standalone_functions_test.cpp
+                            ./runTests.py src/test/integration/standalone_functions_test.cpp
+                            ./runTests.py src/test/integration/multiple_translation_units_test.cpp
+                        """
                     }
                     post { always { deleteDir() } }
                 }
                 stage('Integration Mac') {
                     agent { label 'osx' }
+                    when {
+                        expression {
+                            ( env.BRANCH_NAME == "develop" ||
+                            env.BRANCH_NAME == "master" ||
+                            params.run_tests_all_os ) &&
+                            !skipRemainingStages
+                        }
+                    }
                     steps {
-                        unstash 'StanSetup'
-                        setupCXX()
-                        runTests("src/test/integration", separateMakeStep=false)
+                        sh """
+                            git clone --recursive https://github.com/stan-dev/performance-tests-cmdstan
+                        """
+                        dir('performance-tests-cmdstan/cmdstan/stan'){
+                            unstash 'StanSetup'
+                        }        
+                        sh """
+                            cd performance-tests-cmdstan/cmdstan
+                            echo 'O=0' >> make/local
+                            echo 'CXX=${env.CXX}' >> make/local
+                            make -j${env.PARALLEL} build
+                            cd ..
+                            ./runPerformanceTests.py -j${env.PARALLEL} ${integration_tests_flags()}--runs=0 cmdstan/stan/src/test/test-models/good
+                        """
+                        sh """
+                            cd performance-tests-cmdstan/cmdstan/stan
+                            ./runTests.py src/test/integration/compile_standalone_functions_test.cpp
+                            ./runTests.py src/test/integration/standalone_functions_test.cpp
+                            ./runTests.py src/test/integration/multiple_translation_units_test.cpp
+                        """
                     }
                     post { always { deleteDir() } }
                 }
                 stage('Integration Windows') {
-                    agent { label 'windows' }
-                    when { 
-                        expression { 
+                    agent { label 'windows-ec2' }
+                    when {
+                        expression {
                             ( env.BRANCH_NAME == "develop" ||
-                            env.BRANCH_NAME == "master" ) &&
-                            !skipRemainingStages 
+                            env.BRANCH_NAME == "master" ||
+                            params.run_tests_all_os ) &&
+                            !skipRemainingStages
                         }
                     }
                     steps {
                         deleteDirWin()
+                        bat """
+                            git clone --recursive https://github.com/stan-dev/performance-tests-cmdstan
+                        """
+                        dir('performance-tests-cmdstan/cmdstan/stan'){
                             unstash 'StanSetup'
-                            setupCXX()
-                            bat "mingw32-make -f lib/stan_math/make/standalone math-libs"
-                            setupCXX(false)
-                            runTestsWin("src/test/integration", separateMakeStep=false)
+                        }
+                        writeFile(file: "performance-tests-cmdstan/cmdstan/make/local", text: "CXX=${CXX}\nPRECOMPILED_HEADERS=true")
+                        withEnv(["PATH+TBB=${WORKSPACE}\\performance-tests-cmdstan\\cmdstan\\stan\\lib\\stan_math\\lib\\tbb"]) {  
+                            
+                            bat """
+                                cd performance-tests-cmdstan/cmdstan
+                                mingw32-make -j${env.PARALLEL} build
+                                cd ..
+                                python ./runPerformanceTests.py -j${env.PARALLEL} ${integration_tests_flags()}--runs=0 cmdstan/stan/src/test/test-models/good
+                            """
+                        }
+                        bat """
+                            cd performance-tests-cmdstan/cmdstan/stan
+                            python ./runTests.py src/test/integration/compile_standalone_functions_test.cpp
+                            python ./runTests.py src/test/integration/standalone_functions_test.cpp
+                            python ./runTests.py src/test/integration/multiple_translation_units_test.cpp
+                        """
                     }
                     post { always { deleteDirWin() } }
-                }
-                stage('Math functions expressions test') {
-                    agent any
-                    steps {
-                        unstash 'StanSetup'
-                        setupCXX()
-                        script {
-                            dir("lib/stan_math/") {
-                                withEnv(['PATH+TBB=./lib/tbb']) {           
-                                    try { sh "./runTests.py -j${env.PARALLEL} test/expressions" }
-                                    finally { junit 'test/**/*.xml' }
-                                }
-                                withEnv(['PATH+TBB=./lib/tbb']) {           
-                                    sh "python ./test/expressions/test_expression_testing_framework.py"
-                                }
-                            }
-                        }
-                    }
-                    post { always { deleteDir() } }
                 }
             }
             when {
@@ -293,13 +393,13 @@ pipeline {
             }
         }
         stage('Upstream CmdStan tests') {
-            when { 
-                    expression { 
+            when {
+                    expression {
                         ( env.BRANCH_NAME ==~ /PR-\d+/ ||
                         env.BRANCH_NAME == "downstream_tests" ||
                         env.BRANCH_NAME == "downstream_hotfix" ) &&
-                        !skipRemainingStages 
-                    } 
+                        !skipRemainingStages
+                    }
                 }
             steps {
                 build(job: "CmdStan/${cmdstan_pr()}",
@@ -316,7 +416,7 @@ pipeline {
             agent { label 'oldimac' }
             steps {
                 unstash 'StanSetup'
-                setupCXX()
+                setupCXX(true, env.CXX, stanc3_bin_url())
                 sh """
                     ./runTests.py -j${env.PARALLEL} src/test/performance
                     cd test/performance

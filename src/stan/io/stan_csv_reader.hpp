@@ -3,6 +3,7 @@
 
 #include <boost/algorithm/string.hpp>
 #include <stan/math/prim.hpp>
+#include <cctype>
 #include <istream>
 #include <iostream>
 #include <sstream>
@@ -178,7 +179,7 @@ class stan_csv_reader {
                           std::ostream* out, bool prettify_name = true) {
     std::string line;
 
-    if (in.peek() != 'l')
+    if (!std::isalpha(in.peek()))
       return false;
 
     std::getline(in, line);
@@ -353,7 +354,7 @@ class stan_csv_reader {
 
     if (!read_adaptation(in, data.adaptation, out)) {
       if (out)
-        *out << "Warning: non-fatal error reading adapation data" << std::endl;
+        *out << "Warning: non-fatal error reading adaptation data" << std::endl;
     }
 
     data.timing.warmup = 0;

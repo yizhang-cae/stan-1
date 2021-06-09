@@ -16,15 +16,10 @@ help:
 -include make/mpi_warmup.mk		  # cross-chain warmup
 
 MATH ?= lib/stan_math/
-ifeq ($(OS),Windows_NT)
-  O_STANC ?= 3
-endif
-O_STANC ?= 0
 
 -include $(MATH)make/compiler_flags
 -include $(MATH)make/dependencies
 -include $(MATH)make/libraries
-include make/libstanc                     # bin/libstanc.a
 include make/doxygen                      # doxygen
 include make/cpplint                      # cpplint
 include make/tests                        # tests
@@ -32,8 +27,6 @@ include make/clang-tidy
 include make/torsten.mk			  # torsten
 
 INC_FIRST = -I $(if $(STAN),$(STAN)/src,src) -I ./src/
-LDLIBS_STANC ?= -Ltest -lstanc
-
 
 .PHONY: help
 help:
@@ -44,7 +37,6 @@ help:
 	@echo ''
 	@echo 'Stan makefile:'
 	@$(MAKE) print-compiler-flags
-	@echo '  - O_STANC (Opt for stanc):    ' $(O_STANC)
 	@echo ''
 	@echo 'Common targets:'
 	@echo '  Documentation:'
