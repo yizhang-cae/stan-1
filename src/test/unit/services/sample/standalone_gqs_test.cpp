@@ -1,4 +1,3 @@
-#include <Eigen/Dense>
 #include <boost/algorithm/string.hpp>
 #include <gtest/gtest.h>
 #include <iostream>
@@ -14,7 +13,7 @@
 #include <vector>
 
 class ServicesStandaloneGQ : public ::testing::Test {
-public:
+ public:
   ServicesStandaloneGQ()
       : logger(logger_ss, logger_ss, logger_ss, logger_ss, logger_ss) {}
 
@@ -27,9 +26,7 @@ public:
     model = new stan_model(data_var_context);
   }
 
-  void TearDown() {
-    delete model;
-  }
+  void TearDown() { delete model; }
 
   stan::test::unit::instrumented_interrupt interrupt;
   std::stringstream logger_ss;
@@ -46,7 +43,7 @@ TEST_F(ServicesStandaloneGQ, genDraws_bernoulli) {
   csv_stream.close();
   EXPECT_EQ(12345U, bern_csv.metadata.seed);
   ASSERT_EQ(19, bern_csv.header.size());
-  EXPECT_EQ("theta", bern_csv.header(7));
+  EXPECT_EQ("theta", bern_csv.header[7]);
   ASSERT_EQ(1000, bern_csv.samples.rows());
   ASSERT_EQ(19, bern_csv.samples.cols());
 

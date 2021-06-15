@@ -2,7 +2,6 @@
 #define STAN_LANG_TORSTEN_AST_FUN_HAS_VAR_VIS_DEF_HPP
 
 #include <stan/lang/ast.hpp>
-#include <iostream>
 
 namespace stan {
   namespace lang {

@@ -1,7 +1,7 @@
 #ifndef STAN_IO_WRITER_HPP
 #define STAN_IO_WRITER_HPP
 
-#include <stan/math/prim/mat.hpp>
+#include <stan/math/prim.hpp>
 #include <stdexcept>
 #include <vector>
 
@@ -21,12 +21,13 @@ namespace io {
  *
  * @tparam T Basic scalar type.
  */
-template <typename T> class writer {
-private:
+template <typename T>
+class writer {
+ private:
   std::vector<T> data_r_;
   std::vector<int> data_i_;
 
-public:
+ public:
   typedef Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> matrix_t;
   typedef Eigen::Matrix<T, Eigen::Dynamic, 1> vector_t;
   typedef Eigen::Matrix<T, 1, Eigen::Dynamic> row_vector_t;
@@ -173,7 +174,7 @@ public:
    * correlation-constrained variable.
    *
    * <p>The unconstraining transform is <code>atanh(y)</code>, which
-   * reverses the transfrom in <code>corr_constrain()</code>.
+   * reverses the transform in <code>corr_constrain()</code>.
    *
    * @param y Correlation value.
    * @throw std::runtime_error if y is not between -1.0 and 1.0
@@ -221,7 +222,7 @@ public:
 
   /**
    * Write the unconstrained vector that corresponds to the specified
-   * postiive ascendingly ordered vector.
+   * positive ascendingly ordered vector.
    *
    * <p>The unconstraining transform is defined for input vector
    * <code>y</code> to produce an output vector <code>x</code> of
@@ -417,8 +418,8 @@ public:
     typedef typename stan::math::index_type<matrix_t>::type idx_t;
 
     // FIXME:  optimize by unrolling cholesky_factor_free
-    Eigen::Matrix<T, Eigen::Dynamic, 1> y_free =
-        stan::math::cholesky_factor_free(y);
+    Eigen::Matrix<T, Eigen::Dynamic, 1> y_free
+        = stan::math::cholesky_factor_free(y);
     for (idx_t i = 0; i < y_free.size(); ++i)
       data_r_.push_back(y_free[i]);
   }
@@ -438,8 +439,8 @@ public:
     typedef typename stan::math::index_type<matrix_t>::type idx_t;
 
     // FIXME:  optimize by unrolling cholesky_factor_free
-    Eigen::Matrix<T, Eigen::Dynamic, 1> y_free =
-        stan::math::cholesky_corr_free(y);
+    Eigen::Matrix<T, Eigen::Dynamic, 1> y_free
+        = stan::math::cholesky_corr_free(y);
     for (idx_t i = 0; i < y_free.size(); ++i)
       data_r_.push_back(y_free[i]);
   }
@@ -459,8 +460,9 @@ public:
     typedef typename stan::math::index_type<matrix_t>::type idx_t;
     idx_t k = y.rows();
     if (k == 0 || y.cols() != k)
-      BOOST_THROW_EXCEPTION(std::runtime_error("y must have elements and"
-                                               " y must be a square matrix"));
+      BOOST_THROW_EXCEPTION(
+          std::runtime_error("y must have elements and"
+                             " y must be a square matrix"));
     vector_t L_vec = stan::math::cov_matrix_free(y);
     int i = 0;
     for (idx_t m = 0; m < k; ++m) {

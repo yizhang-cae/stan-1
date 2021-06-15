@@ -13,25 +13,20 @@ help:
 
 -include $(HOME)/.config/stan/make.local  # user-defined variables
 -include make/local                       # user-defined variables
+-include make/mpi_warmup.mk		  # cross-chain warmup
 
 MATH ?= lib/stan_math/
-ifeq ($(OS),Windows_NT)
-  O_STANC ?= 3
-endif
-O_STANC ?= 0
 
 -include $(MATH)make/compiler_flags
 -include $(MATH)make/dependencies
 -include $(MATH)make/libraries
-include make/libstanc                     # bin/libstanc.a
 include make/doxygen                      # doxygen
 include make/cpplint                      # cpplint
 include make/tests                        # tests
+include make/clang-tidy
 include make/torsten.mk			  # torsten
 
-INC_FIRST = -I $(if $(STAN),$(STAN)/src,src)
-LDLIBS_STANC ?= -Ltest -lstanc
-
+INC_FIRST = -I $(if $(STAN),$(STAN)/src,src) -I ./src/
 
 .PHONY: help
 help:
@@ -42,7 +37,6 @@ help:
 	@echo ''
 	@echo 'Stan makefile:'
 	@$(MAKE) print-compiler-flags
-	@echo '  - O_STANC (Opt for stanc):    ' $(O_STANC)
 	@echo ''
 	@echo 'Common targets:'
 	@echo '  Documentation:'
@@ -77,6 +71,26 @@ help:
 	@echo '                    To set the version of python 2, set the PYTHON2 variable:'
 	@echo '                      PYTHON2 = $(PYTHON2)'
 	@echo ''
+	@echo ' Clang Tidy'
+	@echo ' - clang-tidy     : runs the clang-tidy makefile over the test suite.'
+	@echo '                    Options:'
+	@echo '                     files: (Optional) regex for file names to include in the check'
+	@echo '                      Default runs all the tests in unit'
+	@echo '                     tidy_checks: (Optional) A set of checks'
+	@echo '                      Default runs a hand picked selection of tests'
+	@echo ''
+	@echo '     Example: This runs clang-tidy over all the multiply tests in prim'
+	@echo ''
+	@echo '     make clang-tidy files=*prim*multiply*'
+	@echo ''
+	@echo ' - clang-tidy-fix : same as above but runs with the -fix flag.'
+	@echo '                    For automated fixes, outputs a yaml named'
+	@echo '                    .clang-fixes.yml'
+	@echo ''
+	@echo ' Clang Format'
+	@echo ' - clang-format     : runs clang-format over all the .hpp and .cpp files.'
+	@echo '                      in src.'
+	@echo ''
 	@echo 'Clean:'
 	@echo '  - clean         : Basic clean. Leaves doc and compiled libraries intact.'
 	@echo '  - clean-deps    : Removes dependency files for tests. If tests stop building,'
@@ -88,10 +102,10 @@ help:
 ##
 # Clean up.
 ##
-MODEL_SPECS := $(shell find src/test -type f -name '*.stan')
+MODEL_SPECS := $(call findfiles,src/test,*.stan)
 .PHONY: clean clean-demo clean-dox clean-models clean-all clean-deps
 clean:
-	$(RM) $(shell find src -type f -name '*.dSYM') $(shell find src -type f -name '*.d.*')
+	$(RM) $(call findfiles,src,*.dSYM) $(call findfiles,src,*.d.*)
 	$(RM) $(wildcard $(MODEL_SPECS:%.stan=%.hpp))
 	$(RM) $(wildcard $(MODEL_SPECS:%.stan=%$(EXE)))
 	$(RM) $(wildcard $(MODEL_SPECS:%.stan=%.o))
@@ -102,12 +116,12 @@ clean-dox:
 
 clean-deps:
 	@echo '  removing dependency files'
-	$(shell find . -type f -name '*.d' -exec rm {} +)
+	$(RM) $(call findfiles,./,*.d)
 
 clean-all: clean clean-dox clean-deps clean-libraries
 	$(RM) -r test bin
 	@echo '  removing .o files'
-	$(shell find src -type f -name '*.o' -exec rm {} +)
+	$(RM) $(call findfiles,src/,*.o)
 
 ##
 # Submodule related tasks

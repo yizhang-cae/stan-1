@@ -9,16 +9,17 @@ transformed data {
 }
 parameters {
   real y;
-} 
+}
 transformed parameters {
   real v;
   print("In transformed parameters");
-  foo(v)
+  foo(v);
 }
 model {
   print("In model block.");
-  y ~ normal(0,1);
+  y ~ normal(0, 1);
 }
 generated quantities {
   print("In generated quantities");
 }
+

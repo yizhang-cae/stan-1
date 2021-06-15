@@ -8,9 +8,11 @@
 #include <stan/services/error_codes.hpp>
 #include <stan/services/util/create_rng.hpp>
 #include <stan/services/util/gq_writer.hpp>
-#include <Eigen/Dense>
+#include <stan/math/prim/fun/Eigen.hpp>
+#include <boost/algorithm/string.hpp>
 #include <string>
 #include <vector>
+#include <iostream>
 
 namespace stan {
 namespace services {
@@ -22,39 +24,35 @@ namespace services {
  *
  * @tparam Model type of model
  * @param[in] model model to query
- * @param[in, out] vector of parameter names
- * @param[in, out] vector of variable dimensions
+ * @param[in, out] param_names sequence of parameter names
+ * @param[in, out] param_dimss sequence of variable dimensionalities
  */
 template <class Model>
 void get_model_parameters(const Model &model,
                           std::vector<std::string> &param_names,
                           std::vector<std::vector<size_t>> &param_dimss) {
-  std::vector<std::string> constrained_names;
-  model.constrained_param_names(constrained_names, false, false);
-  size_t num_params = constrained_names.size();
+  std::vector<std::string> param_cols;
+  model.constrained_param_names(param_cols, false, false);
+  std::string cur_name("");
+  std::vector<std::string> splits;
+  for (size_t i = 0; i < param_cols.size(); ++i) {
+    boost::algorithm::split(splits, param_cols[i], boost::is_any_of("."));
+    if (splits.size() == 1 || splits[0] != cur_name) {
+      cur_name = splits[0];
+      param_names.emplace_back(cur_name);
+    }
+  }
+  size_t num_params = param_names.size();
   std::vector<std::vector<size_t>> dimss;
   model.get_dims(dimss);
-  size_t total = 0;
-  for (size_t i = 0; i < dimss.size(); ++i) {
+  for (size_t i = 0; i < num_params; ++i) {
     param_dimss.emplace_back(dimss[i]);
-    int cur_param = 1;
-    for (int j = 0; j < dimss[i].size(); ++j)
-      cur_param *= dimss[i][j];
-    if (cur_param == 1) {
-      param_names.emplace_back(constrained_names[total]);
-    } else {
-      int idx = constrained_names[total].find('.');
-      param_names.emplace_back(constrained_names[total].substr(0, idx));
-    }
-    total += cur_param;
-    if (total == num_params)
-      break;
   }
 }
 
 /**
  * Given a set of draws from a fitted model, generate corresponding
- * quantities of interes which are written to callback writer.
+ * quantities of interest which are written to callback writer.
  * Matrix of draws consists of one row per draw, one column per parameter.
  * Draws are processed one row at a time.
  * Return code indicates success or type of error.
@@ -69,8 +67,7 @@ void get_model_parameters(const Model &model,
  * @return error code
  */
 template <class Model>
-int standalone_generate(const Model &model,
-                        const Eigen::MatrixXd& draws,
+int standalone_generate(const Model &model, const Eigen::MatrixXd &draws,
                         unsigned int seed, callbacks::interrupt &interrupt,
                         callbacks::logger &logger,
                         callbacks::writer &sample_writer) {
@@ -115,18 +112,18 @@ int standalone_generate(const Model &model,
                                           param_dimss);
       model.transform_inits(context, dummy_params_i, unconstrained_params_r,
                             &msg);
-    } catch (const std::exception& e) {
+    } catch (const std::exception &e) {
       if (msg.str().length() > 0)
         logger.error(msg);
       logger.error(e.what());
       return error_codes::DATAERR;
     }
-    interrupt();   // call out to interrupt and fail
+    interrupt();  // call out to interrupt and fail
     writer.write_gq_values(model, rng, unconstrained_params_r);
   }
   return error_codes::OK;
 }
 
-}   // namespace services
-}   // namespace stan
+}  // namespace services
+}  // namespace stan
 #endif

@@ -1,7 +1,23 @@
-#include <gtest/gtest.h>
 #include <stan/io/reader.hpp>
+#include <gtest/gtest.h>
 
-TEST(ioReader, zeroSizeVecs) {
+TEST(io_reader, eigen_input) {
+  Eigen::Matrix<int, -1, 1> theta_i(1);
+  Eigen::VectorXd theta(2);
+  theta[0] = 1.0;
+  theta[1] = 2.0;
+  theta_i[0] = 1;
+  stan::io::reader<double> reader(theta, theta_i);
+  double x = reader.scalar();
+  EXPECT_FLOAT_EQ(1.0, x);
+  double y = reader.scalar();
+  EXPECT_FLOAT_EQ(2.0, y);
+  int z = reader.integer();
+  EXPECT_EQ(1, z);
+  EXPECT_EQ(0U, reader.available());
+}
+
+TEST(io_reader, zeroSizeVecs) {
   std::vector<int> theta_i;
   std::vector<double> theta;
   theta.push_back(1.0);
@@ -232,8 +248,8 @@ TEST(io_reader, scalar_lub_exception) {
 }
 const double inv_logit_m2 = 0.1192029;  // stan::math::inv_logit(-2.0)
 const double inv_logit_m1 = 0.2689414;  // stan::math::inv_logit(-1.0)
-const double inv_logit_0 = 0.5;        // stan::math::inv_logit(0)
-const double inv_logit_3 = 0.9525741;  // stan::math::inv_logit(3.0)
+const double inv_logit_0 = 0.5;         // stan::math::inv_logit(0)
+const double inv_logit_3 = 0.9525741;   // stan::math::inv_logit(3.0)
 
 TEST(io_reader, scalar_lub_constrain) {
   std::vector<int> theta_i;
@@ -268,11 +284,11 @@ TEST(io_reader, scalar_lub_constrain_jacobian) {
                   reader.scalar_lub_constrain(-3.0, 2.0, lp));
   EXPECT_FLOAT_EQ(-15.0 + 30.0 * inv_logit_0,
                   reader.scalar_lub_constrain(-15.0, 15.0, lp));
-  double expected_lp = -7.2 +
-                       log((1.0 - 0.0) * inv_logit_m2 * (1 - inv_logit_m2)) +
-                       log((5.0 - 3.0) * inv_logit_3 * (1 - inv_logit_3)) +
-                       log((2.0 - -3.0) * inv_logit_m1 * (1 - inv_logit_m1)) +
-                       log((15.0 - -15.0) * inv_logit_0 * (1 - inv_logit_0));
+  double expected_lp = -7.2
+                       + log((1.0 - 0.0) * inv_logit_m2 * (1 - inv_logit_m2))
+                       + log((5.0 - 3.0) * inv_logit_3 * (1 - inv_logit_3))
+                       + log((2.0 - -3.0) * inv_logit_m1 * (1 - inv_logit_m1))
+                       + log((15.0 - -15.0) * inv_logit_0 * (1 - inv_logit_0));
   EXPECT_FLOAT_EQ(expected_lp, lp);
 }
 
@@ -379,10 +395,10 @@ TEST(io_reader, prob_constrain_jacobian) {
   EXPECT_FLOAT_EQ(inv_logit_3, reader.prob_constrain(lp));
   EXPECT_FLOAT_EQ(inv_logit_m1, reader.prob_constrain(lp));
   EXPECT_FLOAT_EQ(inv_logit_0, reader.prob_constrain(lp));
-  double expected_lp = -0.88 + log(inv_logit_m2 * (1.0 - inv_logit_m2)) +
-                       log(inv_logit_3 * (1.0 - inv_logit_3)) +
-                       log(inv_logit_m1 * (1.0 - inv_logit_m1)) +
-                       log(inv_logit_0 * (1.0 - inv_logit_0));
+  double expected_lp = -0.88 + log(inv_logit_m2 * (1.0 - inv_logit_m2))
+                       + log(inv_logit_3 * (1.0 - inv_logit_3))
+                       + log(inv_logit_m1 * (1.0 - inv_logit_m1))
+                       + log(inv_logit_0 * (1.0 - inv_logit_0));
   EXPECT_FLOAT_EQ(expected_lp, lp);
 }
 
@@ -440,10 +456,10 @@ TEST(io_reader, corr_constrain_jacobian) {
   EXPECT_FLOAT_EQ(tanh(3.0), reader.corr_constrain(lp));
   EXPECT_FLOAT_EQ(tanh(-1.0), reader.corr_constrain(lp));
   EXPECT_FLOAT_EQ(tanh(0.0), reader.corr_constrain(lp));
-  double expected_lp = -10.0 + log(1.0 - tanh(-2.0) * tanh(-2.0)) +
-                       log(1.0 - tanh(3.0) * tanh(3.0)) +
-                       log(1.0 - tanh(-1.0) * tanh(-1.0)) +
-                       log(1.0 - tanh(0.0) * tanh(0.0));
+  double expected_lp = -10.0 + log(1.0 - tanh(-2.0) * tanh(-2.0))
+                       + log(1.0 - tanh(3.0) * tanh(3.0))
+                       + log(1.0 - tanh(-1.0) * tanh(-1.0))
+                       + log(1.0 - tanh(0.0) * tanh(0.0));
   EXPECT_FLOAT_EQ(expected_lp, lp);
 }
 
@@ -550,8 +566,8 @@ TEST(io_reader, matrix_constrain) {
     double x = reader.scalar();
     EXPECT_FLOAT_EQ(static_cast<double>(i), x);
   }
-  Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> y =
-      reader.matrix_constrain(3, 2);
+  Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> y
+      = reader.matrix_constrain(3, 2);
   EXPECT_EQ(3, y.rows());
   EXPECT_EQ(2, y.cols());
   EXPECT_FLOAT_EQ(7.0, y(0, 0));
@@ -761,8 +777,8 @@ TEST(io_reader, corr_matrix) {
   theta[7] = 0.2248293054822660;
   theta[8] = 1.0000000000000001;  // allow some tolerance
   stan::io::reader<double> reader(theta, theta_i);
-  Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> S =
-      reader.corr_matrix(3);
+  Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> S
+      = reader.corr_matrix(3);
   EXPECT_FLOAT_EQ(theta[0], S(0, 0));
 }
 TEST(io_reader, corr_matrix_exception) {
@@ -852,8 +868,8 @@ TEST(io_reader, cov_matrix) {
   theta[7] = 0.5483126868366485;
   theta[8] = 3.0827514661973088;
   stan::io::reader<double> reader(theta, theta_i);
-  Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> S =
-      reader.cov_matrix(3);
+  Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> S
+      = reader.cov_matrix(3);
   EXPECT_FLOAT_EQ(theta[0], S(0, 0));
   EXPECT_FLOAT_EQ(theta[1], S(1, 0));
   EXPECT_FLOAT_EQ(theta[7], S(2, 1));
@@ -895,8 +911,8 @@ TEST(io_reader, cov_matrix_constrain) {
   Eigen::SelfAdjointEigenSolver<
       Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>>
       solver(S, Eigen::EigenvaluesOnly);
-  assert(solver.eigenvalues()[0] >
-         1E-10);  // check positive definite with smallest eigenvalue > 0
+  assert(solver.eigenvalues()[0]
+         > 1E-10);  // check positive definite with smallest eigenvalue > 0
 }
 TEST(io_reader, cov_matrix_constrain_jacobian) {
   std::vector<int> theta_i;
@@ -924,8 +940,8 @@ TEST(io_reader, cov_matrix_constrain_jacobian) {
   Eigen::SelfAdjointEigenSolver<
       Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>>
       solver(S, Eigen::EigenvaluesOnly);
-  assert(solver.eigenvalues()[0] >
-         1E-10);  // check positive definite with smallest eigenvalue > 0
+  assert(solver.eigenvalues()[0]
+         > 1E-10);  // check positive definite with smallest eigenvalue > 0
   // FIXME: test Jacobian
 }
 
@@ -947,8 +963,8 @@ TEST(io_reader, cholesky_factor_cov) {
   theta[7] = 0;
   theta[8] = 6;
   stan::io::reader<double> reader(theta, theta_i);
-  Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> S =
-      reader.cholesky_factor_cov(3, 3);
+  Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> S
+      = reader.cholesky_factor_cov(3, 3);
   EXPECT_FLOAT_EQ(theta[0], S(0, 0));
   EXPECT_FLOAT_EQ(theta[1], S(1, 0));
   EXPECT_FLOAT_EQ(theta[7], S(1, 2));
@@ -969,8 +985,8 @@ TEST(io_reader, cholesky_factor_cov_asymmetric) {
   theta[5] = 5;
 
   stan::io::reader<double> reader(theta, theta_i);
-  Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> S =
-      reader.cholesky_factor_cov(3, 2);
+  Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> S
+      = reader.cholesky_factor_cov(3, 2);
   EXPECT_FLOAT_EQ(theta[0], S(0, 0));
   EXPECT_FLOAT_EQ(theta[1], S(1, 0));
   EXPECT_FLOAT_EQ(theta[2], S(2, 0));
@@ -1074,8 +1090,8 @@ TEST(io_reader, cholesky_factor_corr) {
   theta[7] = 0;
   theta[8] = 1;
   stan::io::reader<double> reader(theta, theta_i);
-  Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> S =
-      reader.cholesky_factor_corr(3);
+  Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> S
+      = reader.cholesky_factor_corr(3);
   EXPECT_FLOAT_EQ(theta[0], S(0, 0));
   EXPECT_FLOAT_EQ(theta[1], S(1, 0));
   EXPECT_FLOAT_EQ(theta[4], S(1, 1));
@@ -1177,8 +1193,8 @@ TEST(io_reader, matrix_lb) {
     EXPECT_FLOAT_EQ(static_cast<double>(i), x);
   }
   double lb = -1.5;
-  Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> y =
-      reader.matrix_lb(lb, 3, 2);
+  Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> y
+      = reader.matrix_lb(lb, 3, 2);
   EXPECT_EQ(3, y.rows());
   EXPECT_EQ(2, y.cols());
   EXPECT_FLOAT_EQ(7.0, y(0, 0));
@@ -1203,8 +1219,8 @@ TEST(io_reader, matrix_lb_constrain) {
     EXPECT_FLOAT_EQ(static_cast<double>(i), x);
   }
   double lb = -1.5;
-  Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> y =
-      reader.matrix_lb_constrain(lb, 3, 2);
+  Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> y
+      = reader.matrix_lb_constrain(lb, 3, 2);
   EXPECT_EQ(3, y.rows());
   EXPECT_EQ(2, y.cols());
   EXPECT_FLOAT_EQ(stan::math::lb_constrain(7.0, lb), y(0, 0));
@@ -1230,8 +1246,8 @@ TEST(io_reader, matrix_lb_constrain_lp) {
   }
   double lb = -1.5;
   double lp = -5.0;
-  Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> y =
-      reader.matrix_lb_constrain(lb, 3, 2, lp);
+  Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> y
+      = reader.matrix_lb_constrain(lb, 3, 2, lp);
   EXPECT_EQ(3, y.rows());
   EXPECT_EQ(2, y.cols());
   EXPECT_FLOAT_EQ(stan::math::lb_constrain(7.0, lb, lp), y(0, 0));
@@ -1256,8 +1272,8 @@ TEST(io_reader, matrix_ub) {
     EXPECT_FLOAT_EQ(static_cast<double>(i), x);
   }
   double ub = 12.5;
-  Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> y =
-      reader.matrix_ub(ub, 3, 2);
+  Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> y
+      = reader.matrix_ub(ub, 3, 2);
   EXPECT_EQ(3, y.rows());
   EXPECT_EQ(2, y.cols());
   EXPECT_FLOAT_EQ(7.0, y(0, 0));
@@ -1282,8 +1298,8 @@ TEST(io_reader, matrix_ub_constrain) {
     EXPECT_FLOAT_EQ(static_cast<double>(i), x);
   }
   double ub = 14.1;
-  Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> y =
-      reader.matrix_ub_constrain(ub, 3, 2);
+  Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> y
+      = reader.matrix_ub_constrain(ub, 3, 2);
   EXPECT_EQ(3, y.rows());
   EXPECT_EQ(2, y.cols());
   EXPECT_FLOAT_EQ(stan::math::ub_constrain(7.0, ub), y(0, 0));
@@ -1309,8 +1325,8 @@ TEST(io_reader, matrix_ub_constrain_lp) {
   }
   double ub = 12.1;
   double lp = -5.0;
-  Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> y =
-      reader.matrix_ub_constrain(ub, 3, 2, lp);
+  Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> y
+      = reader.matrix_ub_constrain(ub, 3, 2, lp);
   EXPECT_EQ(3, y.rows());
   EXPECT_EQ(2, y.cols());
   EXPECT_FLOAT_EQ(stan::math::ub_constrain(7.0, ub, lp), y(0, 0));
@@ -1336,8 +1352,8 @@ TEST(io_reader, matrix_lub) {
   }
   double lb = 6.9;
   double ub = 12.5;
-  Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> y =
-      reader.matrix_lub(lb, ub, 3, 2);
+  Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> y
+      = reader.matrix_lub(lb, ub, 3, 2);
   EXPECT_EQ(3, y.rows());
   EXPECT_EQ(2, y.cols());
   EXPECT_FLOAT_EQ(7.0, y(0, 0));
@@ -1363,8 +1379,8 @@ TEST(io_reader, matrix_lub_constrain) {
   }
   double lb = 3.5;
   double ub = 14.1;
-  Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> y =
-      reader.matrix_lub_constrain(lb, ub, 3, 2);
+  Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> y
+      = reader.matrix_lub_constrain(lb, ub, 3, 2);
   EXPECT_EQ(3, y.rows());
   EXPECT_EQ(2, y.cols());
   EXPECT_FLOAT_EQ(stan::math::lub_constrain(7.0, lb, ub), y(0, 0));
@@ -1391,8 +1407,8 @@ TEST(io_reader, matrix_lub_constrain_lp) {
   double lb = 4.1;
   double ub = 12.1;
   double lp = -5.0;
-  Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> y =
-      reader.matrix_lub_constrain(lb, ub, 3, 2, lp);
+  Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> y
+      = reader.matrix_lub_constrain(lb, ub, 3, 2, lp);
   EXPECT_EQ(3, y.rows());
   EXPECT_EQ(2, y.cols());
   EXPECT_FLOAT_EQ(stan::math::lub_constrain(7.0, lb, ub, lp), y(0, 0));
@@ -1404,4 +1420,118 @@ TEST(io_reader, matrix_lub_constrain_lp) {
 
   double a = reader.scalar();
   EXPECT_FLOAT_EQ(13.0, a);
+}
+
+TEST(io_reader, SimplexThrows) {
+  std::vector<double> theta;
+  std::vector<int> theta_i;
+  stan::io::reader<double> reader(theta, theta_i);
+
+  double x = 0;
+  double lp = 0;
+  EXPECT_THROW(reader.simplex(x), std::invalid_argument);
+  EXPECT_THROW(reader.simplex_constrain(x), std::invalid_argument);
+  EXPECT_THROW(reader.simplex_constrain(x, lp), std::invalid_argument);
+}
+
+TEST(io_reader, UnitVectorThrows) {
+  std::vector<double> theta;
+  std::vector<int> theta_i;
+  stan::io::reader<double> reader(theta, theta_i);
+
+  double x = 0;
+  double lp = 0;
+  EXPECT_THROW(reader.unit_vector(x), std::invalid_argument);
+  EXPECT_THROW(reader.unit_vector_constrain(x), std::invalid_argument);
+  EXPECT_THROW(reader.unit_vector_constrain(x, lp), std::invalid_argument);
+}
+
+TEST(IoReader, var_vector) {
+  using stan::math::var;
+  using stan::math::var_value;
+  std::vector<var> theta{0, 1, 2, 3, 4};
+  std::vector<int> theta_i;
+  stan::io::reader<stan::math::var> reader(theta, theta_i);
+  auto vec_x = reader.var_vector(5);
+  EXPECT_TRUE((stan::is_var_vector<decltype(vec_x)>::value));
+  for (int i = 0; i < 5; ++i) {
+    EXPECT_EQ(vec_x.val()(i), i);
+  }
+  auto vec_x_empty = reader.var_vector(0);
+  stan::math::recover_memory();
+}
+
+TEST(IoReader, var_vector_double) {
+  using stan::math::var;
+  using stan::math::var_value;
+  std::vector<double> theta{0, 1, 2, 3, 4};
+  std::vector<int> theta_i;
+  stan::io::reader<double> reader(theta, theta_i);
+  auto vec_x = reader.var_vector(5);
+  EXPECT_TRUE(
+      (stan::is_eigen_vector<decltype(vec_x)>::value
+       && std::is_arithmetic<stan::value_type_t<decltype(vec_x)>>::value));
+  for (int i = 0; i < 5; ++i) {
+    EXPECT_EQ(vec_x.val()(i), i);
+  }
+}
+
+TEST(IoReader, var_row_vector) {
+  using stan::math::var;
+  using stan::math::var_value;
+  std::vector<var> theta{0, 1, 2, 3, 4};
+  std::vector<int> theta_i;
+  stan::io::reader<stan::math::var> reader(theta, theta_i);
+  auto vec_x = reader.var_row_vector(5);
+  EXPECT_TRUE((stan::is_var_row_vector<decltype(vec_x)>::value));
+  for (int i = 0; i < 5; ++i) {
+    EXPECT_EQ(vec_x.val()(i), i);
+  }
+  auto vec_x_empty = reader.var_row_vector(0);
+}
+
+TEST(IoReader, var_row_vector_double) {
+  using stan::math::var;
+  using stan::math::var_value;
+  std::vector<double> theta{0, 1, 2, 3, 4};
+  std::vector<int> theta_i;
+  stan::io::reader<double> reader(theta, theta_i);
+  auto vec_x = reader.var_row_vector(5);
+  EXPECT_TRUE(
+      (stan::is_eigen_row_vector<decltype(vec_x)>::value
+       && std::is_arithmetic<stan::value_type_t<decltype(vec_x)>>::value));
+  for (int i = 0; i < 5; ++i) {
+    EXPECT_EQ(vec_x.val()(i), i);
+  }
+  auto vec_x_empty = reader.var_row_vector(0);
+}
+
+TEST(IoReader, var_matrix) {
+  using stan::math::var;
+  using stan::math::var_value;
+  std::vector<var> theta{0, 1, 2, 3, 4, 5, 6, 7, 8};
+  std::vector<int> theta_i;
+  stan::io::reader<stan::math::var> reader(theta, theta_i);
+  auto mat_x = reader.var_matrix(3, 3);
+  EXPECT_TRUE((stan::is_var_matrix<decltype(mat_x)>::value));
+  for (int i = 0; i < 9; ++i) {
+    EXPECT_EQ(mat_x.val()(i), i);
+  }
+  auto mat_x_empty = reader.var_matrix(0, 0);
+}
+
+TEST(IoReader, var_matrix_double) {
+  using stan::math::var;
+  using stan::math::var_value;
+  std::vector<double> theta{0, 1, 2, 3, 4, 5, 6, 7, 8};
+  std::vector<int> theta_i;
+  stan::io::reader<double> reader(theta, theta_i);
+  auto mat_x = reader.var_matrix(3, 3);
+  EXPECT_TRUE(
+      (stan::is_eigen_dense_dynamic<decltype(mat_x)>::value
+       && std::is_arithmetic<stan::value_type_t<decltype(mat_x)>>::value));
+  for (int i = 0; i < 9; ++i) {
+    EXPECT_EQ(mat_x.val()(i), i);
+  }
+  auto mat_x_empty = reader.var_matrix(0, 0);
 }

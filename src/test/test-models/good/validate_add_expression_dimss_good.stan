@@ -1,7 +1,7 @@
 transformed data {
   real x;
   vector[3] v;
-  x <- v[1];
+  x = v[1];
 }
 parameters {
   real y;
@@ -9,8 +9,9 @@ parameters {
 transformed parameters {
   real xt;
   vector[3] vt;
-  xt <- vt[1];
+  xt = vt[1];
 }
 model {
-  y ~ normal(0,1);
+  y ~ normal(0, 1);
 }
+

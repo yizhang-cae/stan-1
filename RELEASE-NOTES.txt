@@ -5,6 +5,105 @@ Note: these are the release notes for the stan-dev/stan repository.
 Further changes may arise at the interface level (stan-dev/{rstan,
 pystan, cmdstan}) and math library level (stan-dev/math).
 
+v2.27.0 (2 June 2021)
+======================================================================
+
+- Refactored indexing functions (renaming, replaces indexing structure in favor of variadic arguments). (#3011)
+- Added the serializer and deserializer classes for reading/writing constraints in the generated C++ easier. (#3013, #3018, #3019, #3024, #3036)
+- Removed unuse template keyword to fix for clang 12+. (#3026)
+- Added more robust detection of improper posteriors by checking that metric does not overflow during adaptation. (#3030)
+
+v2.26.1 (17 February 2021)
+======================================================================
+
+- Updated Math to v4.0.1
+
+v.2.26.0 (26 January 2021)
+======================================================================
+
+- Improved performance for assigning to slices of matrices and vectors and vector-style indexing (#2962, #2964, #2965, #2973).
+- Improved error messages on range checks. (#2978)
+- Allowed Stan CSV files to have first column be any Stan variable name, not just "lp__".
+- Removed .eval() in rvalue() where applicable. (#2974)
+- Allowed reader to accept Eigen vector and use Eigen Map to access inputs. (#2955)
+- Allowed functions in reader to output a `var_value<Eigen::Matrix<T, R, C>>`.
+- Added assignment to `var_value<Eigen::Matrix<T, R, C>>`.
+- Added rvalue overloads for `var_value<Eigen::Matrix<T, R, C>>`.
+
+v.2.25.0 (26 October 2020)
+======================================================================
+
+- added a const accessor to _z in base_hmc.hpp
+- bugfixed validate_dims in array_var_context
+- cleaned up includes of Eigen
+
+v.2.24.0 (28 July 2020)
+======================================================================
+
+- `std::chrono` is now used for all timing purposes
+- fixed a bug with generated quantities for vectors of length 1
+- added `recover_memory` for normal exit of `log_prob_grad`
+- replaced the use of `boost::` functions/metaprograms in favor of `std::` where applicable
+
+v.2.23.0 (22 April 2020)
+======================================================================
+
+- updated Stan Math to 3.2
+- `rvalue` and `assign` now accept generic Eigen expressions
+
+v.2.22.0 (24 January 2020)
+======================================================================
+
+New Features
+------------
+
+- validate_dims in stan::io::var_context vas made a virtual function which allows its implementation for JSON data which is needed to accepts arrays where any dimension is size 0
+- replaced Eigen vectors of strings with std::vector<std::string>
+- replaced stan::math::domain_error with throw_domain_error
+- added const noexcept accessors to the stepsize adaptation class which allows developers to query the adaptation parameters in contexts where it's natural to have a const sampler (logging, serialization, ...)
+
+v.2.21.0 (18 October 2019)
+======================================================================
+
+New Features
+------------
+- Add Intel TBB (#2769)
+- Add automated maintanence and cleanup via clang-tools to makefile (#2805)
+- Use Welford's algorithm for Variance Estimates in src/stan/analyze (#2819)
+- Adds additional no-u-turn checks across subtrees to avoid missing u-turns for approximately iid normal models (#2800)
+- Add gp kernels to language (#2739)
+- Update rhat and ess (#2794)
+
+Bug Fixes
+---------
+- Fix const logic and size check (#2822)
+- Add ifdef for R new_model (#2798)
+- Add g_ to name of g vector name in ps_point (#2832)
+
+v.2.20.0 (18 July 2019)
+======================================================================
+
+New Features
+------------
+- Update effective sample size calculations, with a small change to the autocovariance function, to use split chains (#2774)
+- Add stan::model::model_base base class and and stan::model::model_crtp static adapter class for constructing models. (#2785)
+- Allow ts and t0 to be parameters, complete ode_test, and extend the integrate_ode_* stan models (#2791)
+- Add the GP covariance functions to the language (primitives of some popular materns, a dot product, and the periodic) (#2758)
+- Update Eigen includes to allow compilation with new plugin methods (#2754)
+- Add gp kernels to language (#2739)
+
+Bug Fixes
+---------
+- Multi-unit compilation of base_xhmc.hpp. (#2775)
+- Declaring a size zero simplex in a Stan program will halt the program. (#2773)
+
+Other
+-----
+- Defer to Eigen's copy constructor now for assignment ( faster matrix assign ) (#2784)
+- Rethrow_located also takes in a string to specify the location. (#2770)
+- Faster indexing (#2766)
+- Fixed generator so that matrix indexing uses most efficient access strategy (#2749)
+
 v.2.19.1 (18 Apr 2019)
 ======================================================================
 

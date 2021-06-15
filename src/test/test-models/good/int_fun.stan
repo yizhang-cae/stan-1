@@ -5,11 +5,12 @@ functions {
 }
 transformed data {
   int x;
-  x <- foo(2);
+  x = foo(2);
 }
 parameters {
   real y;
 }
 model {
-  y ~ normal(0,1);
+  y ~ normal(0, 1);
 }
+
